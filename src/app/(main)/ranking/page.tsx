@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/shared/components/placeholder-page";
+import { RankingScreen } from "@/features/ranking/presentation/ranking-screen";
 
 export default function RankingPage() {
-  return <PlaceholderPage title="Ranking" />;
+  return <RankingScreen />;
 }

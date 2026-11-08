@@ -1,0 +1,68 @@
+.profile {
+  display: grid;
+  gap: 18px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+.card {
+  padding: 22px;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 4px 0 var(--line);
+  text-align: center;
+}
+
+.avatar {
+  display: grid;
+  width: 92px;
+  height: 92px;
+  place-items: center;
+  margin: 0 auto 14px;
+  border: 3px solid var(--blue);
+  border-radius: 50%;
+  background: rgb(28 176 246 / 15%);
+  box-shadow: 0 4px 0 var(--blue-d);
+  font-size: 52px;
+}
+
+.name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.email {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.signOutArea {
+  display: grid;
+  gap: 10px;
+}
+
+.signOut {
+  min-height: 52px;
+  border: 2px solid #ffc9c9;
+  border-radius: 15px;
+  background: #fff1f1;
+  color: #b42318;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.signOut:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.error {
+  margin: 0;
+  color: #b42318;
+  font-size: 14px;
+  text-align: center;
+}

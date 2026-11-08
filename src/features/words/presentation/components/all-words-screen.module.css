@@ -1,0 +1,175 @@
+.screen {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  overflow: auto;
+  background: var(--bg);
+}
+
+.wrap {
+  display: flex;
+  width: 100%;
+  max-width: 520px;
+  min-height: 100%;
+  flex-direction: column;
+  margin: 0 auto;
+  padding: calc(14px + env(safe-area-inset-top, 0px)) 16px
+    calc(24px + env(safe-area-inset-bottom, 0px));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back {
+  flex: none;
+  padding: 6px 8px 6px 0;
+  color: var(--muted);
+  font-size: 30px;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.header h1 {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.skeletonHeader,
+.skeletonSearch {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--track) 25%,
+    var(--surface) 50%,
+    var(--track) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+.skeletonHeader {
+  width: 80%;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.skeletonSearch {
+  height: 50px;
+  margin: 16px 0 14px;
+  border-radius: 14px;
+}
+
+.count {
+  flex: none;
+  color: var(--blue-d);
+  font-size: 14px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 14px;
+  padding: 0 12px;
+  border: 2px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--muted);
+}
+
+.search:focus-within {
+  border-color: var(--blue);
+}
+
+.search svg {
+  width: 20px;
+  height: 20px;
+  flex: none;
+}
+
+.search input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.search input::placeholder {
+  color: var(--muted);
+}
+
+.card {
+  padding: 18px;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 4px 0 var(--line);
+}
+
+.skeletonWord {
+  height: 58px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    var(--track) 25%,
+    var(--surface) 50%,
+    var(--track) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+.skeletonWord:last-child {
+  margin-bottom: 0;
+}
+
+.loadMore {
+  min-height: 30px;
+  padding: 10px 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+.loadingLabel {
+  display: block;
+}
+
+.endMessage {
+  padding: 0 0 30px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.error {
+  margin: 0 0 10px;
+  color: #c62828;
+  font-size: 14px;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonHeader,
+  .skeletonSearch,
+  .skeletonWord {
+    animation: none;
+  }
+}

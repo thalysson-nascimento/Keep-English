@@ -23,7 +23,7 @@ The project uses:
 - Next.js with App Router.
 - React.
 - TypeScript with strict mode.
-- PostgreSQL.
+- SQLite for the current development stage; PostgreSQL remains the production target.
 - Prisma ORM.
 - Better Auth for authentication.
 - Zod for data validation.
@@ -175,7 +175,7 @@ Authentication and authorization are separate responsibilities.
 
 ## 8. Database Rules
 
-PostgreSQL is the primary database.
+SQLite is the database for the current development stage. PostgreSQL remains the production target, and database provider selection is fixed rather than conditional on environment.
 
 Prisma is the ORM and migration management solution.
 

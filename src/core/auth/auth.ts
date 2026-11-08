@@ -3,6 +3,7 @@ import "server-only";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { getPrismaClient } from "@/core/database/prisma";
+import { avatarSchema, defaultAvatar } from "@/features/auth/domain/avatars";
 
 function getRequiredEnvironmentVariable(name: string): string {
   const value = process.env[name]?.trim();
@@ -44,13 +45,52 @@ export function createAuth() {
   }
 
   const baseURL = getAuthBaseURL();
+  const prisma = getPrismaClient();
 
   return betterAuth({
-    database: prismaAdapter(getPrismaClient(), { provider: "postgresql" }),
+    database: prismaAdapter(prisma, { provider: "sqlite" }),
     secret,
     baseURL,
+    user: {
+      additionalFields: {
+        avatar: {
+          type: "string",
+          required: true,
+          input: true,
+          defaultValue: defaultAvatar,
+          validator: { input: avatarSchema },
+        },
+      },
+    },
     emailAndPassword: {
-      enabled: false,
+      enabled: true,
+    },
+    databaseHooks: {
+      user: {
+        create: {
+          async before(user) {
+            if (!avatarSchema.safeParse(user.avatar).success) {
+              return false;
+            }
+          },
+          async after(user) {
+            await prisma.$transaction([
+              prisma.word.updateMany({
+                where: { userId: null },
+                data: { userId: user.id },
+              }),
+              prisma.dailyGoal.updateMany({
+                where: { userId: null },
+                data: { userId: user.id },
+              }),
+              prisma.vocabularyTest.updateMany({
+                where: { userId: null },
+                data: { userId: user.id },
+              }),
+            ]);
+          },
+        },
+      },
     },
   });
 }

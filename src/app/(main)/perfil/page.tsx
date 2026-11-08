@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/shared/components/placeholder-page";
+import { ProfileScreen } from "@/features/profile/presentation/profile-screen";
 
 export default function ProfilePage() {
-  return <PlaceholderPage title="Perfil" />;
+  return <ProfileScreen />;
 }

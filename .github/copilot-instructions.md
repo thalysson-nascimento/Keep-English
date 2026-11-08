@@ -2,7 +2,7 @@
 
 ## 1. Project Context
 
-This project uses Next.js App Router, React, TypeScript and PostgreSQL.
+This project uses Next.js App Router, React and TypeScript. SQLite is the temporary development database; PostgreSQL remains the production target.
 
 The application follows a Feature-Based architecture combined with pragmatic Clean Architecture principles.
 

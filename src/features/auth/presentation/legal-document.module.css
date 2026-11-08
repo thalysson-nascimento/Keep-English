@@ -1,0 +1,42 @@
+.screen {
+  width: min(100%, 720px);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 24px;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.back {
+  display: inline-flex;
+  margin-bottom: 18px;
+  color: var(--muted);
+}
+
+.back svg {
+  width: 24px;
+  height: 24px;
+}
+
+.screen h1 {
+  margin: 0 0 12px;
+  font-size: 26px;
+}
+
+.screen h2 {
+  margin: 22px 0 6px;
+  font-size: 17px;
+}
+
+.screen p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.notice {
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff5d6;
+  color: #775600 !important;
+}

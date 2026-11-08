@@ -1,5 +1,5 @@
-import { PlaceholderPage } from "@/shared/components/placeholder-page";
+import { AuthForm } from "@/features/auth/presentation/auth-form";
 
 export default function RegistrationPage() {
-  return <PlaceholderPage title="Criar conta" />;
+  return <AuthForm mode="register" />;
 }

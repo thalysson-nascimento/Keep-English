@@ -1,0 +1,357 @@
+.screen {
+  width: 100%;
+}
+
+.hero {
+  overflow: hidden;
+  padding: 22px 22px 0;
+  border-radius: 24px;
+  background: var(--blue);
+  box-shadow: 0 6px 0 var(--blue-d);
+  color: #fff;
+}
+
+.hero > small {
+  display: block;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  opacity: 0.9;
+}
+
+.total {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  margin: 6px 0 20px;
+}
+
+.total strong {
+  font-size: 68px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.total span {
+  padding-bottom: 10px;
+  font-size: 18px;
+  opacity: 0.95;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0 -22px;
+  padding: 14px 0;
+  background: var(--blue-d);
+}
+
+.stats > div {
+  border-right: 2px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+}
+
+.stats > div:last-child {
+  border-right: 0;
+}
+
+.stats strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.stats span {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.testAction {
+  margin-top: 18px;
+}
+
+.testButton {
+  display: flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: 2px solid #84d8ff;
+  border-radius: 16px;
+  background: #ddf4ff;
+  box-shadow: 0 4px 0 #84d8ff;
+  color: var(--blue-d);
+  cursor: pointer;
+  font: inherit;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.testButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.testHint {
+  min-height: 18px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: right;
+}
+
+.section {
+  margin-top: 28px;
+}
+
+.section h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.card {
+  padding: 18px;
+  border: 2px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: 0 4px 0 var(--line);
+}
+
+.chart {
+  display: flex;
+  height: 160px;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.chartColumn {
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  color: var(--muted);
+}
+
+.chartColumn > span {
+  min-height: 13px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.barTrack {
+  display: flex;
+  width: 100%;
+  min-height: 5px;
+  flex: 1;
+  align-items: flex-end;
+}
+
+.barTrack i {
+  display: block;
+  width: 100%;
+  min-height: 5px;
+  border-radius: 8px 8px 4px 4px;
+  background: #b7c0c8;
+}
+
+.greenBar .barTrack i {
+  background: var(--green);
+}
+
+.orangeBar .barTrack i {
+  background: var(--orange);
+}
+
+.emptyColumn .barTrack i {
+  background: #b7c0c8;
+}
+
+.history {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.historyItem {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.historyItem:first-child {
+  padding-top: 0;
+}
+
+.historyItem:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.resultIcon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(28, 176, 246, 0.12);
+  font-size: 21px;
+}
+
+.resultDescription {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.resultDescription strong {
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.resultDescription span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.percentage {
+  flex: none;
+  color: var(--blue);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.empty {
+  width: 100%;
+  padding: 26px 10px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.empty > span {
+  font-size: 46px;
+}
+
+.empty p {
+  margin: 8px 0 0;
+}
+
+.skeletonLabel,
+.skeletonTotal,
+.skeletonStats span,
+.skeletonButton,
+.skeletonHeading,
+.skeletonChart,
+.skeletonHistory {
+  display: block;
+  background: linear-gradient(
+    90deg,
+    var(--track) 25%,
+    var(--surface) 50%,
+    var(--track) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+}
+
+.skeletonHero .skeletonLabel,
+.skeletonHero .skeletonTotal,
+.skeletonHero .skeletonStats span {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    rgba(255, 255, 255, 0.55) 50%,
+    rgba(255, 255, 255, 0.2) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.skeletonLabel {
+  width: 48%;
+  height: 15px;
+  border-radius: 6px;
+}
+
+.skeletonTotal {
+  width: 90px;
+  height: 68px;
+  margin: 8px 0 20px;
+  border-radius: 10px;
+}
+
+.skeletonStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 0 -22px;
+  padding: 14px;
+  background: var(--blue-d);
+}
+
+.skeletonStats span {
+  height: 40px;
+  border-radius: 8px;
+}
+
+.skeletonButton {
+  height: 50px;
+  margin-top: 18px;
+  border-radius: 16px;
+}
+
+.skeletonHeading {
+  width: 45%;
+  height: 27px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+}
+
+.skeletonChart {
+  height: 160px;
+  border-radius: 12px;
+}
+
+.skeletonHistory {
+  height: 58px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+}
+
+.skeletonHistory:last-child {
+  margin-bottom: 0;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonLabel,
+  .skeletonTotal,
+  .skeletonStats span,
+  .skeletonButton,
+  .skeletonHeading,
+  .skeletonChart,
+  .skeletonHistory {
+    animation: none;
+  }
+}

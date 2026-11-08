@@ -1,6 +1,5 @@
 "use client";
 
-import { BookOpen, House, Target, Trophy, UserRound } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -8,14 +7,15 @@ import styles from "./app-shell.module.css";
 
 interface AppShellProps {
   children: ReactNode;
+  headerStats: ReactNode;
 }
 
 const navigationItems = [
-  { href: "/", label: "Início", Icon: House },
-  { href: "/palavras", label: "Palavras", Icon: BookOpen },
-  { href: "/testes", label: "Testes", Icon: Target },
-  { href: "/ranking", label: "Ranking", Icon: Trophy },
-  { href: "/perfil", label: "Perfil", Icon: UserRound },
+  { href: "/", label: "Início", icon: "🏠" },
+  { href: "/palavras", label: "Palavras", icon: "📚" },
+  { href: "/testes", label: "Testes", icon: "🎯" },
+  { href: "/ranking", label: "Ranking", icon: "🏆" },
+  { href: "/perfil", label: "Perfil", icon: "👤" },
 ] as const;
 
 function isActiveRoute(pathname: string, href: string): boolean {
@@ -24,7 +24,7 @@ function isActiveRoute(pathname: string, href: string): boolean {
     : pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function AppShell({ children }: AppShellProps) {
+export function AppShell({ children, headerStats }: AppShellProps) {
   const pathname = usePathname();
 
   return (
@@ -40,12 +40,13 @@ export function AppShell({ children }: AppShellProps) {
           </span>
           <span>keep english</span>
         </Link>
+        {headerStats}
       </header>
 
       <main className={styles.main}>{children}</main>
 
       <nav className={styles.navigation} aria-label="Navegação principal">
-        {navigationItems.map(({ href, label, Icon }) => {
+        {navigationItems.map(({ href, label, icon }) => {
           const active = pathname !== null && isActiveRoute(pathname, href);
 
           return (
@@ -55,8 +56,10 @@ export function AppShell({ children }: AppShellProps) {
               href={href}
               aria-current={active ? "page" : undefined}
             >
-              <Icon className={styles.navigationIcon} aria-hidden="true" />
-              <span>{label}</span>
+              <span aria-hidden="true" className={styles.navigationIcon}>
+                {icon}
+              </span>
+              <span className={styles.visuallyHidden}>{label}</span>
             </Link>
           );
         })}
