@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Keep English</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--surface:#fff;--text:#4b4b4b;--muted:#8a8a8a;--line:#e5e5e5;--green:#58cc02;--green-d:#46a302;--blue:#1cb0f6;--blue-d:#1899d6;--orange:#ff9600;--track:#e5e5e5;--bar:#cde9b0;--box-sizing:border-box;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131f24;--surface:#1f2c33;--text:#f1f7fb;--muted:#8da0aa;--line:#37464f;--track:#37464f;--bar:#3b5a2a;color-scheme:dark}}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Nunito","Trebuchet MS",system-ui,sans-serif;font-weight:700}
+.app{max-width:520px;margin:0 auto;padding:16px 16px calc(180px + env(safe-area-inset-bottom,0px))}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.logo{font-weight:900;font-size:26px;color:var(--green);letter-spacing:-.5px}
+.pills{display:flex;gap:14px;font-weight:900}
+.pill{display:flex;align-items:center;gap:5px;font-size:17px}
+h2{font-size:22px;font-weight:900;margin:28px 0 12px}
+.hello{font-size:15px;color:var(--muted);margin:0 0 14px}
+.hero{background:#ff9600;color:#fff;border-radius:24px;box-shadow:0 6px 0 #d97f00;padding:22px 22px 0;overflow:hidden}
+.hero small{display:block;font-size:13px;font-weight:900;letter-spacing:1.2px;opacity:.9}
+.big{display:flex;align-items:flex-end;gap:10px;margin:6px 0 16px}
+.big b{font-size:68px;line-height:1;font-weight:900}
+.big span{font-size:18px;padding-bottom:10px;opacity:.95}
+.track{height:20px;background:rgba(0,0,0,.2);border-radius:99px;position:relative;overflow:hidden}
+.fill{height:100%;background:#fff;border-radius:99px;width:0;transition:width .7s cubic-bezier(.3,1.3,.5,1);position:relative}
+.fill::after{content:"";position:absolute;left:10px;right:10px;top:4px;height:5px;background:rgba(255,150,0,.3);border-radius:9px}
+.magic{border:2px solid var(--blue);box-shadow:0 3px 0 var(--blue-d);background:rgba(28,176,246,.1);color:var(--blue);font:inherit;font-weight:900;border-radius:14px;padding:10px 14px;margin-top:12px;cursor:pointer;width:100%}
+.magic:disabled{opacity:.6;cursor:wait}
+.undo{background:none;border:0;color:var(--blue);font:inherit;font-weight:900;cursor:pointer;padding:0;margin-left:6px;text-decoration:underline}
+.st{font-size:13px;color:var(--muted);margin-top:8px;min-height:18px}
+.pmsg{display:flex;justify-content:space-between;font-size:15px;margin:10px 0 18px;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);margin:0 -22px;background:#e08600;padding:14px 0}
+.stat{text-align:center;border-right:2px solid rgba(255,255,255,.2)}
+.stat:last-child{border:0}
+.stat b{display:block;font-size:22px;font-weight:900}
+.stat span{font-size:12px;font-weight:800;opacity:.85;letter-spacing:.5px;text-transform:uppercase}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:20px;box-shadow:0 4px 0 var(--line);padding:18px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.chip{border:2px solid var(--line);box-shadow:0 3px 0 var(--line);background:var(--surface);color:var(--text);font:inherit;font-weight:900;border-radius:14px;padding:8px 16px;cursor:pointer}
+.chip.on{border-color:var(--blue);box-shadow:0 3px 0 var(--blue-d);color:var(--blue);background:rgba(28,176,246,.1)}
+.chart{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:6px;position:relative}
+.col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px}
+.bar{width:100%;max-width:38px;border-radius:10px 10px 6px 6px;background:var(--bar);min-height:8px;transition:height .6s cubic-bezier(.3,1.3,.5,1),background .4s,box-shadow .4s}
+.bar.hit{background:var(--green);box-shadow:0 3px 0 var(--green-d)}
+.bar.today{outline:3px solid var(--blue);outline-offset:2px}
+.col em{font-style:normal;font-size:13px;font-weight:900}
+.col span{font-size:12px;color:var(--muted);font-weight:800}
+.legend{font-size:13px;color:var(--muted);margin-top:12px;display:flex;gap:14px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.word{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:2px solid var(--line)}
+.word:last-child{border:0}
+.ico{width:44px;height:44px;border-radius:14px;background:rgba(28,176,246,.15);display:grid;place-items:center;font-size:22px;flex:none}
+.wt{flex:1;min-width:0}
+.wt b{font-size:18px;font-weight:900;display:block}
+.wt span{color:var(--muted);font-size:14px}
+.wt i{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:2px}
+.del{border:0;background:none;color:var(--muted);font-size:20px;cursor:pointer;padding:6px}
+.empty{text-align:center;padding:26px 10px;color:var(--muted)}
+.empty div{font-size:46px}
+.btn{width:100%;border:0;background:var(--green);color:#fff;font:inherit;font-weight:900;font-size:17px;letter-spacing:.8px;text-transform:uppercase;padding:15px;border-radius:16px;box-shadow:0 5px 0 var(--green-d);cursor:pointer}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--green-d)}
+.btn:disabled{background:var(--track);box-shadow:0 5px 0 var(--line);color:var(--muted);cursor:not-allowed}
+.fab{position:fixed;left:0;right:0;bottom:calc(76px + env(safe-area-inset-bottom,0px));padding:0 16px;max-width:520px;margin:0 auto}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:2px solid var(--line);display:flex;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px))}
+nav button{flex:1;max-width:110px;border:2px solid transparent;background:none;border-radius:14px;font-size:26px;padding:6px 0;cursor:pointer;color:var(--text)}
+nav button.on{border-color:var(--blue);background:rgba(28,176,246,.12)}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:20}
+.sheet-bg.open{display:flex}
+.sheet{background:var(--surface);width:100%;max-width:520px;border-radius:26px 26px 0 0;padding:22px 18px calc(22px + env(safe-area-inset-bottom,0px));animation:up .25s ease}
+@keyframes up{from{transform:translateY(60px);opacity:0}}
+.sheet h3{margin:0 0 14px;font-size:22px;font-weight:900}
+label{display:block;font-size:13px;color:var(--muted);font-weight:900;letter-spacing:.8px;text-transform:uppercase;margin:12px 0 6px}
+input{width:100%;font:inherit;font-weight:700;font-size:17px;color:var(--text);background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:13px 14px;outline:none}
+input[readonly]{opacity:.75;background:var(--track);cursor:not-allowed}
+input:focus{border-color:var(--blue)}
+.ghost{background:none;border:0;color:var(--blue);font:inherit;font-weight:900;letter-spacing:.8px;text-transform:uppercase;width:100%;padding:14px;cursor:pointer;margin-top:4px}
+.toast{position:fixed;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-90px);background:var(--blue);color:#fff;padding:12px 20px;border-radius:14px;box-shadow:0 4px 0 var(--blue-d);font-weight:900;transition:transform .3s;z-index:30}
+.toast.show{transform:translate(-50%,0)}
+
+.chart{height:220px;padding-top:4px}
+.bw{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;min-height:0}
+.fl{display:flex;align-items:center;justify-content:center;gap:4px;line-height:1;margin-bottom:12px}
+.fi{font-weight:400;font-size:20px;transition:filter .4s,opacity .4s}
+.fl.off .fi,.off{filter:grayscale(1);opacity:.35}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+.chip.done{opacity:.6}
+.qrow{display:flex;justify-content:flex-end;margin-top:18px}
+.soft{border:2px solid #84d8ff;background:#ddf4ff;color:#1899d6;box-shadow:0 4px 0 #84d8ff;font:inherit;font-weight:900;font-size:15px;letter-spacing:.6px;text-transform:uppercase;border-radius:16px;padding:12px 20px;cursor:pointer}
+.soft:active{transform:translateY(3px);box-shadow:0 1px 0 #84d8ff}
+.soft:disabled{opacity:.5;cursor:not-allowed}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .soft{background:rgba(28,176,246,.15);border-color:#1899d6;box-shadow:0 4px 0 #1899d6;color:#84d8ff}}
+.qhint{text-align:right;font-size:13px;color:var(--muted);margin-top:8px;min-height:4px}
+.quiz{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;overflow:auto}
+.quiz.open{display:block}
+.qwrap{max-width:520px;margin:0 auto;padding:calc(14px + env(safe-area-inset-top,0px)) 16px 0;min-height:100%;display:flex;flex-direction:column}
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.qt{display:flex;align-items:center;gap:10px}
+.qlogo{width:44px;height:44px;border-radius:14px;background:var(--green);box-shadow:0 3px 0 var(--green-d);display:grid;place-items:center;font-size:24px}
+.qt b{display:block;font-size:18px;font-weight:900}
+.qt small{color:var(--muted);font-size:13px}
+.qr{display:flex;align-items:center;gap:8px}
+.qscore{font-weight:900;color:var(--orange);font-size:16px}
+.qx{border:0;background:none;color:var(--muted);font-size:26px;cursor:pointer;padding:6px 8px}
+.qtrack{height:16px;background:var(--track);border-radius:99px;overflow:hidden;margin-top:18px}
+#qfill{height:100%;background:var(--green);border-radius:99px;width:0;transition:width .4s}
+.qcount{text-align:center;color:var(--muted);font-weight:900;margin:8px 0 6px;letter-spacing:1px}
+#qbody{flex:1;padding-top:8px}
+.qask{color:var(--muted);font-size:15px;margin:10px 0 6px}
+.qword{font-size:34px;font-weight:900;margin:0 0 24px;line-height:1.1}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font:inherit;font-weight:800;font-size:18px;color:var(--text);background:var(--surface);border:2px solid var(--line);box-shadow:0 4px 0 var(--line);border-radius:16px;padding:15px 16px;margin-bottom:14px;cursor:pointer}
+.opt i{width:30px;height:30px;border:2px solid var(--line);border-radius:9px;display:grid;place-items:center;font-style:normal;font-size:14px;color:var(--muted);flex:none}
+.opt.sel{border-color:var(--blue);background:rgba(28,176,246,.12);box-shadow:0 4px 0 var(--blue-d);color:var(--blue)}
+.opt.ok{border-color:#58cc02;background:rgba(88,204,2,.15);box-shadow:0 4px 0 #58a700;color:#58a700}
+.opt.bad{border-color:#ff4b4b;background:rgba(255,75,75,.13);box-shadow:0 4px 0 #ea2b2b;color:#ea2b2b}
+.opt:disabled{cursor:default}
+.opt:disabled:not(.ok):not(.bad){opacity:.5}
+.qin{font-size:20px;padding:16px;border-width:2px}
+.qin.ok{border-color:#58cc02;color:#58a700;background:rgba(88,204,2,.15)}
+.qin.bad{border-color:#ff4b4b;color:#ea2b2b;background:rgba(255,75,75,.13)}
+.qans{margin:12px 2px;color:var(--muted)}
+.qfoot{position:sticky;bottom:0;background:var(--bg);padding:14px 0 calc(14px + env(safe-area-inset-bottom,0px))}
+.btn.red{background:#ff4b4b;box-shadow:0 5px 0 #ea2b2b}
+.qbanner{position:fixed;top:0;left:0;right:0;z-index:50;transform:translateY(-120%);transition:transform .3s;padding:calc(18px + env(safe-area-inset-top,0px)) 20px 18px;font-weight:900;font-size:17px;text-align:center;color:#fff}
+.qbanner.show{transform:none}
+.qbanner.ok{background:#58cc02}
+.qbanner.bad{background:#ff4b4b}
+.qres{text-align:center;padding-top:20px}
+.trophy{font-size:80px}
+.qres h3{font-size:26px;font-weight:900;margin:8px 0}
+.score{font-size:56px;font-weight:900;color:var(--green)}
+.qres p{color:var(--muted);font-size:17px}
+.rstats{display:flex;gap:12px;margin-top:20px}
+.rstats div{flex:1;border:2px solid var(--line);border-radius:16px;padding:12px;box-shadow:0 4px 0 var(--line)}
+.rstats b{display:block;font-size:22px;font-weight:900}
+.rstats span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+
+.view{display:none}.view.on{display:block}
+.hero.green{background:var(--green);box-shadow:0 6px 0 var(--green-d)}.hero.green .stats{background:var(--green-d)}
+.hero.blue{background:var(--blue);box-shadow:0 6px 0 var(--blue-d)}.hero.blue .stats{background:var(--blue-d)}
+.hero .big{margin-bottom:20px}
+.wide{width:100%;margin-top:14px}
+.perf{background:linear-gradient(165deg,#79cffc 0%,#2cb3f7 100%);border:0;box-shadow:0 5px 0 #1899d6;color:#fff}
+.phead{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.phead h3{margin:0;font-size:18px;font-weight:900}
+.seg{display:flex;gap:6px}
+.seg button{border:0;background:rgba(255,255,255,.25);color:#fff;font:inherit;font-weight:900;font-size:13px;border-radius:11px;padding:6px 11px;cursor:pointer}
+.seg button.on{background:#fff;color:#1899d6}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 16px}
+.pstats div{background:rgba(255,255,255,.2);border-radius:14px;padding:10px 4px;text-align:center}
+.pstats b{display:block;font-size:22px;font-weight:900}
+.pstats span{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;opacity:.95}
+.pchart{display:flex;align-items:flex-end;gap:5px;height:160px}
+.pc{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px}
+.pc span{font-size:11px;font-weight:800;min-height:13px}
+.pc i{display:block;width:100%;border-radius:8px 8px 4px 4px;background:rgba(255,255,255,.5);min-height:5px}
+.perf .pc.t i{background:#fff}
+.tc .pc{color:var(--muted)}.tc .pc i{background:var(--blue)}.tc .pc.g i{background:var(--green)}.tc .pc.o i{background:var(--orange)}
+.pct{font-size:20px;font-weight:900;color:var(--blue)}
+.avatar{width:96px;height:96px;border-radius:50%;background:rgba(28,176,246,.15);border:3px solid var(--blue);box-shadow:0 4px 0 var(--blue-d);display:grid;place-items:center;font-size:52px;margin:4px auto 12px;cursor:pointer}
+.pname{text-align:center;font-size:22px;font-weight:900;border-color:transparent;background:none;margin-bottom:4px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card.mini{padding:14px;text-align:center}
+.card.mini .mi{font-size:26px}
+.card.mini b{display:block;font-size:24px;font-weight:900}
+.card.mini span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;font-weight:800}
+.qrow+.qhint{margin-bottom:0}
+
+nav button{font-size:24px}
+.podium{display:flex;align-items:flex-end;justify-content:center;gap:10px;padding-top:34px}
+.pd{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+.pd b{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:900;font-size:14px;margin-top:6px}
+.pd>span{font-size:13px;color:var(--muted);font-weight:800;margin-bottom:8px}
+.crown{font-size:26px;position:absolute;top:-30px}
+.pav{width:60px;height:60px;border-radius:50%;background:var(--surface);border:3px solid var(--line);display:grid;place-items:center;font-size:32px}
+.pd.p1 .pav{width:76px;height:76px;font-size:42px;border-color:#ffc800}
+.pav.me{border-color:var(--blue);box-shadow:0 0 0 3px rgba(28,176,246,.3)}
+.blk{width:100%;border-radius:14px 14px 0 0;display:grid;place-items:start center;padding-top:10px;font-size:28px;font-weight:900;color:#fff}
+.p1 .blk{height:120px;background:#ffc800;box-shadow:inset 0 -6px 0 #e5a500}
+.p2 .blk{height:90px;background:#b8c0c8;box-shadow:inset 0 -6px 0 #9aa3ab}
+.p3 .blk{height:70px;background:#d98d4f;box-shadow:inset 0 -6px 0 #b8733b}
+.rkinfo{font-size:16px;font-weight:800;line-height:1.35;margin-bottom:4px}
+.rkinfo small{display:block;color:var(--muted);font-size:12px;font-weight:700;margin-top:2px}
+.rkav{display:flex;justify-content:space-around;gap:8px;margin-top:10px}
+.rka{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;flex:1}
+.rkc{width:56px;height:56px;border-radius:50%;border:4px solid;display:grid;place-items:center;font-size:28px;background:var(--surface)}
+.rka b{font-size:14px;font-weight:900;margin-top:6px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rka span{font-size:12px;color:var(--muted);font-weight:800}
+.rkrow.me{background:rgba(28,176,246,.12);border-radius:14px;padding-left:8px;padding-right:8px;margin:0 -8px}
+.pos{width:34px;text-align:center;font-weight:900;color:var(--muted);flex:none;font-size:17px}
+.rkrow .xp{font-weight:900;color:var(--orange)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="logo">keep english</div>
+    <div class="pills"><div class="pill" style="color:var(--orange)">🔥 <span id="streakTop">0</span></div><div class="pill" style="color:var(--blue)">📘 <span id="totalTop">0</span></div></div>
+  </div>
+  <div class="view on" id="v-home">
+  <p class="hello" id="hello"></p>
+
+  <section class="hero">
+    <small>PALAVRAS ANOTADAS</small>
+    <div class="big"><b id="total">0</b><span>no total</span></div>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <div class="pmsg"><span id="pText">0 de 5 hoje</span><span id="pPct">0%</span></div>
+    <div class="stats">
+      <div class="stat"><b id="sToday">0</b><span>Hoje</span></div>
+      <div class="stat"><b id="sStreak">0</b><span>Sequência</span></div>
+      <div class="stat"><b id="sWeek">0</b><span>Semana</span></div>
+    </div>
+  </section>
+  <div class="qrow"><button class="soft" id="quizBtn">🎯 Fazer teste</button></div>
+  <div class="qhint" id="qhint"></div>
+
+  <h2>Meta diária</h2>
+  <div class="card">
+    <span style="color:var(--muted);font-size:15px">Quantas palavras você quer anotar por dia?</span>
+    <div class="chips" id="goals"></div>
+    <button class="btn" id="goalBtn" style="margin-top:16px">Habilitar meta diária</button>
+    <div class="st" id="goalMsg"></div>
+  </div>
+
+  <h2>Sua evolução</h2>
+  <div class="card">
+    <div class="chart" id="chart"></div>
+    
+  </div>
+
+  <h2>Últimas palavras</h2>
+  <div class="card" id="list"></div>
+  <button class="soft wide" data-go="words">Ver mais palavras →</button>
+  </div>
+
+  <div class="view" id="v-words">
+    <section class="hero green">
+      <small>PALAVRAS SALVAS</small>
+      <div class="big"><b id="wTotal">0</b><span>no total</span></div>
+      <div class="stats">
+        <div class="stat"><b id="wWeek">0</b><span>Semana</span></div>
+        <div class="stat"><b id="wAvg">0</b><span>Média/dia</span></div>
+        <div class="stat"><b id="wBest">0</b><span>Melhor dia</span></div>
+      </div>
+    </section>
+    <h2>Seu desempenho</h2>
+    <div class="card perf">
+      <div class="phead"><h3>Palavras por dia</h3><div class="seg" id="pSeg"><button class="on" data-r="7">7 dias</button><button data-r="14">14 dias</button></div></div>
+      <div class="pstats"><div><b id="pTot">0</b><span>Total</span></div><div><b id="pAvg">0</b><span>Média/dia</span></div><div><b id="pBest">0</b><span>Melhor dia</span></div></div>
+      <div class="pchart" id="pChart"></div>
+    </div>
+    <h2>Últimas palavras</h2>
+    <div class="card" id="wList"></div>
+    <button class="soft wide" id="allBtn">Ver todas as palavras</button>
+  </div>
+
+  <div class="view" id="v-tests">
+    <section class="hero blue">
+      <small>TESTES REALIZADOS</small>
+      <div class="big"><b id="tCount">0</b><span>no total</span></div>
+      <div class="stats">
+        <div class="stat"><b id="tBest">–</b><span>Melhor nota</span></div>
+        <div class="stat"><b id="tAvg">–</b><span>Média</span></div>
+        <div class="stat"><b id="tLast">–</b><span>Último</span></div>
+      </div>
+    </section>
+    <div class="qrow"><button class="soft" id="quizBtn2">🎯 Fazer teste</button></div>
+    <div class="qhint" id="qhint2"></div>
+    <h2>Evolução das notas</h2>
+    <div class="card"><div class="pchart tc" id="tChart"></div></div>
+    <h2>Histórico</h2>
+    <div class="card" id="tList"></div>
+  </div>
+
+  <div class="view" id="v-rank">
+    <p class="hello">🏆 Ranking semanal: 10 pontos por palavra nova e 5 por acerto no teste. Os outros jogadores são exemplos até a API ficar pronta.</p>
+    <div class="card" style="padding-bottom:0;overflow:hidden"><div class="podium" id="podium"></div></div>
+    <h2>Sua posição</h2>
+    <div class="card">
+      <div class="rkinfo" id="rkInfo"></div>
+      <svg id="rkChart" viewBox="0 0 340 170" role="img" aria-label="Pontos acumulados na semana" style="width:100%;height:auto;display:block"></svg>
+      <div class="rkav" id="rkAv"></div>
+    </div>
+    <h2>Classificação geral</h2>
+    <div class="card" id="rkList"></div>
+    <button class="soft wide" id="rkMore">Carregar mais</button>
+  </div>
+
+  <div class="view" id="v-profile">
+    <div class="card" style="text-align:center">
+      <div class="avatar" id="avatar" title="Trocar avatar">🦉</div>
+      <input class="pname" id="pName" maxlength="24" aria-label="Seu nome" autocomplete="off">
+      <div class="st" id="pSince" style="text-align:center"></div>
+    </div>
+    <h2>Resumo</h2>
+    <div class="pgrid" id="pGrid"></div>
+    <h2>Dados</h2>
+    <div class="card">
+      <button class="soft wide" id="seedBtn" style="margin-top:0">Carregar dados de exemplo</button>
+      <button class="btn red" id="resetBtn" style="margin-top:14px">Apagar todos os dados</button>
+    </div>
+  </div>
+</div>
+
+<div class="fab"><button class="btn" id="openAdd">+ Anotar palavra</button></div>
+<nav>
+  <button class="on" data-tab="home" title="Início">🏠</button>
+  <button data-tab="words" title="Palavras">📚</button>
+  <button data-tab="tests" title="Testes">🎯</button>
+  <button data-tab="rank" title="Ranking">🏆</button>
+  <button data-tab="profile" title="Perfil">👤</button>
+</nav>
+
+<div class="sheet-bg" id="bg">
+  <div class="sheet">
+    <h3>Nova palavra</h3>
+    <label for="fw">Palavra (português ou inglês)</label><input id="fw" autocomplete="off" autocapitalize="none" placeholder="ex.: thrive ou prosperar">
+    <button class="magic" id="magic" type="button">🔎 Traduzir e buscar exemplo</button>
+    <div class="st" id="st"></div>
+    <label for="fm">Tradução</label><input id="fm" readonly tabindex="-1" placeholder="preenchida automaticamente">
+    <label for="fe">Frase de exemplo (em inglês)</label><input id="fe" readonly tabindex="-1" placeholder="buscada automaticamente">
+    <div style="height:16px"></div>
+    <button class="btn" id="save" disabled>Salvar</button>
+    <button class="ghost" id="cancel">Cancelar</button>
+  </div>
+</div>
+<div class="quiz" id="allv">
+  <div class="qwrap">
+    <div class="qhead"><button class="qx" id="allBack" aria-label="Voltar" style="padding-left:0">←</button><b style="font-size:20px;font-weight:900;flex:1">Todas as palavras</b><span class="qscore" id="allCount" style="color:var(--blue)"></span></div>
+    <input id="sq" placeholder="🔍  Pesquisar palavra ou tradução" autocomplete="off" style="margin:16px 0 14px">
+    <div class="card" id="allList"></div>
+    <div class="qans" id="allEnd" style="text-align:center;padding-bottom:30px"></div>
+  </div>
+</div>
+<div class="quiz" id="quiz">
+  <div class="qbanner" id="qbanner"></div>
+  <div class="qwrap">
+    <div class="qhead">
+      <div class="qt"><div class="qlogo">🧠</div><div><b>Teste de vocabulário</b><small>Traduza para o inglês</small></div></div>
+      <div class="qr"><span class="qscore" id="qscore">⭐ 0</span><button class="qx" id="qx" aria-label="Fechar">✕</button></div>
+    </div>
+    <div class="qtrack"><div id="qfill"></div></div>
+    <div class="qcount" id="qcount"></div>
+    <div id="qbody"></div>
+    <div class="qfoot"><button class="btn" id="qbtn" disabled>Confirmar</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* =====================================================================
+   CAMADA DE DADOS (Repo): hoje usa localStorage. Quando a API existir, troque
+   só o corpo de cada método (as telas não mudam):
+     page()/list()     -> GET    /words?q=&offset=&limit=
+     add(w)            -> POST   /words           remove(id) -> DELETE /words/:id
+     meta()/setMeta()  -> GET/PUT /me/goal        (meta, trava e último teste)
+     tests()/addTest() -> GET/POST /me/tests
+     profile()/setProfile() -> GET/PATCH /me      seed()/reset() -> só no modo demo
+   ===================================================================== */
+const Repo = (() => {
+  const K = "keep-english-v3", D = 864e5;
+  const fold = x => x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const blank = () => ({words: [], goal: 5, goalLog: [], tests: [], profile: {name: "Estudante", avatar: "🦉", since: Date.now()}});
+  /* Dados de exemplo: 6 dias anteriores (do mais antigo ao de ontem) para o gráfico "Sua evolução" */
+  const SEED_DAYS = [3, 5, 2, 5, 4, 5];
+  const SEED = [
+    ["thrive", "prosperar", "Plants thrive in sunlight."], ["borrow", "pegar emprestado", "Can I borrow your pen?"], ["achieve", "alcançar", "She worked hard to achieve her goal."],
+    ["improve", "melhorar", "I want to improve my English."], ["reliable", "confiável", "He is a reliable friend."], ["struggle", "lutar, ter dificuldade", "Many people struggle with grammar."], ["schedule", "agenda", "My schedule is full today."], ["ignore", "ignorar", "Please do not ignore the warning."],
+    ["overcome", "superar", "You can overcome any challenge."], ["forecast", "previsão", "The forecast says it will rain."],
+    ["neighbor", "vizinho", "My neighbor plays the guitar."], ["ancient", "antigo", "They visited an ancient temple."], ["recipe", "receita", "This recipe is very easy."], ["mention", "mencionar", "She did not mention the problem."], ["deadline", "prazo final", "The deadline is tomorrow."],
+    ["afford", "ter condições de pagar", "I cannot afford a new car."], ["reach", "chegar a", "We reached the top by noon."], ["harvest", "colheita", "The harvest was great this year."], ["behavior", "comportamento", "His behavior surprised everyone."],
+    ["although", "embora", "Although it rained, we went out."], ["wander", "vagar", "They wander through the old town."], ["huge", "enorme", "That is a huge building."], ["remind", "lembrar", "Please remind me to call her."], ["polite", "educado", "She is always polite."]
+  ];
+  const seedState = () => {
+    const t0 = new Date().setHours(0, 0, 0, 0), words = []; let i = 0;
+    SEED_DAYS.forEach((n, k) => { for (let j = 0; j < n; j++) { const [word, meaning, example] = SEED[i++]; words.push({id: i, createdAt: t0 - (6 - k) * D + (9 + j) * 36e5, word, meaning, example}); } });
+    const tests = [[5, 3], [3, 4], [2, 3], [1, 5]].map(([d, score]) => ({at: t0 - d * D + 20 * 36e5, score, total: 5}));
+    return {...blank(), words, tests, goalLog: [{t: t0 - 8 * D, goal: 5}], profile: {name: "Estudante", avatar: "🦉", since: t0 - 7 * D}};
+  };
+  let mem = blank();
+  const persist = () => { try { localStorage.setItem(K, JSON.stringify(mem)); } catch (e) {} };
+  try { const r = localStorage.getItem(K); if (r) mem = {...blank(), ...JSON.parse(r)}; else { mem = seedState(); persist(); } } catch (e) { mem = seedState(); }
+  const sorted = () => [...mem.words].sort((a, b) => b.createdAt - a.createdAt);
+  /* Ranking semanal. Na API: GET /ranking?offset=&limit= | GET /ranking/top | GET /ranking/compare.
+     Pontos = 10 por palavra nova + 5 por acerto em teste. Os outros jogadores abaixo são EXEMPLOS fixos (sem backend). */
+  const NAMES = ["Ana Souza", "Bruno Lima", "Carla Dias", "Diego Alves", "Elisa Rocha", "Felipe Costa", "Gabi Nunes", "Hugo Matos", "Iara Pires", "João Reis", "Karen Melo", "Lucas Prado", "Marina Luz", "Nico Ramos", "Olívia Cruz", "Pedro Dantas", "Quésia Faria", "Rafa Teles", "Sofia Brito", "Thiago Maia", "Uma Vidal", "Vitor Neves", "Wesley Paz", "Yara Borges", "Zeca Moraes", "Bia Campos", "Caio Freitas", "Duda Lopes", "Enzo Pacheco", "Lia Andrade"];
+  const AV = ["🦊", "🐼", "🐯", "🐸", "🦄", "🐙", "🐵", "🐰", "🐨", "🦁", "🐧", "🐢"];
+  const rng = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+  const demoUsers = () => NAMES.map((name, i) => { const r = rng(1000 + i), k = 1.7 - i * 0.045; return {id: "u" + i, name, avatar: AV[i % AV.length], me: false, days: [...Array(7)].map(() => Math.round((15 + r() * 75) * k))}; });
+  const board = () => {
+    const t0 = new Date().setHours(0, 0, 0, 0);
+    const mine = [...Array(7)].map((_, i) => { const a = t0 - (6 - i) * D, b = a + D; return mem.words.filter(w => w.createdAt >= a && w.createdAt < b).length * 10 + mem.tests.filter(t => t.at >= a && t.at < b).reduce((n, t) => n + t.score * 5, 0); });
+    const us = [{id: "me", name: mem.profile.name, avatar: mem.profile.avatar, me: true, days: mine}, ...demoUsers()];
+    us.forEach(u => u.total = u.days.reduce((a, b) => a + b, 0));
+    us.sort((a, b) => b.total - a.total || (a.me ? -1 : b.me ? 1 : 0));
+    us.forEach((u, i) => u.rank = i + 1);
+    return us;
+  };
+  return {
+    async ranking({offset = 0, limit = 10} = {}) { const b = board(); return {items: b.slice(offset, offset + limit), total: b.length, hasMore: offset + limit < b.length}; },
+    async rankingTop() { return board().slice(0, 3); },
+    async rankingCompare() { /* eu + os 2 mais próximos acima (se for o 1º/2º, completa com os de baixo) */
+      const b = board(), i = b.findIndex(u => u.me); let o = [b[i - 1], b[i - 2]].filter(Boolean);
+      if (o.length < 2) o = o.concat([b[i + 1], b[i + 2]].filter(Boolean)).slice(0, 2);
+      return {me: b[i], others: o};
+    },
+    async list() { return sorted(); },
+    async page({q = "", offset = 0, limit = 15} = {}) {
+      const all = sorted().filter(w => !q || fold(w.word + " " + w.meaning).includes(fold(q)));
+      return {items: all.slice(offset, offset + limit), total: all.length, hasMore: offset + limit < all.length};
+    },
+    async add(w) { if (mem.words.some(x => x.word.toLowerCase() === w.word.toLowerCase())) return false; mem.words.push({id: Date.now() + Math.random(), createdAt: Date.now(), ...w}); persist(); return true; },
+    async remove(id) { mem.words = mem.words.filter(w => w.id !== id); persist(); },
+    meta() { return mem; },
+    async setMeta(p) { Object.assign(mem, p); persist(); },
+    tests() { return mem.tests; },
+    async addTest(t) { mem.tests.push(t); persist(); },
+    profile() { return mem.profile; },
+    async setProfile(p) { Object.assign(mem.profile, p); persist(); },
+    async seed() { mem = seedState(); persist(); },
+    async reset() { mem = blank(); persist(); }
+  };
+})();
+
+const $ = id => document.getElementById(id);
+const dayKey = d => { const x = new Date(d); return x.getFullYear() + "-" + (x.getMonth() + 1) + "-" + x.getDate(); };
+const esc = s => s.replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const DOW = ["D", "S", "T", "Q", "Q", "S", "S"];
+let words = [], goal = 5, meta = {}, pending = null, waitTest = false;
+const GOALS = [3, 5, 10, 15, 20];
+const isDup = en => words.some(x => x.word.toLowerCase() === en.toLowerCase());
+const goalFor = t => { let g = 5; for (const e of meta.goalLog || []) if (e.t <= t) g = e.goal; return g; };
+
+async function render() {
+  words = await Repo.list(); meta = Repo.meta(); goal = meta.goal || 5;
+  const tk = dayKey(Date.now());
+  const counts = {}; words.forEach(w => { const k = dayKey(w.createdAt); counts[k] = (counts[k] || 0) + 1; });
+  const days = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - (6 - i)); return {d, n: counts[dayKey(d)] || 0, g: i === 6 ? goal : goalFor(new Date(d).setHours(23, 59, 59, 999))}; });
+  const today = days[6].n, week = days.reduce((s, x) => s + x.n, 0);
+  let streak = 0, c = new Date(); if (!counts[dayKey(c)]) c.setDate(c.getDate() - 1);
+  while (counts[dayKey(c)]) { streak++; c.setDate(c.getDate() - 1); }
+  const pct = Math.min(100, Math.round(today / goal * 100));
+
+  const h = new Date().getHours();
+  $("hello").textContent = (h < 12 ? "Bom dia" : h < 18 ? "Boa tarde" : "Boa noite") + "! " + (today >= goal ? "Meta de hoje concluída 🎉" : "Vamos treinar seu inglês hoje?");
+  ["total", "totalTop"].forEach(i => $(i).textContent = words.length);
+  ["sStreak", "streakTop"].forEach(i => $(i).textContent = streak);
+  $("sToday").textContent = today; $("sWeek").textContent = week;
+  $("pText").textContent = today + " de " + goal + " hoje"; $("pPct").textContent = pct + "%";
+  requestAnimationFrame(() => $("fill").style.width = Math.max(pct, today ? 6 : 0) + "%");
+  updateQuizBtn();
+
+  /* Meta diária: trava depois de habilitada e libera ao bater a meta e fazer o teste */
+  const active = !!meta.goalOn && meta.goalDay === tk;
+  const locked = active && today < goal; /* trava só até bater a meta; o teste é independente */
+  if (locked) pending = goal; else { if (pending == null) pending = goal; if (!GOALS.includes(pending) || pending < today) pending = GOALS.find(g => g >= today) || 20; }
+  days[6].g = locked ? goal : pending; /* a meta escolhida já vale no gráfico */
+  $("goals").innerHTML = GOALS.map(g => '<button class="chip' + (g === pending ? " on" : "") + (g === goal && today >= goal ? " done" : "") + '" data-g="' + g + '"' + (locked || g < today ? " disabled" : "") + ">" + g + "</button>").join("");
+  const canEnable = !locked && (pending !== goal || !active);
+  $("goalBtn").textContent = locked ? "Meta ativa ✓" : "Habilitar meta diária";
+  $("goalBtn").disabled = !canEnable;
+  $("goalMsg").textContent = locked
+    ? "Meta de " + goal + " ativa. Faltam " + (goal - today) + " palavra(s) para liberar outras metas."
+    : active ? (goal >= GOALS[GOALS.length - 1] ? "Meta máxima concluída! 🎉 Volte amanhã para uma nova meta." : "Meta concluída! 🎉 Escolha uma meta maior para continuar anotando.") : "Escolha uma meta e clique em habilitar para liberar o botão de anotar palavras.";
+  const reached = active && today >= goal; /* bateu a meta: só volta a anotar depois de habilitar uma nova */
+  $("openAdd").disabled = !active || reached;
+  $("openAdd").textContent = !active ? "🔒 Defina a meta diária" : reached ? (goal >= GOALS[GOALS.length - 1] ? "🎉 Meta máxima batida hoje" : "🔒 Escolha a nova meta diária") : "+ Anotar palavra";
+  waitTest = locked && today >= goal; updateQuizBtn();
+
+  /* escala fixa: só considera dias já fechados e as palavras de hoje; escolher meta não mexe nos dias anteriores */
+  const max = Math.max(1, ...days.map(x => x.n), ...days.slice(0, 6).map(x => x.g));
+  const ch = $("chart");
+  if (ch.children.length !== 7) { ch.innerHTML = days.map(() => '<div class="col"><div class="fl"><b class="fi">🔥</b><em></em></div><div class="bw"><div class="bar" style="height:0%"></div></div><span></span></div>').join(""); void ch.offsetHeight; }
+  days.forEach((x, i) => {
+    const col = ch.children[i], hit = x.n >= x.g, bar = col.querySelector(".bar");
+    col.querySelector(".fl").classList.toggle("off", !hit);
+    col.querySelector("em").textContent = x.n;
+    col.querySelector("span").textContent = DOW[x.d.getDay()];
+    bar.classList.toggle("hit", hit); bar.classList.toggle("today", i === 6);
+    bar.style.height = Math.round(x.n / max * 100) + "%";
+  });
+
+  $("list").innerHTML = words.length ? words.slice(0, 10).map(wordRow).join("") : EMPTY;
+  renderOthers();
+}
+
+function toast(t) { const e = $("toast"); e.textContent = t; e.classList.add("show"); setTimeout(() => e.classList.remove("show"), 1800); }
+const sheet = open => { $("bg").classList.toggle("open", open); if (open) { ["fw", "fm", "fe"].forEach(i => $(i).value = ""); $("save").disabled = true; last = ""; cur = null; $("st").textContent = ""; setTimeout(() => $("fw").focus(), 80); } };
+const valid = () => ($("save").disabled = !($("fw").value.trim() && $("fm").value.trim() && !(cur && isDup(cur.en))));
+
+$("openAdd").onclick = () => sheet(true);
+$("cancel").onclick = () => sheet(false);
+$("bg").onclick = e => { if (e.target === $("bg")) sheet(false); };
+let last = "", busy = false;
+
+/* APIs públicas (gratuitas, sem chave). Ao criar sua API própria, troque só estas duas funções. */
+let cur = null;
+const norm = x => x.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z ]/g, "").trim();
+const looksPt = x => /[ãõçáéíóúâêôà]/i.test(x) || /(ção|ções|mente|ável|inho|inha)$/i.test(x);
+
+/* 1 requisição: tradução (MyMemory). pair = "en|pt-BR" ou "pt-BR|en" */
+async function mm(w, pair) {
+  let r;
+  try { r = await fetch("https://api.mymemory.translated.net/get?q=" + encodeURIComponent(w) + "&langpair=" + pair); }
+  catch (e) { throw new Error("pedido bloqueado ou sem internet (se estiver dentro do Claude, abra o arquivo no navegador)"); }
+  if (!r.ok) throw new Error("a API respondeu com erro HTTP " + r.status);
+  const j = await r.json();
+  const t = j && j.responseData && j.responseData.translatedText;
+  if (!t || Number(j.responseStatus) !== 200) throw new Error((j && j.responseDetails) || "resposta inesperada da API");
+  return t.trim().replace(/\.$/, "");
+}
+/* Descobre o idioma digitado e devolve {en, pt}. Em geral 1 requisição. */
+async function resolve(w) {
+  let pt = looksPt(w);
+  let t = await mm(w, pt ? "pt-BR|en" : "en|pt-BR");
+  if (!pt && norm(t) === norm(w)) {            /* voltou igual: provavelmente era português */
+    const t2 = await mm(w, "pt-BR|en");
+    if (norm(t2) !== norm(w)) { pt = true; t = t2; }
+  }
+  return pt ? {en: t.toLowerCase(), pt: w, from: "pt"} : {en: w, pt: t, from: "en"};
+}
+/* 1 requisição: frase de exemplo em inglês (API oficial do Tatoeba) */
+async function sentence(w) {
+  const n = w.trim().split(/\s+/).length;
+  if (n >= 3) return w.charAt(0).toUpperCase() + w.slice(1) + (/[.!?]$/.test(w) ? "" : ".");
+  /* formas da palavra (plural, -ing, -ed) em UMA busca: Manticore aceita "a | b" como OU */
+  const l = w.toLowerCase().trim(), forms = [l];
+  if (n === 1) {
+    if (/ies$/.test(l)) forms.push(l.slice(0, -3) + "y"); else if (/(ses|xes|ches|shes)$/.test(l)) forms.push(l.slice(0, -2)); else if (/s$/.test(l)) forms.push(l.slice(0, -1));
+    if (/ing$/.test(l) && l.length > 5) forms.push(l.slice(0, -3));
+    if (/ed$/.test(l) && l.length > 4) forms.push(l.slice(0, -2), l.slice(0, -1));
+  }
+  const q = n === 2 ? '"' + l + '"' : [...new Set(forms)].join(" | ");
+  let r;
+  /* word_count=4-14: o filtro é feito pela própria API (a ordem por relevância traz as frases mais curtas primeiro) */
+  try { r = await fetch("https://api.tatoeba.org/v1/sentences?lang=eng&q=" + encodeURIComponent(q) + "&sort=relevance&is_unapproved=no&word_count=4-14&limit=20&showtrans=none"); }
+  catch (e) { return ""; }
+  if (!r.ok) return "";
+  const j = await r.json();
+  const list = (j.data || []).filter(x => x.text);
+  const re = new RegExp("\\b(" + [...new Set(forms)].map(f => f.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")\\b", "i");
+  const pick = list.find(x => re.test(x.text)) || list[0];
+  return pick ? pick.text : "";
+}
+
+/* Corretor ortográfico: Datamuse (inglês) e LanguageTool (português). Se falhar, segue sem corrigir. */
+async function checkEn(w) {
+  const r = await fetch("https://api.datamuse.com/words?sp=" + encodeURIComponent(w) + "&max=3");
+  if (!r.ok) throw new Error("datamuse");
+  const j = await r.json();
+  if (j.some(x => x.word === w.toLowerCase())) return {ok: true};
+  return {ok: false, fix: j[0] ? j[0].word : ""};
+}
+async function checkPt(w) {
+  const r = await fetch("https://api.languagetoolplus.com/v2/check", {method: "POST", headers: {"Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json"}, body: "language=pt-BR&text=" + encodeURIComponent(w)});
+  if (!r.ok) throw new Error("languagetool");
+  const j = await r.json();
+  const m = (j.matches || []).find(x => x.rule && x.rule.issueType === "misspelling");
+  if (!m) return {ok: true};
+  const rep = (m.replacements || [])[0];
+  return {ok: false, fix: rep ? rep.value : ""};
+}
+async function spell(w) {
+  if (/\s/.test(w)) return w;
+  try {
+    if (looksPt(w)) { const p = await checkPt(w); return p.ok || !p.fix ? w : p.fix; }
+    const e = await checkEn(w);
+    if (e.ok) return w;
+    const p = await checkPt(w).catch(() => ({ok: true}));
+    if (p.ok) return w;
+    return e.fix || p.fix || w;
+  } catch (err) { return w; }
+}
+
+function setSt(t, undo) {
+  const st = $("st"); st.textContent = t;
+  if (undo) {
+    const b = document.createElement("button");
+    b.className = "undo"; b.type = "button"; b.textContent = "Usar “" + undo + "” mesmo";
+    b.onclick = () => { $("fw").value = undo; last = ""; autoFill(true); };
+    st.appendChild(b);
+  }
+}
+
+async function autoFill(skip) {
+  const typed = $("fw").value.trim();
+  if (!typed || typed === last || busy) return;
+  busy = true; cur = null; $("magic").disabled = true; $("fm").value = ""; $("fe").value = ""; valid();
+  try {
+    let w = typed, fixed = false;
+    if (!skip) {
+      setSt("Verificando ortografia…");
+      w = await spell(typed);
+      fixed = w.toLowerCase() !== typed.toLowerCase();
+      if (fixed) $("fw").value = w;
+    }
+    setSt("Traduzindo e buscando exemplo…");
+    const r = await resolve(w);
+    const ex = await sentence(r.en);
+    if ($("fw").value.trim() === w) {
+      cur = r; last = w;
+      $("fm").value = r.from === "pt" ? r.en : r.pt; $("fe").value = ex; valid();
+      setSt((isDup(r.en) ? "Você já anotou esta palavra, então ela não será contabilizada. " : "") + (fixed ? "Corrigi “" + typed + "” para “" + w + "”. " : "") + (r.from === "pt" ? "Português → inglês. " : "Inglês → português. ") + (ex ? "Pronto!" : "Não encontrei frase de exemplo para esta palavra."), fixed ? typed : "");
+    }
+  } catch (e) {
+    setSt("Não foi possível traduzir: " + (e && e.message ? e.message : "erro desconhecido") + ".");
+  }
+  busy = false; $("magic").disabled = false;
+}
+$("fw").oninput = () => { last = ""; cur = null; $("fm").value = ""; $("fe").value = ""; $("st").textContent = ""; valid(); };
+$("fw").onblur = () => autoFill(false);
+$("fw").onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); autoFill(false); } };
+$("magic").onclick = () => autoFill(false);
+$("save").onclick = async () => {
+  if (!cur) return;
+  const added = await Repo.add({word: cur.en, meaning: cur.pt, example: $("fe").value.trim()});
+  sheet(false); await render(); toast(added ? "+1 palavra! Continue assim 💪" : "Você já anotou essa palavra 😉");
+};
+$("goals").onclick = e => { const b = e.target.closest("[data-g]"); if (b && !b.disabled) { pending = +b.dataset.g; render(); } };
+$("goalBtn").onclick = async () => {
+  const now = Date.now();
+  await Repo.setMeta({goal: pending, goalOn: true, goalDay: dayKey(now), goalAt: now, goalLog: [...(meta.goalLog || []), {t: now, goal: pending}]});
+  await render(); toast("Meta de " + pending + " palavras ativada! 🔥");
+};
+
+document.querySelectorAll("[data-soon]").forEach(b => b.onclick = () => toast("Em breve! 🚧"));
+
+/* ---------- Teste de vocabulário ---------- */
+const shuffle = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+let Q = null, bT;
+const COOLDOWN = 30 * 60 * 1000;
+const pad = n => String(n).padStart(2, "0");
+function updateQuizBtn() {
+  const left = (meta.testAt || 0) + COOLDOWN - Date.now(), cool = left > 0;
+  const hint = cool ? "⏳ Próximo teste liberado em " + pad(Math.floor(left / 60000)) + ":" + pad(Math.floor(left % 60000 / 1000)) : words.length ? "" : "Anote palavras para liberar o teste";
+  ["", "2"].forEach(k => { $("quizBtn" + k).disabled = !words.length || cool; $("qhint" + k).textContent = hint; });
+}
+setInterval(updateQuizBtn, 1000);
+function startQuiz() {
+  if (!words.length || (meta.testAt || 0) + COOLDOWN > Date.now()) return;
+  const qs = shuffle(words).slice(0, 5).map(w => {
+    const others = [...new Set(words.filter(x => x.word.toLowerCase() !== w.word.toLowerCase()).map(x => x.word))];
+    const mc = others.length >= 3 && Math.random() > 0.3;
+    return {pt: w.meaning, en: w.word, opts: mc ? shuffle([w.word, ...shuffle(others).slice(0, 3)]) : null};
+  });
+  Q = {qs, i: 0, score: 0, sel: null, answered: false, done: false};
+  $("qscore").textContent = "⭐ 0";
+  $("quiz").classList.add("open"); document.body.style.overflow = "hidden";
+  drawQ();
+}
+function closeQuiz() { $("quiz").classList.remove("open"); $("qbanner").classList.remove("show"); document.body.style.overflow = ""; Q = null; render(); }
+function setBtn(t, on, tone) { const b = $("qbtn"); b.textContent = t; b.disabled = !on; b.className = "btn" + (tone === "bad" ? " red" : ""); }
+function drawQ() {
+  const q = Q.qs[Q.i], n = Q.qs.length;
+  Q.sel = null; Q.answered = false;
+  $("qbanner").classList.remove("show");
+  $("qfill").style.width = (Q.i / n * 100) + "%";
+  $("qcount").textContent = String(Q.i + 1).padStart(2, "0") + "/" + String(n).padStart(2, "0");
+  let h = '<p class="qask">' + (q.opts ? "Qual é a tradução em inglês de" : "Escreva em inglês") + '</p><div class="qword">' + esc(q.pt) + "</div>";
+  h += q.opts ? '<div class="opts">' + q.opts.map((o, i) => '<button class="opt" data-o="' + i + '"><i>' + (i + 1) + "</i>" + esc(o) + "</button>").join("") + "</div>"
+              : '<input id="qin" class="qin" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Digite em inglês">';
+  $("qbody").innerHTML = h;
+  setBtn("Confirmar", false);
+  if (!q.opts) {
+    $("qin").oninput = () => setBtn("Confirmar", !!$("qin").value.trim());
+    $("qin").onkeydown = e => { if (e.key === "Enter" && $("qin").value.trim()) $("qbtn").click(); };
+    setTimeout(() => $("qin") && $("qin").focus(), 60);
+  }
+}
+$("qbody").onclick = e => {
+  const b = e.target.closest(".opt");
+  if (!b || !Q || Q.answered || b.disabled) return;
+  document.querySelectorAll(".opt").forEach(x => x.classList.remove("sel"));
+  b.classList.add("sel"); Q.sel = +b.dataset.o; setBtn("Confirmar", true);
+};
+function answer() {
+  const q = Q.qs[Q.i], n = Q.qs.length;
+  const given = q.opts ? q.opts[Q.sel] : $("qin").value;
+  const ok = norm(given) === norm(q.en);
+  Q.answered = true; if (ok) Q.score++;
+  if (q.opts) document.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (norm(q.opts[i]) === norm(q.en)) b.classList.add("ok"); else if (i === Q.sel) b.classList.add("bad"); });
+  else { $("qin").disabled = true; $("qin").classList.add(ok ? "ok" : "bad"); if (!ok) $("qbody").insertAdjacentHTML("beforeend", '<p class="qans">Resposta certa: <b>' + esc(q.en) + "</b></p>"); }
+  const bn = $("qbanner"); bn.className = "qbanner " + (ok ? "ok" : "bad") + " show";
+  bn.innerHTML = ok ? "🎉 Acertou! Muito bem!" : "😕 Errou. Resposta certa: <u>" + esc(q.en) + "</u>";
+  clearTimeout(bT); bT = setTimeout(() => bn.classList.remove("show"), 2800);
+  $("qscore").textContent = "⭐ " + Q.score;
+  $("qfill").style.width = ((Q.i + 1) / n * 100) + "%";
+  setBtn(Q.i + 1 < n ? "Continuar" : "Ver resultado", true, ok ? "ok" : "bad");
+}
+async function finishQuiz() {
+  const n = Q.qs.length, pct = Math.round(Q.score / n * 100);
+  Q.done = true; $("qbanner").classList.remove("show");
+  await Repo.setMeta({testAt: Date.now()}); await Repo.addTest({at: Date.now(), score: Q.score, total: n});
+  $("qfill").style.width = "100%"; $("qcount").textContent = "Concluído";
+  $("qbody").innerHTML = '<div class="qres"><div class="trophy">' + (pct >= 80 ? "🏆" : pct >= 50 ? "👏" : "💪") + "</div><h3>" + (pct === 100 ? "Perfeito!" : pct >= 60 ? "Muito bem!" : "Continue praticando!") + '</h3><div class="score">' + Q.score + "/" + n + "</div><p>Você acertou " + pct + "% das palavras.</p>" +
+    '<div class="rstats"><div><b>' + Q.score + "</b><span>Acertos</span></div><div><b>" + (n - Q.score) + "</b><span>Erros</span></div><div><b>" + pct + "%</b><span>Nota</span></div></div></div>";
+  setBtn("Finalizar", true);
+}
+$("qbtn").onclick = () => {
+  if (!Q) return;
+  if (Q.done) return closeQuiz();
+  if (!Q.answered) return answer();
+  Q.i++; if (Q.i >= Q.qs.length) finishQuiz(); else drawQ();
+};
+$("qx").onclick = closeQuiz;
+$("quizBtn").onclick = startQuiz; $("quizBtn2").onclick = startQuiz;
+
+/* ---------- Componentes compartilhados ---------- */
+const wordRow = w => '<div class="word"><div class="ico">💬</div><div class="wt"><b>' + esc(w.word) + "</b><span>" + esc(w.meaning) + "</span>" + (w.example ? "<i>“" + esc(w.example) + "”</i>" : "") + '</div><button class="del" data-d="' + w.id + '" aria-label="Remover">✕</button></div>';
+const EMPTY = '<div class="empty"><div>🌱</div><p>Nenhuma palavra ainda.<br>Toque em “Anotar palavra” para começar!</p></div>';
+const fmtD = t => new Date(t).toLocaleDateString("pt-BR", {day: "2-digit", month: "2-digit"});
+const fmtT = t => new Date(t).toLocaleTimeString("pt-BR", {hour: "2-digit", minute: "2-digit"});
+const dayIdx = k => { const [y, m, d] = k.split("-").map(Number); return Math.round(new Date(y, m - 1, d) / 864e5); };
+function bestStreak(counts) {
+  let best = 0, run = 0, prev = null;
+  Object.keys(counts).map(dayIdx).sort((a, b) => a - b).forEach(i => { run = prev !== null && i - prev === 1 ? run + 1 : 1; prev = i; best = Math.max(best, run); });
+  return best;
+}
+document.addEventListener("click", async e => {
+  const d = e.target.closest("[data-d]"); if (!d) return;
+  await Repo.remove(+d.dataset.d); await render();
+  if ($("allv").classList.contains("open")) loadMore(true);
+});
+
+/* ---------- Navegação ---------- */
+function go(tab) {
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("on", v.id === "v-" + tab));
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b.dataset.tab === tab));
+  document.querySelector(".fab").style.display = tab === "home" ? "" : "none";
+  window.scrollTo(0, 0);
+}
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => go(b.dataset.tab));
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(b.dataset.go));
+
+/* ---------- Palavras, Testes e Perfil ---------- */
+let PR = 7;
+function renderOthers() {
+  const counts = {}; words.forEach(w => { const k = dayKey(w.createdAt); counts[k] = (counts[k] || 0) + 1; });
+  const series = n => [...Array(n)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - (n - 1 - i)); return {d, n: counts[dayKey(d)] || 0}; });
+  const avg = v => v.toFixed(1).replace(".", ",");
+  const w7 = series(7).reduce((t, x) => t + x.n, 0);
+  $("wTotal").textContent = words.length; $("wWeek").textContent = w7; $("wAvg").textContent = avg(w7 / 7); $("wBest").textContent = Math.max(0, ...Object.values(counts));
+  const ps = series(PR), tot = ps.reduce((t, x) => t + x.n, 0), mx = Math.max(1, ...ps.map(x => x.n));
+  $("pTot").textContent = tot; $("pAvg").textContent = avg(tot / PR); $("pBest").textContent = Math.max(...ps.map(x => x.n));
+  $("pChart").innerHTML = ps.map((x, i) => '<div class="pc' + (i === PR - 1 ? " t" : "") + '"><span>' + (x.n || "") + '</span><div class="bw"><i style="height:' + Math.round(x.n / mx * 100) + '%"></i></div><span>' + (PR > 7 ? x.d.getDate() : DOW[x.d.getDay()]) + "</span></div>").join("");
+  $("wList").innerHTML = words.length ? words.slice(0, 10).map(wordRow).join("") : EMPTY;
+  $("allBtn").style.display = words.length ? "" : "none";
+
+  const tests = Repo.tests(), pcts = tests.map(t => Math.round(t.score / t.total * 100));
+  const mean = pcts.length ? Math.round(pcts.reduce((a, b) => a + b, 0) / pcts.length) : null;
+  $("tCount").textContent = tests.length;
+  $("tBest").textContent = pcts.length ? Math.max(...pcts) + "%" : "–";
+  $("tAvg").textContent = mean !== null ? mean + "%" : "–";
+  $("tLast").textContent = pcts.length ? pcts[pcts.length - 1] + "%" : "–";
+  const NOTESTS = '<div class="empty" style="width:100%"><div>🎯</div><p>Nenhum teste ainda.<br>Faça o primeiro para ver sua evolução!</p></div>';
+  $("tChart").innerHTML = tests.length ? tests.slice(-10).map(t => { const p = Math.round(t.score / t.total * 100); return '<div class="pc ' + (p >= 80 ? "g" : p >= 60 ? "b" : "o") + '"><span>' + p + '%</span><div class="bw"><i style="height:' + Math.max(p, 4) + '%"></i></div><span>' + fmtD(t.at) + "</span></div>"; }).join("") : NOTESTS;
+  $("tList").innerHTML = tests.length ? [...tests].reverse().slice(0, 10).map(t => { const p = Math.round(t.score / t.total * 100); return '<div class="word"><div class="ico">' + (p >= 80 ? "🏆" : p >= 60 ? "👏" : "💪") + '</div><div class="wt"><b>' + t.score + "/" + t.total + " acertos</b><span>" + fmtD(t.at) + " às " + fmtT(t.at) + '</span></div><b class="pct">' + p + "%</b></div>"; }).join("") : NOTESTS;
+
+  const pr = Repo.profile();
+  let sn = 0, c = new Date(); if (!counts[dayKey(c)]) c.setDate(c.getDate() - 1);
+  while (counts[dayKey(c)]) { sn++; c.setDate(c.getDate() - 1); }
+  $("avatar").textContent = pr.avatar;
+  if (document.activeElement !== $("pName")) $("pName").value = pr.name;
+  $("pSince").textContent = "Estudando desde " + new Date(pr.since).toLocaleDateString("pt-BR", {day: "2-digit", month: "long", year: "numeric"});
+  $("pGrid").innerHTML = [["📘", words.length, "Palavras salvas"], ["🔥", sn, "Sequência atual"], ["🏅", bestStreak(counts), "Maior sequência"], ["🎯", tests.length, "Testes feitos"], ["⭐", mean !== null ? mean + "%" : "–", "Nota média"], ["🚩", goal, "Meta diária"]]
+    .map(([i, v, l]) => '<div class="card mini"><div class="mi">' + i + "</div><b>" + v + "</b><span>" + l + "</span></div>").join("");
+  renderRank();
+}
+/* ---------- Ranking ---------- */
+const RK = {shown: 10}, RKC = ["#1cb0f6", "#ff9600", "#ff4b4b"];
+const rkRow = u => '<div class="word rkrow' + (u.me ? " me" : "") + '"><b class="pos">' + (u.rank <= 3 ? ["🥇", "🥈", "🥉"][u.rank - 1] : u.rank) + '</b><div class="ico">' + u.avatar + '</div><div class="wt"><b>' + esc(u.name) + (u.me ? " (você)" : "") + '</b><span>Semana</span></div><b class="xp">' + u.total + " XP</b></div>";
+function drawRankChart(cmp) {
+  const us = [cmp.me, ...cmp.others], W = 340, H = 170, L = 10, R = 12, T = 10, B = 24;
+  const cum = us.map(u => { let a = 0; return u.days.map(x => a += x); });
+  const mx = Math.max(10, ...cum.map(c => c[6]));
+  const X = i => L + i * (W - L - R) / 6, Y = v => T + (H - T - B) * (1 - v / mx);
+  let g = "";
+  [0, .5, 1].forEach(f => { const y = Y(mx * f); g += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y + '" y2="' + y + '" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 5"/>'; });
+  for (let i = 0; i < 7; i++) { const d = new Date(); d.setDate(d.getDate() - (6 - i)); g += '<text x="' + X(i) + '" y="' + (H - 6) + '" text-anchor="middle" font-size="11" font-weight="800" fill="var(--muted)">' + DOW[d.getDay()] + "</text>"; }
+  for (let k = us.length - 1; k >= 0; k--) {
+    const pts = cum[k].map((v, i) => X(i) + "," + Y(v)).join(" ");
+    g += '<polyline points="' + pts + '" fill="none" stroke="' + RKC[k] + '" stroke-width="' + (k ? 3.5 : 4.5) + '" stroke-linecap="round" stroke-linejoin="round"/>';
+    cum[k].forEach((v, i) => g += '<circle cx="' + X(i) + '" cy="' + Y(v) + '" r="' + (i === 6 ? 5.5 : 3) + '" fill="' + RKC[k] + '"' + (i === 6 ? ' stroke="var(--surface)" stroke-width="2"' : "") + "/>");
+  }
+  $("rkChart").innerHTML = g;
+}
+async function renderRank() {
+  const [top, cmp, page] = await Promise.all([Repo.rankingTop(), Repo.rankingCompare(), Repo.ranking({offset: 0, limit: RK.shown})]);
+  $("podium").innerHTML = [top[1], top[0], top[2]].filter(Boolean).map(u => '<div class="pd p' + u.rank + '">' + (u.rank === 1 ? '<div class="crown">👑</div>' : "") + '<div class="pav' + (u.me ? " me" : "") + '">' + u.avatar + "</div><b>" + esc(u.me ? "Você" : u.name) + "</b><span>" + u.total + ' XP</span><div class="blk">' + u.rank + "</div></div>").join("");
+  const me = cmp.me, a = cmp.others[0];
+  $("rkInfo").innerHTML = (me.rank === 1 ? "🏆 Você lidera! Vantagem de " + (me.total - a.total) + " XP sobre " + esc(a.name) : "<b>Você está em " + me.rank + "º</b> · faltam " + Math.max(1, a.total - me.total + 1) + " XP para passar " + esc(a.name)) + "<small>Pontos acumulados na semana</small>";
+  drawRankChart(cmp);
+  $("rkAv").innerHTML = [me, ...cmp.others].map((u, i) => '<div class="rka"><div class="rkc" style="border-color:' + RKC[i] + '">' + u.avatar + "</div><b>" + (u.me ? "Você" : esc(u.name.split(" ")[0])) + "</b><span>" + u.rank + "º · " + u.total + " XP</span></div>").join("");
+  $("rkList").innerHTML = page.items.map(rkRow).join("");
+  $("rkMore").style.display = page.hasMore ? "" : "none";
+}
+$("rkMore").onclick = () => { RK.shown += 10; renderRank(); };
+$("pSeg").onclick = e => { const b = e.target.closest("[data-r]"); if (!b) return; PR = +b.dataset.r; document.querySelectorAll("#pSeg button").forEach(x => x.classList.toggle("on", x === b)); renderOthers(); };
+$("avatar").onclick = async () => { const A = ["🦉", "🦊", "🐼", "🐯", "🐸", "🦄", "🐙", "🚀"]; await Repo.setProfile({avatar: A[(A.indexOf(Repo.profile().avatar) + 1) % A.length]}); render(); };
+$("pName").onchange = async () => { await Repo.setProfile({name: $("pName").value.trim() || "Estudante"}); render(); };
+$("seedBtn").onclick = async () => { if (confirm("Substituir seus dados atuais pelos dados de exemplo?")) { await Repo.seed(); pending = null; await render(); toast("Dados de exemplo carregados"); } };
+$("resetBtn").onclick = async () => { if (confirm("Apagar todas as palavras, testes e metas?")) { await Repo.reset(); pending = null; await render(); toast("Tudo zerado ✨"); } };
+
+/* ---------- Todas as palavras (busca + rolagem infinita) ---------- */
+const AL = {q: "", off: 0, busy: false, more: true, tok: 0, t: 0};
+async function loadMore(reset) {
+  if (!reset && (AL.busy || !AL.more)) return;
+  const tok = reset ? ++AL.tok : AL.tok;
+  if (reset) { AL.off = 0; AL.more = true; $("allList").innerHTML = ""; }
+  AL.busy = true;
+  const r = await Repo.page({q: AL.q, offset: AL.off, limit: 15});
+  if (tok !== AL.tok) return;
+  AL.off += r.items.length; AL.more = r.hasMore;
+  $("allList").insertAdjacentHTML("beforeend", r.items.map(wordRow).join(""));
+  if (!r.total) $("allList").innerHTML = '<div class="empty"><div>🔎</div><p>Nenhuma palavra encontrada.</p></div>';
+  $("allCount").textContent = r.total + (r.total === 1 ? " palavra" : " palavras");
+  $("allEnd").textContent = !AL.more && r.total ? "Você chegou ao fim 🎉" : "";
+  AL.busy = false;
+  const o = $("allv"); if (AL.more && o.scrollHeight <= o.clientHeight + 40) loadMore();
+}
+const openAll = () => { $("allv").classList.add("open"); document.body.style.overflow = "hidden"; $("sq").value = ""; AL.q = ""; loadMore(true); };
+const closeAll = () => { $("allv").classList.remove("open"); document.body.style.overflow = ""; };
+$("allBtn").onclick = openAll; $("allBack").onclick = closeAll;
+$("allv").onscroll = () => { const o = $("allv"); if (o.scrollTop + o.clientHeight >= o.scrollHeight - 160) loadMore(); };
+$("sq").oninput = () => { clearTimeout(AL.t); AL.t = setTimeout(() => { AL.q = $("sq").value.trim(); loadMore(true); }, 250); };
+render();
+</script>
+</body>
+</html>
