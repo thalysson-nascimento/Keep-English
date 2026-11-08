@@ -1,0 +1,31 @@
+@import "../shared/styles/tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-height: 100%;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background: var(--bg, #ffffff);
+  color: var(--text, #4b4b4b);
+  font-family: var(--font-stack);
+  font-weight: 700;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.fullscreen-layout,
+.auth-layout {
+  min-height: 100vh;
+}

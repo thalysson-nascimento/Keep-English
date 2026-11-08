@@ -1,0 +1,124 @@
+.shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-stack);
+}
+
+.header {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  padding: max(var(--space-2), env(safe-area-inset-top, 0px)) var(--space-5)
+    var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--green-d);
+  font-size: var(--font-size-brand);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.brand:focus-visible,
+.navigationLink:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.brandMark {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border-radius: 10px;
+  background: var(--green);
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+
+.main {
+  min-height: calc(100vh - 64px);
+  min-height: calc(100dvh - 64px);
+  padding: var(--space-6) var(--space-4)
+    calc(6.5rem + env(safe-area-inset-bottom, 0px));
+}
+
+.navigation {
+  position: fixed;
+  z-index: 10;
+  right: 0;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  width: min(100%, 520px);
+  justify-content: space-around;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-2)
+    max(var(--space-2), env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.navigationLink {
+  display: flex;
+  min-width: 0;
+  min-height: 48px;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-navigation);
+  color: var(--muted);
+  font-size: var(--font-size-navigation);
+  font-weight: 800;
+  line-height: 1.1;
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.navigationLink[aria-current="page"] {
+  background: color-mix(in srgb, var(--green) 14%, transparent);
+  color: var(--text);
+}
+
+.navigationLink[aria-current="page"] .navigationIcon {
+  color: var(--green-d);
+}
+
+.navigationIcon {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  stroke-width: 2.5;
+}
+
+@media (min-width: 520px) {
+  .navigation {
+    border-right: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+    border-radius: 16px 16px 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navigationLink {
+    transition: none;
+  }
+}
