@@ -8,7 +8,6 @@ import {
 export interface WordPerformanceDay {
   date: string;
   count: number;
-  label7: string;
   label14: string;
 }
 
@@ -39,12 +38,6 @@ function countByDate(dates: Date[]): Map<string, number> {
 
 function formatAverage(value: number): string {
   return value.toFixed(1).replace(".", ",");
-}
-
-function getWeekdayLabel(dateKey: string): string {
-  return new Intl.DateTimeFormat("pt-BR", {
-    weekday: "narrow",
-  }).format(new Date(`${dateKey}T12:00:00.000Z`));
 }
 
 function createPerformancePeriod(
@@ -101,7 +94,6 @@ export async function getWordsPerformanceData(
     return {
       date,
       count: counts.get(date) ?? 0,
-      label7: getWeekdayLabel(date),
       label14: String(dateValue.getUTCDate()),
     };
   });

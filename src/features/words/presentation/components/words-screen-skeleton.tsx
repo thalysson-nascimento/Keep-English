@@ -1,9 +1,13 @@
+import { getRequestLocale } from "@/shared/i18n/server";
+import { translate } from "@/shared/i18n/messages";
 import styles from "./words-screen.module.css";
 
-export function WordsSummarySkeleton() {
+export async function WordsSummarySkeleton() {
+  const locale = await getRequestLocale();
+
   return (
     <section
-      aria-label="Carregando resumo de palavras"
+      aria-label={translate(locale, "words.summary.aria")}
       aria-busy="true"
       className={`${styles.hero} ${styles.skeletonHero}`}
       role="status"
@@ -19,10 +23,12 @@ export function WordsSummarySkeleton() {
   );
 }
 
-export function WordsPerformanceSkeleton() {
+export async function WordsPerformanceSkeleton() {
+  const locale = await getRequestLocale();
+
   return (
     <section
-      aria-label="Carregando desempenho"
+      aria-label={translate(locale, "words.performance.title")}
       aria-busy="true"
       className={styles.section}
       role="status"
@@ -45,10 +51,12 @@ export function WordsPerformanceSkeleton() {
   );
 }
 
-export function WordsRecentSkeleton() {
+export async function WordsRecentSkeleton() {
+  const locale = await getRequestLocale();
+
   return (
     <section
-      aria-label="Carregando últimas palavras"
+      aria-label={translate(locale, "words.recent.title")}
       aria-busy="true"
       className={styles.section}
       role="status"

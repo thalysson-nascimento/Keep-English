@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { Word } from "@/features/words/domain/word";
 import { deleteWordAction } from "@/features/words/presentation/actions";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import { WordList } from "./word-list";
 import styles from "./words-screen.module.css";
 
@@ -14,6 +15,7 @@ interface RecentWordsProps {
 }
 
 export function RecentWords({ initialWords, total }: RecentWordsProps) {
+  const { t } = useI18n();
   const router = useRouter();
   const [words, setWords] = useState(initialWords);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -27,14 +29,14 @@ export function RecentWords({ initialWords, total }: RecentWordsProps) {
       const deleted = await deleteWordAction(id);
 
       if (!deleted) {
-        setError("Não foi possível remover a palavra.");
+        setError(t("home.words.removeFailed"));
         return;
       }
 
       setWords((currentWords) => currentWords.filter((word) => word.id !== id));
       router.refresh();
     } catch {
-      setError("Não foi possível remover a palavra.");
+      setError(t("home.words.removeFailed"));
     } finally {
       setDeletingId(null);
     }
@@ -45,7 +47,7 @@ export function RecentWords({ initialWords, total }: RecentWordsProps) {
       <div className={styles.card}>
         <WordList
           deletingId={deletingId}
-          emptyMessage="Nenhuma palavra ainda."
+          emptyMessage={t("words.recent.none")}
           onDelete={handleDelete}
           words={words}
         />
@@ -57,7 +59,7 @@ export function RecentWords({ initialWords, total }: RecentWordsProps) {
       )}
       {total > 0 && (
         <Link className={styles.allWordsButton} href="/palavras/todas">
-          Ver todas as palavras
+          {t("words.recent.all")}
         </Link>
       )}
     </>

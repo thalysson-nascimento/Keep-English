@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./app-shell.module.css";
 
 interface AppShellProps {
@@ -11,11 +12,11 @@ interface AppShellProps {
 }
 
 const navigationItems = [
-  { href: "/", label: "Início", icon: "🏠" },
-  { href: "/palavras", label: "Palavras", icon: "📚" },
-  { href: "/testes", label: "Testes", icon: "🎯" },
-  { href: "/ranking", label: "Ranking", icon: "🏆" },
-  { href: "/perfil", label: "Perfil", icon: "👤" },
+  { href: "/", label: "navigation.home", icon: "🏠" },
+  { href: "/palavras", label: "navigation.words", icon: "📚" },
+  { href: "/testes", label: "navigation.tests", icon: "🎯" },
+  { href: "/ranking", label: "navigation.ranking", icon: "🏆" },
+  { href: "/perfil", label: "navigation.profile", icon: "👤" },
 ] as const;
 
 function isActiveRoute(pathname: string, href: string): boolean {
@@ -26,6 +27,7 @@ function isActiveRoute(pathname: string, href: string): boolean {
 
 export function AppShell({ children, headerStats }: AppShellProps) {
   const pathname = usePathname();
+  const { t } = useI18n();
 
   return (
     <div className={styles.shell}>
@@ -33,7 +35,7 @@ export function AppShell({ children, headerStats }: AppShellProps) {
         <Link
           className={styles.brand}
           href="/"
-          aria-label="Keep English — início"
+          aria-label={t("navigation.brand")}
         >
           <span className={styles.brandMark} aria-hidden="true">
             K
@@ -45,7 +47,7 @@ export function AppShell({ children, headerStats }: AppShellProps) {
 
       <main className={styles.main}>{children}</main>
 
-      <nav className={styles.navigation} aria-label="Navegação principal">
+      <nav className={styles.navigation} aria-label={t("navigation.main")}>
         {navigationItems.map(({ href, label, icon }) => {
           const active = pathname !== null && isActiveRoute(pathname, href);
 
@@ -59,7 +61,7 @@ export function AppShell({ children, headerStats }: AppShellProps) {
               <span aria-hidden="true" className={styles.navigationIcon}>
                 {icon}
               </span>
-              <span className={styles.visuallyHidden}>{label}</span>
+              <span className={styles.visuallyHidden}>{t(label)}</span>
             </Link>
           );
         })}

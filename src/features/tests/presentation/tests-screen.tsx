@@ -1,4 +1,11 @@
 import type { TestsOverviewData } from "@/features/tests/application/get-tests-overview";
+import { getIntlLocale } from "@/shared/i18n/config";
+import { getRequestLocale } from "@/shared/i18n/server";
+import {
+  translate,
+  type TranslationKey,
+  type TranslationValues,
+} from "@/shared/i18n/messages";
 import styles from "./tests-screen.module.css";
 import { TestStartButton } from "./test-start-button";
 
@@ -6,28 +13,34 @@ interface TestsScreenProps {
   data: TestsOverviewData;
 }
 
-function formatDate(timestamp: number): string {
-  return new Date(timestamp).toLocaleDateString("pt-BR", {
+type Translator = (key: TranslationKey, values?: TranslationValues) => string;
+
+function formatDate(timestamp: number, locale: string): string {
+  return new Date(timestamp).toLocaleDateString(locale, {
     day: "2-digit",
     month: "2-digit",
     timeZone: "America/Sao_Paulo",
   });
 }
 
-function formatDateTime(timestamp: number): string {
+function formatDateTime(
+  timestamp: number,
+  locale: string,
+  t: Translator,
+): string {
   const date = new Date(timestamp);
-  const day = date.toLocaleDateString("pt-BR", {
+  const day = date.toLocaleDateString(locale, {
     day: "2-digit",
     month: "2-digit",
     timeZone: "America/Sao_Paulo",
   });
-  const time = date.toLocaleTimeString("pt-BR", {
+  const time = date.toLocaleTimeString(locale, {
     hour: "2-digit",
     minute: "2-digit",
     timeZone: "America/Sao_Paulo",
   });
 
-  return `${day} às ${time}`;
+  return t("testOverview.dateTime", { date: day, time });
 }
 
 function getResultIcon(percentage: number): string {
@@ -46,20 +59,28 @@ function getChartColor(percentage: number): string {
   return percentage >= 60 ? styles.blueBar : styles.orangeBar;
 }
 
-function EmptyTests() {
+function EmptyTests({ t }: { t: Translator }) {
   return (
     <div className={styles.empty}>
       <span aria-hidden="true">🎯</span>
       <p>
-        Nenhum teste ainda.
-        <br />
-        Faça o primeiro para ver sua evolução!
+        {t("testOverview.empty")
+          .split("\n")
+          .map((line, index) => (
+            <span key={line}>
+              {index > 0 && <br />}
+              {line}
+            </span>
+          ))}
       </p>
     </div>
   );
 }
 
-export function TestsScreen({ data }: TestsScreenProps) {
+export async function TestsScreen({ data }: TestsScreenProps) {
+  const locale = await getRequestLocale();
+  const t: Translator = (key, values) => translate(locale, key, values);
+  const intlLocale = getIntlLocale(locale);
   const recentChartRecords = data.records.slice(0, 6).reverse();
   const chartRecords = Array.from({ length: 6 }, (_, index) => {
     const recordIndex = index - (6 - recentChartRecords.length);
@@ -70,33 +91,30 @@ export function TestsScreen({ data }: TestsScreenProps) {
 
   return (
     <div className={styles.screen}>
-      <section
-        aria-label="Resumo dos testes realizados"
-        className={styles.hero}
-      >
-        <small>TESTES REALIZADOS</small>
+      <section aria-label={t("testOverview.aria")} className={styles.hero}>
+        <small>{t("testOverview.summary")}</small>
         <div className={styles.total}>
           <strong>{data.total}</strong>
-          <span>no total</span>
+          <span>{t("testOverview.total")}</span>
         </div>
         <div className={styles.stats}>
           <div>
             <strong>
               {data.bestScore === null ? "–" : `${data.bestScore}%`}
             </strong>
-            <span>Melhor nota</span>
+            <span>{t("testOverview.best")}</span>
           </div>
           <div>
             <strong>
               {data.averageScore === null ? "–" : `${data.averageScore}%`}
             </strong>
-            <span>Média</span>
+            <span>{t("testOverview.average")}</span>
           </div>
           <div>
             <strong>
               {data.latestScore === null ? "–" : `${data.latestScore}%`}
             </strong>
-            <span>Último</span>
+            <span>{t("testOverview.latest")}</span>
           </div>
         </div>
       </section>
@@ -107,10 +125,10 @@ export function TestsScreen({ data }: TestsScreenProps) {
         aria-labelledby="test-evolution-title"
         className={styles.section}
       >
-        <h2 id="test-evolution-title">Evolução das notas</h2>
+        <h2 id="test-evolution-title">{t("testOverview.evolution")}</h2>
         <div className={styles.card}>
           <div
-            aria-label="Notas dos últimos seis testes; barras cinzas indicam testes ainda não realizados"
+            aria-label={t("testOverview.chartAria")}
             className={styles.chart}
             role="img"
           >
@@ -139,7 +157,9 @@ export function TestsScreen({ data }: TestsScreenProps) {
                       }}
                     />
                   </div>
-                  <span>{record ? formatDate(record.completedAt) : ""}</span>
+                  <span>
+                    {record ? formatDate(record.completedAt, intlLocale) : ""}
+                  </span>
                 </div>
               );
             })}
@@ -148,10 +168,10 @@ export function TestsScreen({ data }: TestsScreenProps) {
       </section>
 
       <section aria-labelledby="test-history-title" className={styles.section}>
-        <h2 id="test-history-title">Histórico</h2>
+        <h2 id="test-history-title">{t("testOverview.history")}</h2>
         <div className={styles.card}>
           {recentRecords.length === 0 ? (
-            <EmptyTests />
+            <EmptyTests t={t} />
           ) : (
             <ul className={styles.history}>
               {recentRecords.map((record) => {
@@ -166,9 +186,14 @@ export function TestsScreen({ data }: TestsScreenProps) {
                     </span>
                     <div className={styles.resultDescription}>
                       <strong>
-                        {record.score}/{record.total} acertos
+                        {t("testOverview.correctAnswers", {
+                          score: record.score,
+                          total: record.total,
+                        })}
                       </strong>
-                      <span>{formatDateTime(record.completedAt)}</span>
+                      <span>
+                        {formatDateTime(record.completedAt, intlLocale, t)}
+                      </span>
                     </div>
                     <strong className={styles.percentage}>{percentage}%</strong>
                   </li>
@@ -182,10 +207,12 @@ export function TestsScreen({ data }: TestsScreenProps) {
   );
 }
 
-export function TestsScreenSkeleton() {
+export async function TestsScreenSkeleton() {
+  const locale = await getRequestLocale();
+
   return (
     <div
-      aria-label="Carregando testes"
+      aria-label={translate(locale, "testOverview.loadingAria")}
       aria-busy="true"
       className={styles.screen}
       role="status"

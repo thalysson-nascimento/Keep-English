@@ -3,9 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { authClient } from "@/core/auth/auth-client";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./user-profile.module.css";
 
 export function SignOutButton() {
+  const { t } = useI18n();
   const router = useRouter();
   const [error, setError] = useState("");
   const [isSigningOut, setIsSigningOut] = useState(false);
@@ -18,14 +20,14 @@ export function SignOutButton() {
       const result = await authClient.signOut();
 
       if (result.error) {
-        setError("Não foi possível sair da conta. Tente novamente.");
+        setError(t("auth.sessionError"));
         return;
       }
 
       router.replace("/login");
       router.refresh();
     } catch {
-      setError("Não foi possível sair da conta. Tente novamente.");
+      setError(t("auth.sessionError"));
     } finally {
       setIsSigningOut(false);
     }
@@ -44,7 +46,7 @@ export function SignOutButton() {
         onClick={() => void signOut()}
         type="button"
       >
-        {isSigningOut ? "Saindo..." : "Sair da conta"}
+        {isSigningOut ? t("auth.signingOut") : t("auth.signOut")}
       </button>
     </div>
   );

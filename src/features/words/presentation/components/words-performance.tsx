@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import type { WordPerformancePeriod } from "@/features/words/application/get-words-overview";
+import { getIntlLocale } from "@/shared/i18n/config";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./words-screen.module.css";
 
 interface WordsPerformanceProps {
@@ -12,22 +14,30 @@ interface WordsPerformanceProps {
 }
 
 export function WordsPerformance({ data }: WordsPerformanceProps) {
+  const { locale, t } = useI18n();
   const [range, setRange] = useState<7 | 14>(7);
   const period = range === 7 ? data.sevenDays : data.fourteenDays;
   const scale = Math.max(1, ...period.days.map((day) => day.count));
+  const average = new Intl.NumberFormat(getIntlLocale(locale), {
+    maximumFractionDigits: 1,
+    minimumFractionDigits: 1,
+  }).format(Number(period.average.replace(",", ".")));
 
   return (
     <div className={`${styles.card} ${styles.performance}`}>
       <div className={styles.performanceHeader}>
-        <h3>Palavras por dia</h3>
-        <div aria-label="Período do gráfico" className={styles.rangeToggle}>
+        <h3>{t("words.performance.chartTitle")}</h3>
+        <div
+          aria-label={t("words.performance.range")}
+          className={styles.rangeToggle}
+        >
           <button
             aria-pressed={range === 7}
             className={range === 7 ? styles.rangeActive : ""}
             onClick={() => setRange(7)}
             type="button"
           >
-            7 dias
+            {t("words.performance.days", { count: 7 })}
           </button>
           <button
             aria-pressed={range === 14}
@@ -35,7 +45,7 @@ export function WordsPerformance({ data }: WordsPerformanceProps) {
             onClick={() => setRange(14)}
             type="button"
           >
-            14 dias
+            {t("words.performance.days", { count: 14 })}
           </button>
         </div>
       </div>
@@ -43,20 +53,20 @@ export function WordsPerformance({ data }: WordsPerformanceProps) {
       <div className={styles.performanceStats}>
         <div>
           <strong>{period.total}</strong>
-          <span>Total</span>
+          <span>{t("common.total")}</span>
         </div>
         <div>
-          <strong>{period.average}</strong>
-          <span>Média/dia</span>
+          <strong>{average}</strong>
+          <span>{t("common.averagePerDay")}</span>
         </div>
         <div>
           <strong>{period.bestDay}</strong>
-          <span>Melhor dia</span>
+          <span>{t("common.bestDay")}</span>
         </div>
       </div>
 
       <div
-        aria-label={`Palavras anotadas por dia nos últimos ${range} dias`}
+        aria-label={t("words.performance.chartAria", { count: range })}
         className={styles.performanceChart}
         role="img"
       >
@@ -73,7 +83,13 @@ export function WordsPerformance({ data }: WordsPerformanceProps) {
                   style={{ height: `${height}%` }}
                 />
               </div>
-              <span>{range === 7 ? day.label7 : day.label14}</span>
+              <span>
+                {range === 7
+                  ? new Intl.DateTimeFormat(getIntlLocale(locale), {
+                      weekday: "narrow",
+                    }).format(new Date(`${day.date}T12:00:00.000Z`))
+                  : day.label14}
+              </span>
             </div>
           );
         })}

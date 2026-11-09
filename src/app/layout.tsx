@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { Nunito } from "next/font/google";
+import { RequestLocaleProvider } from "@/shared/i18n/request-locale-provider";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -22,7 +24,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" className={nunito.variable}>
-      <body>{children}</body>
+      <body>
+        <Suspense
+          fallback={<div aria-busy="true" className="locale-loading" />}
+        >
+          <RequestLocaleProvider>{children}</RequestLocaleProvider>
+        </Suspense>
+      </body>
     </html>
   );
 }

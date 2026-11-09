@@ -1,10 +1,14 @@
+import { getRequestLocale } from "@/shared/i18n/server";
+import { translate } from "@/shared/i18n/messages";
 import styles from "./all-words-screen.module.css";
 
-export function WordsAllScreenSkeleton() {
+export async function WordsAllScreenSkeleton() {
+  const locale = await getRequestLocale();
+
   return (
     <div className={styles.screen}>
       <div
-        aria-label="Carregando todas as palavras"
+        aria-label={translate(locale, "common.loadingWords")}
         aria-busy="true"
         className={styles.wrap}
         role="status"

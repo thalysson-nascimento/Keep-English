@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { SignOutButton } from "@/features/auth/presentation/sign-out-button";
+import { getIntlLocale } from "@/shared/i18n/config";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./profile-screen.module.css";
 
 const profileSchema = z.object({
@@ -22,12 +24,12 @@ const profileSchema = z.object({
 type ProfileData = z.infer<typeof profileSchema>;
 
 const profileStats = [
-  { key: "savedWords", icon: "📘", label: "Palavras salvas" },
-  { key: "currentStreak", icon: "🔥", label: "Sequência atual" },
-  { key: "longestStreak", icon: "🏅", label: "Maior sequência" },
-  { key: "completedTests", icon: "🎯", label: "Testes feitos" },
-  { key: "averageScore", icon: "⭐", label: "Nota média" },
-  { key: "dailyGoal", icon: "🚩", label: "Meta diária" },
+  { key: "savedWords", icon: "📘", label: "profile.savedWords" },
+  { key: "currentStreak", icon: "🔥", label: "profile.currentStreak" },
+  { key: "longestStreak", icon: "🏅", label: "profile.longestStreak" },
+  { key: "completedTests", icon: "🎯", label: "profile.completedTests" },
+  { key: "averageScore", icon: "⭐", label: "profile.averageScore" },
+  { key: "dailyGoal", icon: "🚩", label: "profile.dailyGoal" },
 ] as const;
 
 async function fetchProfile(signal: AbortSignal): Promise<ProfileData> {
@@ -38,9 +40,7 @@ async function fetchProfile(signal: AbortSignal): Promise<ProfileData> {
 
   if (!response.ok) {
     throw new Error(
-      response.status === 401
-        ? "Sua sessão expirou. Entre novamente para consultar seu perfil."
-        : "Não foi possível carregar os dados do perfil.",
+      response.status === 401 ? "session-expired" : "load-failed",
     );
   }
 
@@ -48,14 +48,14 @@ async function fetchProfile(signal: AbortSignal): Promise<ProfileData> {
   const parsed = profileSchema.safeParse(result);
 
   if (!parsed.success) {
-    throw new Error("Os dados recebidos para o perfil são inválidos.");
+    throw new Error("invalid-data");
   }
 
   return parsed.data;
 }
 
-function formatEnrollmentDate(date: string): string {
-  return new Intl.DateTimeFormat("pt-BR", {
+function formatEnrollmentDate(date: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     timeZone: "America/Sao_Paulo",
@@ -74,9 +74,9 @@ function formatStatValue(
   return String(profile[key]);
 }
 
-function ProfileSkeleton() {
+function ProfileSkeleton({ label }: { label: string }) {
   return (
-    <div aria-label="Carregando perfil" className={styles.profile}>
+    <div aria-label={label} className={styles.profile}>
       <div className={`${styles.card} ${styles.heroSkeleton}`} />
       <div className={styles.skeletonHeading} />
       <div className={styles.statsGrid}>
@@ -89,6 +89,7 @@ function ProfileSkeleton() {
 }
 
 export function ProfileScreen() {
+  const { locale, t } = useI18n();
   const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [error, setError] = useState("");
@@ -106,24 +107,25 @@ export function ProfileScreen() {
 
         if (
           requestError instanceof Error &&
-          requestError.message.startsWith("Sua sessão expirou")
+          requestError.message === "session-expired"
         ) {
           router.replace("/login");
           return;
         }
 
-        setError(
-          requestError instanceof Error
-            ? requestError.message
-            : "Não foi possível carregar os dados do perfil.",
-        );
+        const errorMessage =
+          requestError instanceof Error &&
+          requestError.message === "invalid-data"
+            ? t("profile.invalidData")
+            : t("profile.loadFailed");
+        setError(errorMessage);
       });
 
     return () => controller.abort();
-  }, [retry, router]);
+  }, [retry, router, t]);
 
   if (!profile && !error) {
-    return <ProfileSkeleton />;
+    return <ProfileSkeleton label={t("common.loadingProfile")} />;
   }
 
   if (!profile) {
@@ -137,7 +139,7 @@ export function ProfileScreen() {
           }}
           type="button"
         >
-          Tentar novamente
+          {t("profile.retry")}
         </button>
       </div>
     );
@@ -145,18 +147,29 @@ export function ProfileScreen() {
 
   return (
     <div className={styles.profile}>
-      <section aria-label="Informações da conta" className={styles.hero}>
-        <div aria-label={`Avatar ${profile.avatar}`} className={styles.avatar}>
+      <section aria-label={t("profile.account")} className={styles.hero}>
+        <div
+          aria-label={t("profile.avatar", { avatar: profile.avatar })}
+          className={styles.avatar}
+        >
           {profile.avatar}
         </div>
         <h1 className={styles.name}>{profile.name}</h1>
         <p className={styles.joined}>
-          Estudando desde {formatEnrollmentDate(profile.createdAt)}
+          {t("profile.studyingSince", {
+            date: formatEnrollmentDate(
+              profile.createdAt,
+              getIntlLocale(locale),
+            ),
+          })}
         </p>
       </section>
 
-      <h2 className={styles.sectionTitle}>Resumo</h2>
-      <section aria-label="Resumo do aprendizado" className={styles.statsGrid}>
+      <h2 className={styles.sectionTitle}>{t("profile.summary")}</h2>
+      <section
+        aria-label={t("profile.summaryAria")}
+        className={styles.statsGrid}
+      >
         {profileStats.map(({ key, icon, label }) => (
           <div className={styles.statCard} key={key}>
             <span aria-hidden="true" className={styles.statIcon}>
@@ -165,7 +178,7 @@ export function ProfileScreen() {
             <strong className={styles.statValue}>
               {formatStatValue(key, profile)}
             </strong>
-            <span className={styles.statLabel}>{label}</span>
+            <span className={styles.statLabel}>{t(label)}</span>
           </div>
         ))}
       </section>

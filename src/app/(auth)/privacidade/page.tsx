@@ -1,24 +1,28 @@
 import { LegalDocument } from "@/features/auth/presentation/legal-document";
+import { getRequestLocale } from "@/shared/i18n/server";
+import { translate } from "@/shared/i18n/messages";
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const locale = await getRequestLocale();
+
   return (
     <LegalDocument
-      description="Esta versão inicial descreve os dados usados pela aplicação durante o desenvolvimento."
+      description={translate(locale, "legal.privacy.description")}
       sections={[
         {
-          title: "Dados da conta",
-          text: "A aplicação armazena nome, e-mail e avatar para identificar sua conta. A autenticação e as senhas são gerenciadas pelo Better Auth.",
+          title: translate(locale, "legal.privacy.account.title"),
+          text: translate(locale, "legal.privacy.account.text"),
         },
         {
-          title: "Dados de aprendizagem",
-          text: "Palavras salvas, metas diárias e resultados de testes são associados à sua conta para apresentar o progresso e o ranking.",
+          title: translate(locale, "legal.privacy.learning.title"),
+          text: translate(locale, "legal.privacy.learning.text"),
         },
         {
-          title: "Armazenamento",
-          text: "No ambiente de desenvolvimento atual, os dados ficam em uma base SQLite local. Antes da disponibilização pública, este documento e as práticas de tratamento de dados precisam ser revisados.",
+          title: translate(locale, "legal.privacy.storage.title"),
+          text: translate(locale, "legal.privacy.storage.text"),
         },
       ]}
-      title="Política de privacidade"
+      title={translate(locale, "legal.privacy.title")}
     />
   );
 }

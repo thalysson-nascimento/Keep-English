@@ -18,7 +18,8 @@ export interface HomeDay {
 }
 
 export interface HomeData {
-  greeting: string;
+  greetingPeriod: "morning" | "afternoon" | "evening";
+  goalReached: boolean;
   total: number;
   today: number;
   week: number;
@@ -34,14 +35,9 @@ export interface HomeHeaderData {
   streak: number;
 }
 
-function getGreeting(date: Date, goalReached: boolean): string {
+function getGreetingPeriod(date: Date): HomeData["greetingPeriod"] {
   const hour = getHourInTimeZone(date);
-  const greeting =
-    hour < 12 ? "Bom dia" : hour < 18 ? "Boa tarde" : "Boa noite";
-
-  return `${greeting}! ${
-    goalReached ? "Meta de hoje concluída 🎉" : "Vamos treinar seu inglês hoje?"
-  }`;
+  return hour < 12 ? "morning" : hour < 18 ? "afternoon" : "evening";
 }
 
 function countWordsByDay(createdAt: Date[]): Map<string, number> {
@@ -123,7 +119,8 @@ export async function getHomeData(
   });
 
   return {
-    greeting: getGreeting(now, today >= goal),
+    greetingPeriod: getGreetingPeriod(now),
+    goalReached: today >= goal,
     total,
     today,
     week: days.reduce((sum, day) => sum + day.count, 0),

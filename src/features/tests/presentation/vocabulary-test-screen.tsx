@@ -11,6 +11,7 @@ import {
   type VocabularyQuestion,
 } from "@/features/tests/domain/vocabulary-test";
 import { completeVocabularyTestAction } from "@/features/tests/presentation/actions";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./vocabulary-test-screen.module.css";
 
 interface VocabularyTestScreenProps {
@@ -28,23 +29,27 @@ interface SubmittedAnswer {
   answer: string;
 }
 
-function getCompletionError(status: string): string {
+function getCompletionError(
+  status: string,
+  t: ReturnType<typeof useI18n>["t"],
+): string {
   if (status === "goal") {
-    return "A meta diária ainda não foi concluída. Volte para a tela inicial e termine a meta para iniciar o teste.";
+    return t("test.goalNotComplete");
   }
 
   if (status === "cooldown") {
-    return "O intervalo de 30 minutos ainda não terminou. Aguarde para iniciar outro teste.";
+    return t("test.cooldownWait");
   }
 
   if (status === "words") {
-    return "Adicione palavras antes de iniciar um teste.";
+    return t("test.addWords");
   }
 
-  return "Não foi possível registrar o teste. Tente novamente.";
+  return t("test.recordFailed");
 }
 
 export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
+  const { t } = useI18n();
   const [now, setNow] = useState(data.now);
   const [hasStarted, setHasStarted] = useState(false);
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -116,7 +121,7 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
       const result = await completeVocabularyTestAction(nextAnswers);
 
       if (result.status !== "completed") {
-        setError(getCompletionError(result.status));
+        setError(getCompletionError(result.status, t));
         return;
       }
 
@@ -126,7 +131,7 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
         completedAt: result.completedAt,
       });
     } catch {
-      setError("Não foi possível salvar o resultado do teste.");
+      setError(t("test.saveFailed"));
     } finally {
       setIsSubmitting(false);
     }
@@ -146,34 +151,34 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
           </div>
           <h1>
             {percentage === 100
-              ? "Perfeito!"
+              ? t("test.perfect")
               : percentage >= 60
-                ? "Muito bem!"
-                : "Continue praticando!"}
+                ? t("test.wellDone")
+                : t("test.keepPracticing")}
           </h1>
           <strong className={styles.score}>
             {completedTest.score}/{completedTest.total}
           </strong>
-          <p>Você acertou {percentage}% das palavras.</p>
+          <p>{t("test.scoreMessage", { percentage })}</p>
           <div className={styles.resultStats}>
             <div>
               <strong>{completedTest.score}</strong>
-              <span>Acertos</span>
+              <span>{t("test.correct")}</span>
             </div>
             <div>
               <strong>{completedTest.total - completedTest.score}</strong>
-              <span>Erros</span>
+              <span>{t("test.incorrect")}</span>
             </div>
             <div>
               <strong>{percentage}%</strong>
-              <span>Nota</span>
+              <span>{t("test.score")}</span>
             </div>
           </div>
           <p aria-live="polite" className={styles.cooldown}>
-            ⏳ Próximo teste em {formatTestCountdown(remaining)}
+            {t("test.nextIn", { time: formatTestCountdown(remaining) })}
           </p>
           <Link className={styles.primaryButton} href="/">
-            Voltar para o início
+            {t("common.backToHome")}
           </Link>
         </div>
       </div>
@@ -183,34 +188,39 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
   if (lockReason) {
     const message =
       lockReason === "words"
-        ? "Anote palavras antes de iniciar um teste."
+        ? t("test.lockWords")
         : lockReason === "goal"
           ? data.goal === null
-            ? "Defina e conclua sua meta diária para liberar o teste."
-            : `Conclua sua meta diária (${data.todayWords}/${data.goal}) para liberar o teste.`
-          : `Próximo teste liberado em ${formatTestCountdown(cooldownRemaining)}.`;
+            ? t("test.lockGoal")
+            : t("test.completeGoal", {
+                today: data.todayWords,
+                goal: data.goal,
+              })
+          : t("test.cooldown", {
+              time: formatTestCountdown(cooldownRemaining),
+            });
 
     return (
       <div className={styles.screen}>
         <header className={styles.header}>
           <Link
-            aria-label="Voltar para o início"
+            aria-label={t("test.backToHomeAria")}
             className={styles.close}
             href="/"
           >
             ×
           </Link>
-          <span>Teste de vocabulário</span>
+          <span>{t("test.title")}</span>
           <span aria-hidden="true" className={styles.headerSpacer} />
         </header>
         <section className={styles.locked}>
           <span aria-hidden="true" className={styles.lockIcon}>
             {lockReason === "cooldown" ? "⏳" : "🎯"}
           </span>
-          <h1>Teste indisponível</h1>
+          <h1>{t("test.unavailable")}</h1>
           <p aria-live="polite">{message}</p>
           <Link className={styles.primaryButton} href="/">
-            Voltar para o início
+            {t("common.backToHome")}
           </Link>
         </section>
       </div>
@@ -222,28 +232,28 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
       <div className={styles.screen}>
         <header className={styles.header}>
           <Link
-            aria-label="Voltar para o início"
+            aria-label={t("test.backToHomeAria")}
             className={styles.close}
             href="/"
           >
             ×
           </Link>
-          <span>Teste de vocabulário</span>
+          <span>{t("test.title")}</span>
           <span aria-hidden="true" className={styles.headerSpacer} />
         </header>
         <section className={styles.intro}>
           <div aria-hidden="true" className={styles.logo}>
             🧠
           </div>
-          <h1>Teste de vocabulário</h1>
-          <p>Traduza as palavras para o inglês.</p>
-          <p>{data.questions.length} perguntas selecionadas da sua lista.</p>
+          <h1>{t("test.title")}</h1>
+          <p>{t("test.intro")}</p>
+          <p>{t("test.questions", { count: data.questions.length })}</p>
           <button
             className={styles.primaryButton}
             onClick={() => setHasStarted(true)}
             type="button"
           >
-            Começar teste
+            {t("test.start")}
           </button>
         </section>
       </div>
@@ -259,14 +269,17 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
   return (
     <div className={styles.screen}>
       <header className={styles.header}>
-        <Link aria-label="Sair do teste" className={styles.close} href="/">
+        <Link aria-label={t("test.exit")} className={styles.close} href="/">
           ×
         </Link>
-        <span>Teste de vocabulário</span>
+        <span>{t("test.title")}</span>
         <span className={styles.liveScore}>⭐ {correctAnswers}</span>
       </header>
       <div
-        aria-label={`Progresso: pergunta ${questionIndex + 1} de ${data.questions.length}`}
+        aria-label={t("test.progress", {
+          current: questionIndex + 1,
+          total: data.questions.length,
+        })}
         className={styles.progressTrack}
         role="progressbar"
         aria-valuemax={data.questions.length}
@@ -285,8 +298,8 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
       <section className={styles.question}>
         <p className={styles.prompt}>
           {currentQuestion.options
-            ? "Qual é a tradução em inglês de"
-            : "Escreva em inglês"}
+            ? t("test.translatePrompt")
+            : t("test.writePrompt")}
         </p>
         <h1>{currentQuestion.translation}</h1>
         {currentQuestion.options ? (
@@ -340,14 +353,14 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
                 void handleAnswer();
               }
             }}
-            placeholder="Digite em inglês"
+            placeholder={t("test.answerPlaceholder")}
             spellCheck={false}
             value={selectedAnswer}
           />
         )}
         {hasAnswered && !answerIsCorrect && (
           <p className={styles.correctAnswer}>
-            Resposta certa: <strong>{currentQuestion.word}</strong>
+            {t("test.correctAnswer")} <strong>{currentQuestion.word}</strong>
           </p>
         )}
         {error && (
@@ -364,12 +377,12 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
           type="button"
         >
           {isSubmitting
-            ? "Salvando resultado..."
+            ? t("test.saving")
             : hasAnswered
               ? questionIndex === data.questions.length - 1
-                ? "Ver resultado"
-                : "Continuar"
-              : "Confirmar"}
+                ? t("test.result")
+                : t("test.continue")
+              : t("test.confirm")}
         </button>
       </footer>
     </div>
@@ -377,8 +390,13 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
 }
 
 export function VocabularyTestSkeleton() {
+  const { t } = useI18n();
   return (
-    <div aria-label="Carregando teste" className={styles.screen} role="status">
+    <div
+      aria-label={t("test.loadingAria")}
+      className={styles.screen}
+      role="status"
+    >
       <div className={styles.skeletonHeader} />
       <div className={styles.skeletonProgress} />
       <div className={styles.skeletonQuestion} />

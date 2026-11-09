@@ -7,6 +7,7 @@ import {
 } from "@/features/words/presentation/actions";
 import type { Word } from "@/features/words/domain/word";
 import type { WordLookup } from "@/features/words/domain/word-lookup";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./word-form-sheet.module.css";
 
 interface WordFormSheetProps {
@@ -15,6 +16,7 @@ interface WordFormSheetProps {
 }
 
 export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
+  const { t } = useI18n();
   const [word, setWord] = useState("");
   const [lookup, setLookup] = useState<WordLookup | null>(null);
   const [duplicate, setDuplicate] = useState(false);
@@ -38,17 +40,17 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
     setIsLookingUp(true);
     setLookup(null);
     setDuplicate(false);
-    setMessage("Verificando ortografia…");
+    setMessage(t("word.add.checking"));
 
     try {
-      setMessage("Traduzindo e buscando exemplo…");
+      setMessage(t("word.add.translating"));
       const result = await lookupWordAction({
         word: input,
         skipCorrection,
       });
 
       if (result.status === "invalid") {
-        setMessage("Informe uma palavra com até 80 caracteres.");
+        setMessage(t("word.add.invalid"));
         return;
       }
 
@@ -60,26 +62,25 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
       }
 
       const correctionMessage = result.lookup.correctedWord
-        ? `Corrigi “${input}” para “${result.lookup.correctedWord}”. `
+        ? t("word.add.corrected", {
+            input,
+            word: result.lookup.correctedWord,
+          })
         : "";
-      const duplicateMessage = result.duplicate
-        ? "Você já anotou esta palavra, então ela não será contabilizada. "
-        : "";
+      const duplicateMessage = result.duplicate ? t("word.add.duplicate") : "";
       const direction =
         result.lookup.sourceLanguage === "pt"
-          ? "Português → inglês."
-          : "Inglês → português.";
+          ? t("word.add.direction.ptEn")
+          : t("word.add.direction.enPt");
       const exampleMessage = result.lookup.example
-        ? "Pronto!"
-        : "Não encontrei frase de exemplo para esta palavra.";
+        ? t("word.add.ready")
+        : t("word.add.noExample");
 
       setMessage(
         `${duplicateMessage}${correctionMessage}${direction} ${exampleMessage}`,
       );
-    } catch (error) {
-      const reason =
-        error instanceof Error ? error.message : "erro desconhecido";
-      setMessage(`Não foi possível traduzir: ${reason}.`);
+    } catch {
+      setMessage(t("word.add.translateError"));
     } finally {
       setIsLookingUp(false);
     }
@@ -104,32 +105,28 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
 
       if (result.status === "duplicate") {
         setDuplicate(true);
-        setMessage(
-          "Você já anotou esta palavra, então ela não será contabilizada.",
-        );
+        setMessage(t("word.add.duplicate"));
         return;
       }
 
       if (result.status === "goal-required") {
-        setMessage(
-          "Defina e habilite uma meta diária antes de anotar palavras.",
-        );
+        setMessage(t("word.add.goalRequired"));
         return;
       }
 
       if (result.status === "goal-reached") {
-        setMessage("Sua meta diária foi concluída. Escolha uma nova meta.");
+        setMessage(t("word.add.goalReached"));
         return;
       }
 
       if (result.status === "invalid") {
-        setMessage("Confira a palavra e tente novamente.");
+        setMessage(t("word.add.invalidInput"));
         return;
       }
 
       onCreated(result.word);
     } catch {
-      setMessage("Não foi possível salvar a palavra. Tente novamente.");
+      setMessage(t("word.add.saveFailed"));
     } finally {
       setIsSaving(false);
     }
@@ -155,9 +152,9 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
         onClick={(event) => event.stopPropagation()}
         role="dialog"
       >
-        <h2 id="word-sheet-title">Nova palavra</h2>
+        <h2 id="word-sheet-title">{t("word.add.title")}</h2>
         <form onSubmit={handleSubmit}>
-          <label htmlFor="word">Palavra (português ou inglês)</label>
+          <label htmlFor="word">{t("word.add.label")}</label>
           <input
             autoCapitalize="none"
             autoComplete="off"
@@ -166,7 +163,7 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
             id="word"
             maxLength={80}
             onChange={(event) => handleWordChange(event.target.value)}
-            placeholder="ex.: thrive ou prosperar"
+            placeholder={t("word.add.placeholder")}
             required
             value={word}
           />
@@ -180,10 +177,10 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
             {isLookingUp ? (
               <>
                 <span aria-hidden="true" className={styles.skeleton} />
-                Buscando...
+                {t("word.add.searching")}
               </>
             ) : (
-              "🔎 Traduzir e buscar exemplo"
+              t("word.add.search")
             )}
           </button>
 
@@ -200,27 +197,27 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
                   }
                   type="button"
                 >
-                  Usar “{correctedFrom}” mesmo
+                  {t("word.add.useAnyway", { word: correctedFrom })}
                 </button>
               </>
             )}
           </p>
 
-          <label htmlFor="translation">Tradução</label>
+          <label htmlFor="translation">{t("word.add.translation")}</label>
           <input
             className={styles.readOnly}
             id="translation"
-            placeholder="preenchida automaticamente"
+            placeholder={t("word.add.translationPlaceholder")}
             readOnly
             tabIndex={-1}
             value={translationValue}
           />
 
-          <label htmlFor="example">Frase de exemplo (em inglês)</label>
+          <label htmlFor="example">{t("word.add.example")}</label>
           <input
             className={styles.readOnly}
             id="example"
-            placeholder="buscada automaticamente"
+            placeholder={t("word.add.examplePlaceholder")}
             readOnly
             tabIndex={-1}
             value={lookup?.example ?? ""}
@@ -235,10 +232,10 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
             {isSaving ? (
               <>
                 <span aria-hidden="true" className={styles.skeleton} />
-                Salvando...
+                {t("word.add.saving")}
               </>
             ) : (
-              "Salvar"
+              t("word.add.save")
             )}
           </button>
           <button
@@ -247,7 +244,7 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
             onClick={onClose}
             type="button"
           >
-            Cancelar
+            {t("word.add.cancel")}
           </button>
         </form>
       </section>

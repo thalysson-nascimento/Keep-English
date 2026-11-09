@@ -8,6 +8,7 @@ import {
   getTestLockReason,
   type TestAccessState,
 } from "@/features/tests/domain/vocabulary-test";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./tests-screen.module.css";
 
 interface TestStartButtonProps {
@@ -15,18 +16,24 @@ interface TestStartButtonProps {
 }
 
 export function TestStartButton({ access }: TestStartButtonProps) {
+  const { t } = useI18n();
   const [now, setNow] = useState(access.now);
   const lockReason = getTestLockReason(access, now);
   const cooldownRemaining = getTestCooldownRemaining(access.lastTestAt, now);
   const hint =
     lockReason === "words"
-      ? "Anote palavras para liberar o teste"
+      ? t("testOverview.lockWords")
       : lockReason === "goal"
         ? access.goal === null
-          ? "Defina e conclua sua meta diária para liberar o teste."
-          : `Conclua sua meta diária (${access.todayWords}/${access.goal}) para liberar o teste.`
+          ? t("testOverview.lockGoal")
+          : t("testOverview.completeGoal", {
+              today: access.todayWords,
+              goal: access.goal,
+            })
         : lockReason === "cooldown"
-          ? `⏳ Próximo teste liberado em ${formatTestCountdown(cooldownRemaining)}`
+          ? t("testOverview.cooldown", {
+              time: formatTestCountdown(cooldownRemaining),
+            })
           : "";
 
   useEffect(() => {
@@ -39,11 +46,11 @@ export function TestStartButton({ access }: TestStartButtonProps) {
     <div className={styles.testAction}>
       {lockReason ? (
         <button className={styles.testButton} disabled type="button">
-          🎯 Fazer teste
+          {t("testOverview.testAction")}
         </button>
       ) : (
         <Link className={styles.testButton} href="/teste">
-          🎯 Fazer teste
+          {t("testOverview.testAction")}
         </Link>
       )}
       <p aria-live="polite" className={styles.testHint}>

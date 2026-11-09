@@ -21,6 +21,7 @@ import { Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./home-screen.module.css";
 
 interface HomeScreenProps {
@@ -36,6 +37,7 @@ export function HomeScreen({
   initialNow,
   lastTestAt,
 }: HomeScreenProps) {
+  const { locale, t } = useI18n();
   const router = useRouter();
   const requestId = useRef(0);
   const [now, setNow] = useState(initialNow);
@@ -76,7 +78,7 @@ export function HomeScreen({
           }
 
           if (result.status === "invalid") {
-            setError("A pesquisa deve ter até 80 caracteres.");
+            setError(t("home.words.searchError"));
             return;
           }
 
@@ -85,7 +87,7 @@ export function HomeScreen({
         })
         .catch(() => {
           if (currentRequestId === requestId.current) {
-            setError("Não foi possível pesquisar as palavras.");
+            setError(t("home.words.searchFailed"));
           }
         })
         .finally(() => {
@@ -99,7 +101,7 @@ export function HomeScreen({
       window.clearTimeout(timeoutId);
       requestId.current += 1;
     };
-  }, [query]);
+  }, [query, t]);
 
   async function handleDelete(id: string) {
     setDeletingId(id);
@@ -109,7 +111,7 @@ export function HomeScreen({
       const deleted = await deleteWordAction(id);
 
       if (!deleted) {
-        setError("Não foi possível remover a palavra.");
+        setError(t("home.words.removeFailed"));
         return;
       }
 
@@ -126,7 +128,7 @@ export function HomeScreen({
 
       router.refresh();
     } catch {
-      setError("Não foi possível remover a palavra.");
+      setError(t("home.words.removeFailed"));
     } finally {
       setDeletingId(null);
     }
@@ -156,13 +158,13 @@ export function HomeScreen({
       const result = await enableDailyGoalAction(selectedGoal);
 
       if (result.status !== "enabled") {
-        setError("Não foi possível habilitar essa meta. Escolha outra meta.");
+        setError(t("home.goal.enableError"));
         return;
       }
 
       router.refresh();
     } catch {
-      setError("Não foi possível habilitar a meta diária.");
+      setError(t("home.goal.dailyEnableError"));
     } finally {
       setIsEnablingGoal(false);
     }
@@ -184,13 +186,18 @@ export function HomeScreen({
   const testCooldownRemaining = getTestCooldownRemaining(lastTestAt, now);
   const testHint =
     testLockReason === "words"
-      ? "Anote palavras para liberar o teste"
+      ? t("home.test.addWords")
       : testLockReason === "goal"
         ? initialData.goalActive
-          ? `Conclua sua meta diária para liberar o teste (${initialData.today}/${initialData.goal}).`
-          : "Defina e conclua sua meta diária para liberar o teste."
+          ? t("home.test.completeGoal", {
+              today: initialData.today,
+              goal: initialData.goal,
+            })
+          : t("home.test.setGoal")
         : testLockReason === "cooldown"
-          ? `⏳ Próximo teste liberado em ${formatTestCountdown(testCooldownRemaining)}`
+          ? t("home.test.cooldown", {
+              time: formatTestCountdown(testCooldownRemaining),
+            })
           : "";
   const progressGoal = initialData.goalActive
     ? initialData.goal
@@ -208,19 +215,22 @@ export function HomeScreen({
       ? selectedGoal > initialData.goal && selectedGoal >= initialData.today
       : selectedGoal >= initialData.today);
   const goalMessage = dailyGoalLocked
-    ? `Meta de ${initialData.goal} ativa. Faltam ${initialData.goal - initialData.today} palavra(s) para liberar outras metas.`
+    ? t("home.goal.active", {
+        goal: initialData.goal,
+        remaining: initialData.goal - initialData.today,
+      })
     : dailyGoalReached
       ? initialData.goal === goalOptions[goalOptions.length - 1]
-        ? "Meta máxima concluída! 🎉 Volte amanhã para uma nova meta."
-        : "Meta concluída! 🎉 Escolha uma meta maior para continuar anotando."
-      : "Escolha uma meta e clique em habilitar para liberar o botão de anotar palavras.";
+        ? t("home.goal.maximum")
+        : t("home.goal.completed")
+      : t("home.goal.choose");
   const addWordLabel = !initialData.goalActive
-    ? "🔒 Defina a meta diária"
+    ? t("home.add.defineGoal")
     : dailyGoalReached
       ? initialData.goal === goalOptions[goalOptions.length - 1]
-        ? "🎉 Meta máxima batida hoje"
-        : "🔒 Escolha a nova meta diária"
-      : "+ Anotar palavra";
+        ? t("home.add.goalReachedMax")
+        : t("home.add.chooseGoal")
+      : t("home.add.word");
   const visibleWords = query.trim()
     ? searchResults
     : [
@@ -231,8 +241,14 @@ export function HomeScreen({
       ].slice(0, 10);
   const resultCount = query.trim() ? searchResultCount : initialData.total;
   const listEmptyMessage = query.trim()
-    ? "Nenhuma palavra encontrada."
-    : "Nenhuma palavra ainda. Toque em “Anotar palavra” para começar!";
+    ? t("home.words.noneFound")
+    : t("home.words.noneYet");
+  const greeting =
+    initialData.greetingPeriod === "morning"
+      ? t("home.greeting.morning")
+      : initialData.greetingPeriod === "afternoon"
+        ? t("home.greeting.afternoon")
+        : t("home.greeting.evening");
   const chartScale = Math.max(
     1,
     ...initialData.days.map((day) => day.count),
@@ -246,13 +262,18 @@ export function HomeScreen({
 
   return (
     <div className={styles.home}>
-      <p className={styles.greeting}>{initialData.greeting}</p>
+      <p className={styles.greeting}>
+        {initialData.goalReached
+          ? t("home.greeting.goalReached")
+          : `${greeting}! `}
+        {!initialData.goalReached && t("home.greeting.prompt")}
+      </p>
 
-      <section aria-label="Resumo das palavras" className={styles.hero}>
-        <small>PALAVRAS ANOTADAS</small>
+      <section aria-label={t("home.summary.aria")} className={styles.hero}>
+        <small>{t("home.summary.label")}</small>
         <div className={styles.total}>
           <strong>{initialData.total}</strong>
-          <span>no total</span>
+          <span>{t("home.summary.total")}</span>
         </div>
         <div className={styles.progressTrack}>
           <div
@@ -264,22 +285,25 @@ export function HomeScreen({
         </div>
         <div className={styles.progressCaption}>
           <span>
-            {initialData.today} de {progressGoal} hoje
+            {t("home.evolution.dayGoal", {
+              count: initialData.today,
+              goal: progressGoal,
+            })}
           </span>
           <span>{progressPercent}%</span>
         </div>
         <div className={styles.stats}>
           <div>
             <strong>{initialData.today}</strong>
-            <span>Hoje</span>
+            <span>{t("home.summary.today")}</span>
           </div>
           <div>
             <strong>{initialData.streak}</strong>
-            <span>Sequência</span>
+            <span>{t("home.summary.streak")}</span>
           </div>
           <div>
             <strong>{initialData.week}</strong>
-            <span>Semana</span>
+            <span>{t("home.summary.week")}</span>
           </div>
         </div>
       </section>
@@ -287,22 +311,20 @@ export function HomeScreen({
       <div className={styles.testRow}>
         {testLockReason === null ? (
           <Link className={styles.testButton} href="/teste">
-            🎯 Fazer teste
+            {t("home.test.start")}
           </Link>
         ) : (
           <button className={styles.testButton} disabled type="button">
-            🎯 Fazer teste
+            {t("home.test.start")}
           </button>
         )}
       </div>
       {testHint && <p className={styles.testHint}>{testHint}</p>}
 
       <section aria-labelledby="goal-title" className={styles.section}>
-        <h2 id="goal-title">Meta diária</h2>
+        <h2 id="goal-title">{t("home.goal.title")}</h2>
         <div className={styles.card}>
-          <p className={styles.goalPrompt}>
-            Quantas palavras você quer anotar por dia?
-          </p>
+          <p className={styles.goalPrompt}>{t("home.goal.prompt")}</p>
           <div className={styles.goalOptions}>
             {goalOptions.map((goal) => {
               const isLockedGoalOption =
@@ -338,10 +360,10 @@ export function HomeScreen({
             type="button"
           >
             {isEnablingGoal
-              ? "Habilitando..."
+              ? t("home.goal.enabling")
               : dailyGoalLocked
-                ? "Meta ativa ✓"
-                : "Habilitar meta diária"}
+                ? t("home.goal.enabled")
+                : t("home.goal.enable")}
           </button>
           <p aria-live="polite" className={styles.goalMessage}>
             {goalMessage}
@@ -350,13 +372,16 @@ export function HomeScreen({
       </section>
 
       <section aria-labelledby="evolution-title" className={styles.section}>
-        <h2 id="evolution-title">Sua evolução</h2>
+        <h2 id="evolution-title">{t("home.evolution.title")}</h2>
         <div className={`${styles.card} ${styles.chart}`}>
           {chartDays.map((day, index) => {
             const date = new Date(`${day.date}T12:00:00`);
-            const weekday = new Intl.DateTimeFormat("pt-BR", {
-              weekday: "narrow",
-            }).format(date);
+            const weekday = new Intl.DateTimeFormat(
+              locale === "en" ? "en-US" : "pt-BR",
+              {
+                weekday: "narrow",
+              },
+            ).format(date);
             const isToday = index === chartDays.length - 1;
             const height = isToday
               ? Math.min(100, Math.round((day.count / day.goal) * 100))
@@ -382,8 +407,11 @@ export function HomeScreen({
                     style={{ height: `${height}%` }}
                     title={
                       isToday
-                        ? `${day.count} de ${day.goal} palavras da meta`
-                        : `${day.count} palavras`
+                        ? t("home.evolution.dayGoal", {
+                            count: day.count,
+                            goal: day.goal,
+                          })
+                        : t("home.evolution.dayCount", { count: day.count })
                     }
                   />
                 </div>
@@ -400,14 +428,20 @@ export function HomeScreen({
       >
         <div className={styles.sectionHeading}>
           <h2 id="words-title">
-            {query.trim() ? "Resultados da busca" : "Últimas palavras"}
+            {query.trim() ? t("home.words.results") : t("home.words.recent")}
           </h2>
           <span>
-            {resultCount} {resultCount === 1 ? "palavra" : "palavras"}
+            {resultCount === 1
+              ? t("common.countWord", { count: resultCount })
+              : t("common.countWords", { count: resultCount })}
           </span>
         </div>
 
-        <label className={styles.search} htmlFor="word-search">
+        <label
+          aria-label={t("home.words.searchPlaceholder")}
+          className={styles.search}
+          htmlFor="word-search"
+        >
           <Search aria-hidden="true" />
           <input
             autoComplete="off"
@@ -419,7 +453,7 @@ export function HomeScreen({
               setIsSearching(Boolean(nextQuery.trim()));
               setError("");
             }}
-            placeholder="Pesquisar palavra ou tradução"
+            placeholder={t("home.words.searchPlaceholder")}
             value={query}
           />
         </label>
@@ -446,13 +480,14 @@ export function HomeScreen({
         {!query.trim() &&
           initialData.total > initialData.recentWords.length && (
             <Link className={styles.moreWords} href="/palavras">
-              Ver mais palavras →
+              {t("home.words.more")}
             </Link>
           )}
       </section>
 
       <div className={styles.fab}>
         <button
+          aria-label={t("home.add.aria")}
           disabled={!initialData.goalActive || dailyGoalReached}
           onClick={() => setIsSheetOpen(true)}
           type="button"

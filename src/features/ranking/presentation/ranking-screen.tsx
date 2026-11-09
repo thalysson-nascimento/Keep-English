@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { z } from "zod";
+import { formatOrdinal, getIntlLocale } from "@/shared/i18n/config";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./ranking-screen.module.css";
 
 const rankingEntrySchema = z.object({
@@ -40,31 +42,63 @@ const pageSize = 10;
 async function requestJson<TSchema extends z.ZodType>(
   path: string,
   schema: TSchema,
+  failureMessage: string,
+  invalidMessage: string,
   signal?: AbortSignal,
 ): Promise<z.output<TSchema>> {
-  const response = await fetch(path, { cache: "no-store", signal });
+  let response: Response;
 
-  if (!response.ok) {
-    throw new Error("Não foi possível carregar o ranking.");
+  try {
+    response = await fetch(path, { cache: "no-store", signal });
+  } catch {
+    throw new Error(failureMessage);
   }
 
-  const result: unknown = await response.json();
+  if (!response.ok) {
+    throw new Error(failureMessage);
+  }
+
+  let result: unknown;
+
+  try {
+    result = await response.json();
+  } catch {
+    throw new Error(invalidMessage);
+  }
   const parsed = schema.safeParse(result);
 
   if (!parsed.success) {
-    throw new Error("A resposta do ranking está em um formato inválido.");
+    throw new Error(invalidMessage);
   }
 
   return parsed.data;
 }
 
-async function fetchRankingData(signal?: AbortSignal): Promise<RankingData> {
+async function fetchRankingData(
+  failureMessage: string,
+  invalidMessage: string,
+  signal?: AbortSignal,
+): Promise<RankingData> {
   const [top, comparison, page] = await Promise.all([
-    requestJson("/api/ranking/top", z.array(rankingEntrySchema), signal),
-    requestJson("/api/ranking/compare", rankingComparisonSchema, signal),
+    requestJson(
+      "/api/ranking/top",
+      z.array(rankingEntrySchema),
+      failureMessage,
+      invalidMessage,
+      signal,
+    ),
+    requestJson(
+      "/api/ranking/compare",
+      rankingComparisonSchema,
+      failureMessage,
+      invalidMessage,
+      signal,
+    ),
     requestJson(
       `/api/ranking?offset=0&limit=${pageSize}`,
       rankingPageSchema,
+      failureMessage,
+      invalidMessage,
       signal,
     ),
   ]);
@@ -72,13 +106,21 @@ async function fetchRankingData(signal?: AbortSignal): Promise<RankingData> {
   return { top, comparison, page };
 }
 
-function getDayLabel(dateKey: string): string {
-  return new Intl.DateTimeFormat("pt-BR", { weekday: "short" })
+function getDayLabel(dateKey: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, { weekday: "short" })
     .format(new Date(`${dateKey}T12:00:00`))
     .replace(".", "");
 }
 
-function RankingChart({ comparison }: { comparison: RankingComparison }) {
+function RankingChart({
+  comparison,
+  locale,
+  label,
+}: {
+  comparison: RankingComparison;
+  locale: string;
+  label: string;
+}) {
   const entries = [comparison.me, ...comparison.others];
   const cumulative = entries.map((entry) =>
     entry.days.map((_, index) =>
@@ -91,7 +133,7 @@ function RankingChart({ comparison }: { comparison: RankingComparison }) {
 
   return (
     <svg
-      aria-label="Pontos acumulados na semana"
+      aria-label={label}
       className={styles.chart}
       role="img"
       viewBox="0 0 340 170"
@@ -119,7 +161,7 @@ function RankingChart({ comparison }: { comparison: RankingComparison }) {
           textAnchor="middle"
           className={styles.chartLabel}
         >
-          {getDayLabel(key)}
+          {getDayLabel(key, locale)}
         </text>
       ))}
       {cumulative.map((points, entryIndex) => {
@@ -156,9 +198,9 @@ function RankingChart({ comparison }: { comparison: RankingComparison }) {
   );
 }
 
-function RankingSkeleton() {
+function RankingSkeleton({ label }: { label: string }) {
   return (
-    <div aria-label="Carregando ranking" className={styles.loading}>
+    <div aria-label={label} className={styles.loading}>
       <div className={`${styles.card} ${styles.podiumSkeleton}`} />
       <div className={`${styles.card} ${styles.comparisonSkeleton}`} />
       <div className={`${styles.card} ${styles.listSkeleton}`} />
@@ -166,26 +208,47 @@ function RankingSkeleton() {
   );
 }
 
-function getPositionMessage(comparison: RankingComparison): string {
+function getPositionMessage(
+  comparison: RankingComparison,
+  locale: "pt-BR" | "en",
+  t: ReturnType<typeof useI18n>["t"],
+): string {
   const { me, others } = comparison;
   const neighbor = others[0];
 
   if (!neighbor) {
-    return "Você está em 1º lugar! Continue acumulando pontos nesta semana.";
+    return t("ranking.position.leading");
   }
 
   if (me.rank === 1) {
-    return `Você lidera! Vantagem de ${me.total - neighbor.total} XP sobre ${neighbor.name}.`;
+    return t("ranking.position.lead", {
+      points: me.total - neighbor.total,
+      name: neighbor.name,
+    });
   }
 
   if (neighbor.rank < me.rank) {
-    return `Você está em ${me.rank}º · faltam ${Math.max(1, neighbor.total - me.total + 1)} XP para passar ${neighbor.name}.`;
+    return t("ranking.position.catchUp", {
+      rank: formatOrdinal(locale, me.rank),
+      points: Math.max(1, neighbor.total - me.total + 1),
+      name: neighbor.name,
+    });
   }
 
-  return `Você está em ${me.rank}º lugar nesta semana.`;
+  return t("ranking.position.current", {
+    rank: formatOrdinal(locale, me.rank),
+  });
 }
 
-function Podium({ entries }: { entries: RankingEntry[] }) {
+function Podium({
+  entries,
+  locale,
+  t,
+}: {
+  entries: RankingEntry[];
+  locale: "pt-BR" | "en";
+  t: ReturnType<typeof useI18n>["t"];
+}) {
   const places = [2, 1, 3].map((rank) => ({
     rank,
     entry: entries.find((entry) => entry.rank === rank),
@@ -206,7 +269,10 @@ function Podium({ entries }: { entries: RankingEntry[] }) {
             </span>
           )}
           <div
-            aria-label={entry?.name ?? `${rank}º lugar aguardando participante`}
+            aria-label={
+              entry?.name ??
+              `${formatOrdinal(locale, rank)} ${t("ranking.emptyPlace")}`
+            }
             className={`${styles.podiumAvatar} ${
               entry?.isCurrentUser ? styles.currentAvatar : ""
             }`}
@@ -214,10 +280,19 @@ function Podium({ entries }: { entries: RankingEntry[] }) {
             {entry?.avatar ?? "·"}
           </div>
           <strong>
-            {entry ? (entry.isCurrentUser ? "Você" : entry.name) : "Aguardando"}
+            {entry
+              ? entry.isCurrentUser
+                ? t("common.currentUser")
+                : entry.name
+              : t("ranking.emptyPlace")}
           </strong>
-          <span>{entry ? `${entry.total} XP` : "Sem participante"}</span>
-          <div aria-label={`${rank}º lugar`} className={styles.block}>
+          <span>
+            {entry ? `${entry.total} XP` : t("ranking.noParticipant")}
+          </span>
+          <div
+            aria-label={formatOrdinal(locale, rank)}
+            className={styles.block}
+          >
             {rank}
           </div>
         </div>
@@ -226,7 +301,13 @@ function Podium({ entries }: { entries: RankingEntry[] }) {
   );
 }
 
-function RankingRow({ entry }: { entry: RankingEntry }) {
+function RankingRow({
+  entry,
+  t,
+}: {
+  entry: RankingEntry;
+  t: ReturnType<typeof useI18n>["t"];
+}) {
   const medal = ["🥇", "🥈", "🥉"][entry.rank - 1];
 
   return (
@@ -242,9 +323,11 @@ function RankingRow({ entry }: { entry: RankingEntry }) {
       <div className={styles.userDetails}>
         <strong>
           {entry.name}
-          {entry.isCurrentUser ? " (você)" : ""}
+          {entry.isCurrentUser
+            ? ` (${t("common.currentUser").toLowerCase()})`
+            : ""}
         </strong>
-        <span>Semana</span>
+        <span>{t("ranking.week")}</span>
       </div>
       <strong className={styles.points}>{entry.total} XP</strong>
     </div>
@@ -252,6 +335,7 @@ function RankingRow({ entry }: { entry: RankingEntry }) {
 }
 
 export function RankingScreen() {
+  const { locale, t } = useI18n();
   const [data, setData] = useState<RankingData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -262,7 +346,11 @@ export function RankingScreen() {
     setError(null);
 
     try {
-      const rankingData = await fetchRankingData(signal);
+      const rankingData = await fetchRankingData(
+        t("ranking.failed"),
+        t("ranking.invalidResponse"),
+        signal,
+      );
 
       if (!signal?.aborted) {
         setData(rankingData);
@@ -272,7 +360,7 @@ export function RankingScreen() {
         setError(
           requestError instanceof Error
             ? requestError.message
-            : "Não foi possível carregar o ranking.",
+            : t("ranking.failed"),
         );
       }
     } finally {
@@ -284,14 +372,18 @@ export function RankingScreen() {
 
   useEffect(() => {
     const controller = new AbortController();
-    void fetchRankingData(controller.signal)
+    void fetchRankingData(
+      t("ranking.failed"),
+      t("ranking.invalidResponse"),
+      controller.signal,
+    )
       .then(setData)
       .catch((requestError: unknown) => {
         if (!controller.signal.aborted) {
           setError(
             requestError instanceof Error
               ? requestError.message
-              : "Não foi possível carregar o ranking.",
+              : t("ranking.failed"),
           );
         }
       })
@@ -302,7 +394,7 @@ export function RankingScreen() {
       });
 
     return () => controller.abort();
-  }, []);
+  }, [t]);
 
   async function loadMore() {
     if (!data || isLoadingMore || !data.page.hasMore) {
@@ -316,6 +408,8 @@ export function RankingScreen() {
       const nextPage = await requestJson(
         `/api/ranking?offset=${data.page.items.length}&limit=${pageSize}`,
         rankingPageSchema,
+        t("ranking.failed"),
+        t("ranking.invalidResponse"),
       );
       setData((current) =>
         current
@@ -332,7 +426,7 @@ export function RankingScreen() {
       setError(
         requestError instanceof Error
           ? requestError.message
-          : "Não foi possível carregar mais participantes.",
+          : t("ranking.moreFailed"),
       );
     } finally {
       setIsLoadingMore(false);
@@ -340,7 +434,7 @@ export function RankingScreen() {
   }
 
   if (isLoading) {
-    return <RankingSkeleton />;
+    return <RankingSkeleton label={t("ranking.loadAria")} />;
   }
 
   if (error && !data) {
@@ -348,7 +442,7 @@ export function RankingScreen() {
       <div className={styles.error} role="alert">
         <p>{error}</p>
         <button onClick={() => void loadRanking()} type="button">
-          Tentar novamente
+          {t("common.retry")}
         </button>
       </div>
     );
@@ -362,23 +456,27 @@ export function RankingScreen() {
 
   return (
     <div className={styles.screen}>
-      <p className={styles.intro}>
-        🏆 Ranking semanal: 10 pontos por palavra nova e 5 por acerto no teste.
-      </p>
+      <p className={styles.intro}>{t("ranking.intro")}</p>
       <section
-        aria-label="Pódio semanal"
+        aria-label={t("ranking.podium")}
         className={`${styles.card} ${styles.podiumCard}`}
       >
-        <Podium entries={data.top} />
+        <Podium entries={data.top} locale={locale} t={t} />
       </section>
 
-      <h1 className={styles.heading}>Sua posição</h1>
+      <h1 className={styles.heading}>{t("ranking.yourPosition")}</h1>
       <section className={styles.card}>
         <p className={styles.positionMessage}>
-          {getPositionMessage(data.comparison)}
+          {getPositionMessage(data.comparison, locale, t)}
         </p>
-        <small className={styles.subheading}>Pontos acumulados na semana</small>
-        <RankingChart comparison={data.comparison} />
+        <small className={styles.subheading}>
+          {t("ranking.pointsThisWeek")}
+        </small>
+        <RankingChart
+          comparison={data.comparison}
+          label={t("ranking.chartAria")}
+          locale={getIntlLocale(locale)}
+        />
         <div className={styles.legend}>
           {comparisonEntries.map((entry, index) => (
             <div className={styles.legendEntry} key={entry.id}>
@@ -389,27 +487,29 @@ export function RankingScreen() {
                 {entry.avatar}
               </span>
               <strong>
-                {entry.isCurrentUser ? "Você" : entry.name.split(" ")[0]}
+                {entry.isCurrentUser
+                  ? t("common.currentUser")
+                  : entry.name.split(" ")[0]}
               </strong>
               <span>
-                {entry.rank}º · {entry.total} XP
+                {formatOrdinal(locale, entry.rank)} · {entry.total} XP
               </span>
             </div>
           ))}
         </div>
       </section>
 
-      <h2 className={styles.heading}>Classificação geral</h2>
+      <h2 className={styles.heading}>{t("ranking.general")}</h2>
       <section
-        aria-label="Classificação geral"
+        aria-label={t("ranking.general")}
         className={`${styles.card} ${styles.rankingList}`}
       >
         {data.page.items.length > 0 ? (
           data.page.items.map((entry) => (
-            <RankingRow entry={entry} key={entry.id} />
+            <RankingRow entry={entry} key={entry.id} t={t} />
           ))
         ) : (
-          <p className={styles.empty}>Ainda não há participantes no ranking.</p>
+          <p className={styles.empty}>{t("ranking.empty")}</p>
         )}
       </section>
       {error && (
@@ -424,7 +524,7 @@ export function RankingScreen() {
           onClick={() => void loadMore()}
           type="button"
         >
-          {isLoadingMore ? "Carregando..." : "Carregar mais"}
+          {isLoadingMore ? t("ranking.loadingMore") : t("ranking.loadMore")}
         </button>
       )}
     </div>

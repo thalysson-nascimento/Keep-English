@@ -9,6 +9,7 @@ import {
   getWordsPageAction,
 } from "@/features/words/presentation/actions";
 import { WordList } from "./word-list";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./all-words-screen.module.css";
 
 interface AllWordsScreenProps {
@@ -22,6 +23,7 @@ export function AllWordsScreen({
   initialTotal,
   initialHasMore,
 }: AllWordsScreenProps) {
+  const { t } = useI18n();
   const screenRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestId = useRef(0);
@@ -63,7 +65,7 @@ export function AllWordsScreen({
         }
 
         if (result.status !== "ok") {
-          setError("Não foi possível carregar as palavras.");
+          setError(t("words.all.failed"));
           return;
         }
 
@@ -74,7 +76,7 @@ export function AllWordsScreen({
         setHasMore(result.hasMore);
       } catch {
         if (currentRequestId === requestId.current) {
-          setError("Não foi possível carregar as palavras.");
+          setError(t("words.all.failed"));
         }
       } finally {
         if (!replace) {
@@ -86,7 +88,7 @@ export function AllWordsScreen({
         }
       }
     },
-    [],
+    [t],
   );
 
   useEffect(() => {
@@ -134,7 +136,7 @@ export function AllWordsScreen({
       const deleted = await deleteWordAction(id);
 
       if (!deleted) {
-        setError("Não foi possível remover a palavra.");
+        setError(t("words.all.removeFailed"));
         return;
       }
 
@@ -142,7 +144,7 @@ export function AllWordsScreen({
       setTotal((currentTotal) => Math.max(0, currentTotal - 1));
       await loadPage(query.trim(), 0, true);
     } catch {
-      setError("Não foi possível remover a palavra.");
+      setError(t("words.all.removeFailed"));
     } finally {
       setDeletingId(null);
     }
@@ -153,21 +155,24 @@ export function AllWordsScreen({
       <div className={styles.wrap}>
         <header className={styles.header}>
           <Link
-            aria-label="Voltar para palavras"
+            aria-label={t("words.all.back")}
             className={styles.back}
             href="/palavras"
           >
             ←
           </Link>
-          <h1>Todas as palavras</h1>
+          <h1>{t("words.all.title")}</h1>
           <span className={styles.count}>
-            {total} {total === 1 ? "palavra" : "palavras"}
+            {total === 1
+              ? t("words.all.countWord", { count: total })
+              : t("words.all.countWords", { count: total })}
           </span>
         </header>
 
         <label className={styles.search} htmlFor="all-words-search">
           <Search aria-hidden="true" />
           <input
+            aria-label={t("words.all.search")}
             autoComplete="off"
             id="all-words-search"
             maxLength={80}
@@ -178,7 +183,7 @@ export function AllWordsScreen({
               setIsLoading(true);
               setError("");
             }}
-            placeholder="🔍  Pesquisar palavra ou tradução"
+            placeholder={`🔍  ${t("words.all.search")}`}
             value={query}
           />
         </label>
@@ -191,7 +196,7 @@ export function AllWordsScreen({
 
         <div aria-busy={isLoading} className={styles.card}>
           {isLoading ? (
-            <div aria-label="Carregando palavras" role="status">
+            <div aria-label={t("common.loadingWords")} role="status">
               {[0, 1, 2].map((item) => (
                 <div className={styles.skeletonWord} key={item} />
               ))}
@@ -199,7 +204,7 @@ export function AllWordsScreen({
           ) : (
             <WordList
               deletingId={deletingId}
-              emptyMessage="Nenhuma palavra encontrada."
+              emptyMessage={t("words.all.none")}
               onDelete={handleDelete}
               words={words}
             />
@@ -208,20 +213,20 @@ export function AllWordsScreen({
 
         {hasMore && (
           <div
-            aria-label="Carregando mais palavras"
+            aria-label={t("words.all.loadMore")}
             className={styles.loadMore}
             ref={sentinelRef}
             role="status"
           >
             {isLoading ? (
-              <span className={styles.loadingLabel}>Carregando...</span>
+              <span className={styles.loadingLabel}>{t("common.loading")}</span>
             ) : (
               <span />
             )}
           </div>
         )}
         {!hasMore && total > 0 && (
-          <p className={styles.endMessage}>Você chegou ao fim 🎉</p>
+          <p className={styles.endMessage}>{t("words.all.end")}</p>
         )}
       </div>
     </div>

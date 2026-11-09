@@ -7,26 +7,35 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./auth-form.module.css";
 
 interface AuthFormProps {
   mode: "login" | "register" | "forgot" | "reset";
+  initialPassword?: string;
   token?: string;
 }
 
-const resetEmailUnavailableMessage =
-  "A recuperação de senha ainda não está configurada neste ambiente. O envio de e-mails precisa ser habilitado.";
-
 export function AuthFormSkeleton() {
-  return <div aria-busy="true" className={styles.screen} />;
+  const { t } = useI18n();
+  return (
+    <div
+      aria-busy="true"
+      aria-label={t("common.loading")}
+      className={styles.screen}
+    />
+  );
 }
 
-export function AuthForm({ mode, token }: AuthFormProps) {
+export function AuthForm({ mode, initialPassword, token }: AuthFormProps) {
+  const { t } = useI18n();
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(mode === "login" ? "user@test.com" : "");
+  const [password, setPassword] = useState(
+    mode === "login" ? (initialPassword ?? "") : "",
+  );
   const [avatar, setAvatar] = useState<string>(defaultAvatar);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -39,12 +48,12 @@ export function AuthForm({ mode, token }: AuthFormProps) {
   const isResettingPassword = mode === "reset";
 
   const title = isRegistering
-    ? "Criar conta"
+    ? t("auth.register.title")
     : isForgotPassword
-      ? "Perdi minha senha"
+      ? t("auth.forgot.title")
       : isResettingPassword
-        ? "Criar nova senha"
-        : "Entrar";
+        ? t("auth.reset.title")
+        : t("auth.login.title");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,9 +62,7 @@ export function AuthForm({ mode, token }: AuthFormProps) {
     setSuccess("");
 
     if (isRegistering && !acceptedTerms) {
-      setError(
-        "Você precisa aceitar os termos de uso e a política de privacidade.",
-      );
+      setError(t("auth.register.acceptTerms"));
       return;
     }
 
@@ -69,12 +76,8 @@ export function AuthForm({ mode, token }: AuthFormProps) {
       } else {
         await authenticate();
       }
-    } catch (requestError) {
-      setError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Não foi possível concluir a solicitação. Tente novamente.",
-      );
+    } catch {
+      setError(t("auth.requestError"));
     } finally {
       setIsSubmitting(false);
     }
@@ -89,20 +92,18 @@ export function AuthForm({ mode, token }: AuthFormProps) {
     if (result.error) {
       setError(
         result.error.code === "RESET_PASSWORD_DISABLED"
-          ? resetEmailUnavailableMessage
-          : "Não foi possível solicitar a recuperação. Tente novamente.",
+          ? t("auth.forgot.unavailable")
+          : t("auth.forgot.error"),
       );
       return;
     }
 
-    setSuccess(
-      "Se este e-mail estiver cadastrado, você receberá as instruções para redefinir sua senha.",
-    );
+    setSuccess(t("auth.forgot.success"));
   }
 
   async function resetPassword() {
     if (!token) {
-      setError("Este link de recuperação é inválido ou expirou.");
+      setError(t("auth.reset.invalidLink"));
       return;
     }
 
@@ -112,11 +113,11 @@ export function AuthForm({ mode, token }: AuthFormProps) {
     });
 
     if (result.error) {
-      setError("Não foi possível redefinir a senha. Solicite um novo link.");
+      setError(t("auth.reset.error"));
       return;
     }
 
-    setSuccess("Senha atualizada. Agora você já pode entrar na sua conta.");
+    setSuccess(t("auth.reset.success"));
   }
 
   async function authenticate() {
@@ -137,8 +138,8 @@ export function AuthForm({ mode, token }: AuthFormProps) {
     if (result.error) {
       setError(
         isRegistering
-          ? "Não foi possível criar a conta. Verifique os dados ou tente entrar."
-          : "E-mail ou senha inválidos.",
+          ? t("auth.register.createError")
+          : t("auth.login.invalidCredentials"),
       );
       return;
     }
@@ -150,7 +151,7 @@ export function AuthForm({ mode, token }: AuthFormProps) {
   return (
     <section className={styles.screen}>
       {(isForgotPassword || isRegistering || isResettingPassword) && (
-        <Link aria-label="Voltar" className={styles.back} href="/login">
+        <Link aria-label={t("auth.back")} className={styles.back} href="/login">
           <ArrowLeft aria-hidden="true" />
         </Link>
       )}
@@ -168,7 +169,7 @@ export function AuthForm({ mode, token }: AuthFormProps) {
           <p className={styles.appName}>
             <span>keep</span> english
           </p>
-          <p className={styles.tagline}>Anote. Pratique. Mantenha.</p>
+          <p className={styles.tagline}>{t("auth.tagline")}</p>
         </header>
       )}
 
@@ -182,30 +183,32 @@ export function AuthForm({ mode, token }: AuthFormProps) {
         <h1>{title}</h1>
         <p>
           {isRegistering
-            ? "Escolha seu avatar e comece a anotar suas palavras."
+            ? t("auth.register.description")
             : isForgotPassword
-              ? "Digite o e-mail da sua conta e enviaremos um link para criar uma nova senha."
+              ? t("auth.forgot.description")
               : isResettingPassword
-                ? "Escolha uma senha nova para voltar aos seus estudos."
-                : "Bem-vindo de volta! Continue de onde parou."}
+                ? t("auth.reset.description")
+                : t("auth.login.description")}
         </p>
       </header>
 
       {isRegistering && (
         <fieldset className={styles.avatarFieldset}>
           <div
-            aria-label={`Avatar selecionado: ${avatar}`}
+            aria-label={t("auth.register.selectedAvatar", { avatar })}
             className={styles.selectedAvatar}
           >
             {avatar}
           </div>
 
-          <legend>Escolha seu avatar</legend>
+          <legend>{t("auth.register.chooseAvatar")}</legend>
 
           <div className={styles.avatarGrid}>
             {avatarOptions.map((option, index) => (
               <button
-                aria-label={`Selecionar avatar ${index + 1}`}
+                aria-label={t("auth.register.selectAvatar", {
+                  number: index + 1,
+                })}
                 aria-pressed={avatar === option}
                 className={styles.avatarOption}
                 key={`${option}-${index}`}
@@ -222,7 +225,7 @@ export function AuthForm({ mode, token }: AuthFormProps) {
       <form className={styles.form} onSubmit={handleSubmit}>
         {isRegistering && (
           <label className={styles.field}>
-            <span>Nome</span>
+            <span>{t("auth.register.name")}</span>
             <input
               autoComplete="name"
               maxLength={80}
@@ -235,7 +238,7 @@ export function AuthForm({ mode, token }: AuthFormProps) {
 
         {!isResettingPassword && (
           <label className={styles.field}>
-            <span>E-mail</span>
+            <span>{t("auth.email")}</span>
             <input
               autoComplete="email"
               onChange={(event) => setEmail(event.target.value)}
@@ -248,7 +251,11 @@ export function AuthForm({ mode, token }: AuthFormProps) {
 
         {!isForgotPassword && (
           <label className={styles.field}>
-            <span>{isResettingPassword ? "Nova senha" : "Senha"}</span>
+            <span>
+              {isResettingPassword
+                ? t("auth.reset.password")
+                : t("auth.password")}
+            </span>
 
             <span className={styles.passwordInput}>
               <input
@@ -265,7 +272,11 @@ export function AuthForm({ mode, token }: AuthFormProps) {
               />
 
               <button
-                aria-label={passwordVisible ? "Ocultar senha" : "Mostrar senha"}
+                aria-label={
+                  passwordVisible
+                    ? t("auth.hidePassword")
+                    : t("auth.showPassword")
+                }
                 className={styles.visibilityToggle}
                 onClick={() => setPasswordVisible((visible) => !visible)}
                 type="button"
@@ -285,13 +296,13 @@ export function AuthForm({ mode, token }: AuthFormProps) {
             />
 
             <span>
-              Li e aceito os{" "}
+              {t("auth.register.termsPrefix")}{" "}
               <Link href="/termos">
-                <strong>termos de uso</strong>
+                <strong>{t("auth.register.terms")}</strong>
               </Link>{" "}
-              e a{" "}
+              {t("auth.register.and")}{" "}
               <Link href="/privacidade">
-                <strong>política de privacidade</strong>
+                <strong>{t("auth.register.privacy")}</strong>
               </Link>
               .
             </span>
@@ -300,7 +311,7 @@ export function AuthForm({ mode, token }: AuthFormProps) {
 
         {mode === "login" && (
           <Link className={styles.forgotLink} href="/esqueci-senha">
-            Perdi minha senha
+            {t("auth.login.forgotPassword")}
           </Link>
         )}
 
@@ -318,22 +329,22 @@ export function AuthForm({ mode, token }: AuthFormProps) {
 
         <button className={styles.submit} disabled={isSubmitting} type="submit">
           {isSubmitting
-            ? "Aguarde..."
+            ? t("auth.login.submitting")
             : isRegistering
-              ? "Cadastrar"
+              ? t("auth.register.submit")
               : isForgotPassword
-                ? "Enviar link"
+                ? t("auth.forgot.submit")
                 : isResettingPassword
-                  ? "Salvar nova senha"
-                  : "Entrar"}
+                  ? t("auth.reset.submit")
+                  : t("auth.login.submit")}
         </button>
       </form>
 
       {mode === "login" ? (
         <div className={styles.registerPrompt}>
-          <span>ou</span>
+          <span>{t("auth.login.or")}</span>
           <Link className={styles.alternate} href="/registro">
-            Cadastrar
+            {t("auth.login.createAccount")}
           </Link>
         </div>
       ) : (
@@ -344,10 +355,10 @@ export function AuthForm({ mode, token }: AuthFormProps) {
           href="/login"
         >
           {isRegistering
-            ? "Já tenho conta"
+            ? t("auth.register.haveAccount")
             : isForgotPassword
-              ? "Voltar ao login"
-              : "Ir para o login"}
+              ? t("auth.backToLogin")
+              : t("auth.signIn")}
         </Link>
       )}
     </section>
