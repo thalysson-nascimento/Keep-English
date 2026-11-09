@@ -18,7 +18,7 @@ export interface TestAccessState {
 export type TestLockReason = "words" | "goal" | "cooldown" | null;
 
 export const testCooldownMilliseconds = 30 * 60 * 1000;
-export const vocabularyTestQuestionCount = 5;
+export const maxVocabularyTestQuestionCount = 20;
 
 function shuffle<T>(values: readonly T[]): T[] {
   const shuffled = [...values];
@@ -36,9 +36,10 @@ function shuffle<T>(values: readonly T[]): T[] {
 
 export function createVocabularyQuestions(
   words: readonly VocabularyTestWord[],
+  questionCount: number,
 ): VocabularyQuestion[] {
   return shuffle(words)
-    .slice(0, vocabularyTestQuestionCount)
+    .slice(0, questionCount)
     .map((word) => {
       const alternatives = [
         ...new Set(

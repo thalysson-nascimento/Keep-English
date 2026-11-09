@@ -176,7 +176,7 @@ export function HomeScreen({
     initialData.goalActive && initialData.today >= initialData.goal;
   const testLockReason = getTestLockReason(
     {
-      goal: initialData.goalActive ? initialData.goal : null,
+      goal: initialData.latestCompletedGoal,
       todayWords: initialData.today,
       wordCount: initialData.total,
       lastTestAt,

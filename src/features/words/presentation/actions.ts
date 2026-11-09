@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getGoalValidationData } from "@/features/home/application/get-home-data";
+import { getDailyGoalXp } from "@/features/home/domain/daily-goal";
+import { getDateStart } from "@/features/home/domain/home-date";
 import { createPrismaDailyGoalsRepository } from "@/features/home/infrastructure/prisma-daily-goals-repository";
 import { wordInputSchema } from "@/features/words/application/word-input.schema";
 import {
@@ -91,7 +93,12 @@ export async function createWordAction(
     return { status: "goal-reached" };
   }
 
-  const word = await createWord(repository, parsedInput.data);
+  const word = await createWord(repository, parsedInput.data, {
+    dateKey: goalData.todayKey,
+    dayStart: getDateStart(goalData.todayKey),
+    goal: goalData.dailyGoal.goal,
+    xp: getDailyGoalXp(goalData.dailyGoal.goal),
+  });
 
   if (!word) {
     return { status: "duplicate" };

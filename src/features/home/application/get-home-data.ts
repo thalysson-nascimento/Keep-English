@@ -26,6 +26,7 @@ export interface HomeData {
   streak: number;
   goal: number;
   goalActive: boolean;
+  latestCompletedGoal: number | null;
   days: HomeDay[];
   recentWords: Word[];
 }
@@ -33,6 +34,7 @@ export interface HomeData {
 export interface HomeHeaderData {
   total: number;
   streak: number;
+  xp: number;
 }
 
 function getGreetingPeriod(date: Date): HomeData["greetingPeriod"] {
@@ -99,12 +101,14 @@ export async function getHomeData(
   const todayKey = getDateKey(now);
   const firstDayKey = shiftDateKey(todayKey, -6);
   const activityStart = getDateStart(shiftDateKey(todayKey, -365));
-  const [total, recentWords, createdAt, goals] = await Promise.all([
-    wordsRepository.getCount(),
-    wordsRepository.findRecent(10),
-    wordsRepository.findCreatedSince(activityStart),
-    goalsRepository.findSince(firstDayKey),
-  ]);
+  const [total, recentWords, createdAt, goals, latestCompletion] =
+    await Promise.all([
+      wordsRepository.getCount(),
+      wordsRepository.findRecent(10),
+      wordsRepository.findCreatedSince(activityStart),
+      goalsRepository.findSince(firstDayKey),
+      goalsRepository.findLatestCompletion(todayKey),
+    ]);
   const counts = countWordsByDay(createdAt);
   const goalByDay = new Map(goals.map(({ dateKey, goal }) => [dateKey, goal]));
   const today = counts.get(todayKey) ?? 0;
@@ -127,6 +131,7 @@ export async function getHomeData(
     streak: getCurrentStreak(counts, todayKey),
     goal,
     goalActive: activeGoal !== undefined,
+    latestCompletedGoal: latestCompletion?.goal ?? null,
     days,
     recentWords,
   };
@@ -134,19 +139,22 @@ export async function getHomeData(
 
 export async function getHomeHeaderData(
   wordsRepository: WordsRepository,
+  goalsRepository: DailyGoalsRepository,
   now: Date = new Date(),
 ): Promise<HomeHeaderData> {
   const todayKey = getDateKey(now);
-  const [total, createdAt] = await Promise.all([
+  const [total, createdAt, xp] = await Promise.all([
     wordsRepository.getCount(),
     wordsRepository.findCreatedSince(
       getDateStart(shiftDateKey(todayKey, -365)),
     ),
+    goalsRepository.getTotalXp(),
   ]);
 
   return {
     total,
     streak: getCurrentStreak(countWordsByDay(createdAt), todayKey),
+    xp,
   };
 }
 

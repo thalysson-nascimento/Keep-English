@@ -7,19 +7,20 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  avatar        String    @default("🦔")
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
-  words         Word[]
-  dailyGoals     DailyGoal[]
-  vocabularyTests VocabularyTest[]
+  id                   String                @id @default(cuid())
+  name                 String
+  email                String                @unique
+  emailVerified        Boolean               @default(false)
+  image                String?
+  avatar               String                @default("🦔")
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  sessions             Session[]
+  accounts             Account[]
+  words                Word[]
+  dailyGoals           DailyGoal[]
+  dailyGoalCompletions DailyGoalCompletion[]
+  vocabularyTests      VocabularyTest[]
 }
 
 model Session {
@@ -96,13 +97,26 @@ model DailyGoal {
   @@index([userId])
 }
 
+model DailyGoalCompletion {
+  id          String   @id @default(cuid())
+  dateKey     String
+  goal        Int
+  xp          Int
+  completedAt DateTime @default(now())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, dateKey, goal])
+  @@index([userId, dateKey, completedAt])
+}
+
 model VocabularyTest {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   score       Int
   total       Int
-  completedAt DateTime  @default(now())
+  completedAt DateTime @default(now())
   userId      String?
-  user        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, completedAt])
   @@index([completedAt])

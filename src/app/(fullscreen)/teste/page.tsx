@@ -24,7 +24,10 @@ async function TestContent() {
     <VocabularyTestScreen
       data={{
         ...data,
-        questions: createVocabularyQuestions(data.words),
+        questions: createVocabularyQuestions(
+          data.words,
+          Math.min(data.goal ?? 0, data.words.length),
+        ),
       }}
     />
   );

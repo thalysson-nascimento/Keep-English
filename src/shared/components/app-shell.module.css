@@ -49,7 +49,7 @@
 }
 
 .headerStatsSkeleton {
-  width: 78px;
+  width: 132px;
   height: 24px;
   border-radius: 12px;
   background: linear-gradient(
@@ -78,6 +78,11 @@
 
 .wordsStat {
   color: var(--blue);
+}
+
+.xpStat {
+  color: #8b70b7;
+  white-space: nowrap;
 }
 
 .brand:focus-visible,
@@ -188,6 +193,18 @@
     border-right: 1px solid var(--line);
     border-left: 1px solid var(--line);
     border-radius: 16px 16px 0 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .header {
+    padding-right: var(--space-3);
+    padding-left: var(--space-3);
+  }
+
+  .headerStats {
+    gap: 8px;
+    font-size: 15px;
   }
 }
 

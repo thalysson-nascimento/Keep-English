@@ -17,11 +17,28 @@ export function createPrismaDailyGoalsRepository(
       });
     },
 
+    findLatestCompletion(dateKey) {
+      return prisma.dailyGoalCompletion.findFirst({
+        where: { userId, dateKey },
+        orderBy: [{ completedAt: "desc" }, { id: "desc" }],
+        select: { dateKey: true, goal: true, xp: true, completedAt: true },
+      });
+    },
+
     findToday(dateKey) {
       return prisma.dailyGoal.findUnique({
         where: { userId_dateKey: { userId, dateKey } },
         select: { dateKey: true, goal: true },
       });
+    },
+
+    async getTotalXp(): Promise<number> {
+      const result = await prisma.dailyGoalCompletion.aggregate({
+        where: { userId },
+        _sum: { xp: true },
+      });
+
+      return result._sum.xp ?? 0;
     },
 
     async save(dateKey, goal) {

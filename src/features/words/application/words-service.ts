@@ -1,5 +1,8 @@
 import type { NewWord, Word } from "@/features/words/domain/word";
-import type { WordsRepository } from "./words-repository";
+import type {
+  GoalCompletionContext,
+  WordsRepository,
+} from "./words-repository";
 
 export interface WordInput {
   word: string;
@@ -18,6 +21,7 @@ export function normalizeWord(value: string): string {
 export async function createWord(
   repository: WordsRepository,
   input: WordInput,
+  goalCompletion: GoalCompletionContext,
 ): Promise<Word | null> {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -27,7 +31,7 @@ export async function createWord(
     translationKey: normalizeWord(input.translation),
   };
 
-  return repository.create(newWord);
+  return repository.create(newWord, goalCompletion);
 }
 
 export function searchWords(

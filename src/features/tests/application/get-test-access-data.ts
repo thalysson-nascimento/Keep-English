@@ -19,12 +19,13 @@ export async function getTestAccessData(
   now: Date = new Date(),
 ): Promise<TestAccessData> {
   const todayKey = getDateKey(now);
-  const [words, todayWords, dailyGoal, lastTestAt] = await Promise.all([
-    wordsRepository.findAll(),
-    wordsRepository.countCreatedSince(getDateStart(todayKey)),
-    goalsRepository.findToday(todayKey),
-    testsRepository.findLatestCompletion(),
-  ]);
+  const [words, todayWords, latestGoalCompletion, lastTestAt] =
+    await Promise.all([
+      wordsRepository.findAll(),
+      wordsRepository.countCreatedSince(getDateStart(todayKey)),
+      goalsRepository.findLatestCompletion(todayKey),
+      testsRepository.findLatestCompletion(),
+    ]);
 
   return {
     words: words.map(({ id, word, translation }) => ({
@@ -32,7 +33,7 @@ export async function getTestAccessData(
       word,
       translation,
     })),
-    goal: dailyGoal?.goal ?? null,
+    goal: latestGoalCompletion?.goal ?? null,
     todayWords,
     lastTestAt: lastTestAt?.getTime() ?? null,
     now: now.getTime(),

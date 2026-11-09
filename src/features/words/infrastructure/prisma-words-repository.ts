@@ -1,7 +1,10 @@
 import "server-only";
 
 import { Prisma, PrismaClient } from "@prisma/client";
-import type { WordsRepository } from "@/features/words/application/words-repository";
+import type {
+  GoalCompletionContext,
+  WordsRepository,
+} from "@/features/words/application/words-repository";
 import type { NewWord, Word } from "@/features/words/domain/word";
 import { getPrismaClient } from "@/core/database/prisma";
 
@@ -36,13 +39,42 @@ export function createPrismaWordsRepository(
       });
     },
 
-    async create(word: NewWord): Promise<Word | null> {
+    async create(
+      word: NewWord,
+      goalCompletion: GoalCompletionContext,
+    ): Promise<Word | null> {
       try {
-        const record = await prisma.word.create({
-          data: { ...word, userId },
-          select: wordSelect,
+        return await prisma.$transaction(async (transaction) => {
+          const record = await transaction.word.create({
+            data: { ...word, userId },
+            select: wordSelect,
+          });
+          const wordsCreatedToday = await transaction.word.count({
+            where: { userId, createdAt: { gte: goalCompletion.dayStart } },
+          });
+
+          if (wordsCreatedToday >= goalCompletion.goal) {
+            await transaction.dailyGoalCompletion.upsert({
+              where: {
+                userId_dateKey_goal: {
+                  userId,
+                  dateKey: goalCompletion.dateKey,
+                  goal: goalCompletion.goal,
+                },
+              },
+              create: {
+                dateKey: goalCompletion.dateKey,
+                goal: goalCompletion.goal,
+                xp: goalCompletion.xp,
+                userId,
+              },
+              update: {},
+              select: { id: true },
+            });
+          }
+
+          return toWord(record);
         });
-        return toWord(record);
       } catch (error) {
         if (
           error instanceof Prisma.PrismaClientKnownRequestError &&

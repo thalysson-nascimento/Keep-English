@@ -13,12 +13,9 @@ async function HomeContent() {
   const userId = await requireCurrentUserId();
   const now = new Date();
   const wordsRepository = createPrismaWordsRepository(userId);
+  const goalsRepository = createPrismaDailyGoalsRepository(userId);
   const testsRepository = createPrismaTestsRepository(userId);
-  const data = await getHomeData(
-    wordsRepository,
-    createPrismaDailyGoalsRepository(userId),
-    now,
-  );
+  const data = await getHomeData(wordsRepository, goalsRepository, now);
   const lastTestAt = await testsRepository.findLatestCompletion();
 
   return (

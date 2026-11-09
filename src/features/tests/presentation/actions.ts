@@ -8,8 +8,8 @@ import { getTestAccessData } from "@/features/tests/application/get-test-access-
 import { createPrismaTestsRepository } from "@/features/tests/infrastructure/prisma-tests-repository";
 import {
   getTestLockReason,
+  maxVocabularyTestQuestionCount,
   normalizeAnswer,
-  vocabularyTestQuestionCount,
 } from "@/features/tests/domain/vocabulary-test";
 import { requireCurrentUserId } from "@/core/auth/session";
 
@@ -21,7 +21,7 @@ const answersSchema = z
     }),
   )
   .min(1)
-  .max(vocabularyTestQuestionCount);
+  .max(maxVocabularyTestQuestionCount);
 
 export async function completeVocabularyTestAction(input: unknown) {
   const parsedInput = answersSchema.safeParse(input);
@@ -55,10 +55,7 @@ export async function completeVocabularyTestAction(input: unknown) {
     return { status: lockReason };
   }
 
-  const expectedQuestionCount = Math.min(
-    vocabularyTestQuestionCount,
-    data.words.length,
-  );
+  const expectedQuestionCount = Math.min(data.goal ?? 0, data.words.length);
   const answerIds = parsedInput.data.map(({ wordId }) => wordId);
   const uniqueAnswerIds = new Set(answerIds);
 
