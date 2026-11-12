@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --text: #4b4b4b;
+  --muted: #767676;
+  --line: #e5e5e5;
+  --track: #e5e5e5;
+  --bar: #cde9b0;
+  --green: #58cc02;
+  --green-d: #46a302;
+  --blue: #1cb0f6;
+  --blue-d: #1899d6;
+  --orange: #ff9600;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --font-size-small: 0.875rem;
+  --font-size-body: 1rem;
+  --font-size-heading: clamp(1.5rem, 7vw, 2rem);
+  --font-size-brand: 1.1875rem;
+  --font-size-navigation: 0.625rem;
+  --font-weight-bold: 800;
+  --font-weight-black: 900;
+  --radius-navigation: 0.75rem;
+  --font-stack:
+    var(--font-nunito, "Nunito"), "Nunito", "Trebuchet MS", system-ui,
+    sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #131f24;
+    --surface: #1f2c33;
+    --text: #f1f7fb;
+    --muted: #8da0aa;
+    --line: #37464f;
+    --track: #37464f;
+    --bar: #3b5a2a;
+  }
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --text: #4b4b4b;
+  --muted: #8a8a8a;
+  --line: #e5e5e5;
+  --track: #e5e5e5;
+  --bar: #cde9b0;
+}

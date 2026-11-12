@@ -1,0 +1,39 @@
+{
+  "name": "keep-english",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predev": "prisma generate",
+    "dev": "next dev",
+    "prebuild": "prisma generate",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,css}\" \"*.{js,mjs,ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"*.{js,mjs,ts,json}\"",
+    "prisma:generate": "prisma generate",
+    "prisma:validate": "prisma validate"
+  },
+  "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "better-auth": "^1.7.18",
+    "lucide-react": "^1.70.0",
+    "next": "16.4.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-hook-form": "^7.91.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.4.5",
+    "prettier": "^3.9.10",
+    "prisma": "^7.10.1",
+    "typescript": "^5"
+  }
+}
