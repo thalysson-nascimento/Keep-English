@@ -1,39 +1,88 @@
-import { connection } from "next/server";
-import { getHomeHeaderData } from "@/features/home/application/get-home-data";
-import { createPrismaDailyGoalsRepository } from "@/features/home/infrastructure/prisma-daily-goals-repository";
-import { createPrismaWordsRepository } from "@/features/words/infrastructure/prisma-words-repository";
-import { getRequestLocale } from "@/shared/i18n/server";
-import { translate } from "@/shared/i18n/messages";
+"use client";
+
+import { z } from "zod";
+import {
+  ApiRequestError,
+  requestApiJson,
+  subscribeToAccountDataChanged,
+} from "@/shared/lib/api-client";
+import { useI18n } from "@/shared/i18n/locale-provider";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import styles from "@/shared/components/app-shell.module.css";
 
-interface HomeHeaderStatsProps {
-  userId: string;
-}
+const headerStatsSchema = z.object({
+  total: z.number().int().nonnegative(),
+  streak: z.number().int().nonnegative(),
+  xp: z.number().int().nonnegative(),
+});
 
-export async function HomeHeaderStats({ userId }: HomeHeaderStatsProps) {
-  await connection();
-  const locale = await getRequestLocale();
-  const { streak, total, xp } = await getHomeHeaderData(
-    createPrismaWordsRepository(userId),
-    createPrismaDailyGoalsRepository(userId),
+type HeaderStats = z.infer<typeof headerStatsSchema>;
+
+export function HomeHeaderStats() {
+  const { t } = useI18n();
+  const router = useRouter();
+  const [stats, setStats] = useState<HeaderStats | null>(null);
+  const [hasError, setHasError] = useState(false);
+
+  const loadStats = useCallback(
+    () =>
+      requestApiJson("/api/home/summary", headerStatsSchema, {
+        cache: "no-store",
+      }),
+    [],
   );
+
+  useEffect(() => {
+    const updateStats = () => {
+      void loadStats()
+        .then((result) => {
+          setStats(result);
+          setHasError(false);
+        })
+        .catch((error: unknown) => {
+          if (error instanceof ApiRequestError && error.status === 401) {
+            router.replace("/login");
+            return;
+          }
+
+          setHasError(true);
+        });
+    };
+
+    updateStats();
+    return subscribeToAccountDataChanged(updateStats);
+  }, [loadStats, router]);
+
+  if (!stats) {
+    return (
+      <div
+        aria-label={hasError ? t("home.loadFailed") : t("common.loading")}
+        aria-live="polite"
+        className={styles.headerStats}
+        role={hasError ? "alert" : "status"}
+      >
+        {hasError && t("home.loadFailed")}
+      </div>
+    );
+  }
 
   return (
     <div
       className={styles.headerStats}
-      aria-label={translate(locale, "home.header.progress")}
+      aria-label={t("home.header.progress")}
     >
       <span className={styles.streakStat}>
         <span aria-hidden="true">🔥</span>
-        {streak}
+        {stats.streak}
       </span>
       <span className={styles.wordsStat}>
         <span aria-hidden="true">📘</span>
-        {total}
+        {stats.total}
       </span>
       <span className={styles.xpStat}>
         <span aria-hidden="true">✦</span>
-        {xp} XP
+        {stats.xp} XP
       </span>
     </div>
   );

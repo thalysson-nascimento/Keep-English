@@ -5,35 +5,28 @@ import Link from "next/link";
 import { Search } from "lucide-react";
 import type { Word } from "@/features/words/domain/word";
 import {
-  deleteWordAction,
-  getWordsPageAction,
-} from "@/features/words/presentation/actions";
+  notifyAccountDataChanged,
+  requestApiJson,
+  requestApiVoid,
+} from "@/shared/lib/api-client";
+import { wordsPageResponseSchema } from "@/features/words/application/words-api.schema";
 import { WordList } from "./word-list";
 import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./all-words-screen.module.css";
 
-interface AllWordsScreenProps {
-  initialWords: Word[];
-  initialTotal: number;
-  initialHasMore: boolean;
-}
+const wordsPageSize = 15;
 
-export function AllWordsScreen({
-  initialWords,
-  initialTotal,
-  initialHasMore,
-}: AllWordsScreenProps) {
+export function AllWordsScreen() {
   const { t } = useI18n();
   const screenRef = useRef<HTMLDivElement>(null);
   const sentinelRef = useRef<HTMLDivElement>(null);
   const requestId = useRef(0);
   const appendRequestInFlight = useRef(false);
   const [query, setQuery] = useState("");
-  const previousQuery = useRef(query);
-  const [words, setWords] = useState(initialWords);
-  const [total, setTotal] = useState(initialTotal);
-  const [hasMore, setHasMore] = useState(initialHasMore);
-  const [isLoading, setIsLoading] = useState(false);
+  const [words, setWords] = useState<Word[]>([]);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState("");
 
@@ -55,17 +48,18 @@ export function AllWordsScreen({
       setError("");
 
       try {
-        const result = await getWordsPageAction({
+        const searchParams = new URLSearchParams({
           query: nextQuery,
-          offset,
+          offset: String(offset),
+          limit: String(wordsPageSize),
         });
+        const result = await requestApiJson(
+          `/api/words?${searchParams}`,
+          wordsPageResponseSchema,
+          { cache: "no-store" },
+        );
 
         if (currentRequestId !== requestId.current) {
-          return;
-        }
-
-        if (result.status !== "ok") {
-          setError(t("words.all.failed"));
           return;
         }
 
@@ -92,11 +86,6 @@ export function AllWordsScreen({
   );
 
   useEffect(() => {
-    if (previousQuery.current === query) {
-      return;
-    }
-
-    previousQuery.current = query;
     const timeoutId = window.setTimeout(() => {
       void loadPage(query.trim(), 0, true);
     }, 250);
@@ -133,15 +122,13 @@ export function AllWordsScreen({
     setError("");
 
     try {
-      const deleted = await deleteWordAction(id);
-
-      if (!deleted) {
-        setError(t("words.all.removeFailed"));
-        return;
-      }
+      await requestApiVoid(`/api/words/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
 
       setWords((currentWords) => currentWords.filter((word) => word.id !== id));
       setTotal((currentTotal) => Math.max(0, currentTotal - 1));
+      notifyAccountDataChanged();
       await loadPage(query.trim(), 0, true);
     } catch {
       setError(t("words.all.removeFailed"));

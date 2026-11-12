@@ -1,18 +1,23 @@
 "use client";
 
-import type { HomeData } from "@/features/home/application/get-home-data";
+import {
+  ApiRequestError,
+  notifyAccountDataChanged,
+  requestApiJson,
+} from "@/shared/lib/api-client";
+import {
+  homeResponseSchema,
+  type HomeApiData,
+} from "@/features/home/application/home-api.schema";
 import {
   formatTestCountdown,
   getTestCooldownRemaining,
   getTestLockReason,
 } from "@/features/tests/domain/vocabulary-test";
 import type { Word } from "@/features/words/domain/word";
-import {
-  deleteWordAction,
-  enableDailyGoalAction,
-  searchWordsAction,
-} from "@/features/words/presentation/actions";
+import { wordsPageResponseSchema } from "@/features/words/application/words-api.schema";
 import { WordFormSheet } from "@/features/words/presentation/components/word-form-sheet";
+import { HomeSkeleton } from "@/features/home/presentation/home-skeleton";
 import {
   WordList,
   WordListSkeleton,
@@ -20,25 +25,108 @@ import {
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./home-screen.module.css";
 
 interface HomeScreenProps {
-  initialData: HomeData;
+  initialData: HomeApiData;
   initialNow: number;
   lastTestAt: number | null;
 }
 
 const goalOptions = [3, 5, 10, 15, 20];
 
-export function HomeScreen({
+export function HomeScreen() {
+  const { t } = useI18n();
+  const router = useRouter();
+  const [data, setData] = useState<HomeApiData | null>(null);
+  const [error, setError] = useState("");
+  const [retry, setRetry] = useState(0);
+
+  const loadData = useCallback(
+    (signal?: AbortSignal) =>
+      requestApiJson("/api/home", homeResponseSchema, {
+        cache: "no-store",
+        signal,
+      }),
+    [],
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    void loadData(controller.signal)
+      .then(setData)
+      .then(() => setError(""))
+      .catch((requestError: unknown) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        if (
+          requestError instanceof ApiRequestError &&
+          requestError.status === 401
+        ) {
+          router.replace("/login");
+          return;
+        }
+
+        setError(t("home.loadFailed"));
+      });
+
+    return () => controller.abort();
+  }, [loadData, retry, router, t]);
+
+  useEffect(() => {
+    const handleDataChanged = () => {
+      void loadData()
+        .then(setData)
+        .then(() => setError(""))
+        .catch(() => setError(t("home.loadFailed")));
+    };
+    window.addEventListener(
+      "keep-english:account-data-changed",
+      handleDataChanged,
+    );
+
+    return () =>
+      window.removeEventListener(
+        "keep-english:account-data-changed",
+        handleDataChanged,
+      );
+  }, [loadData, t]);
+
+  if (!data && !error) {
+    return <HomeSkeleton />;
+  }
+
+  if (!data) {
+    return (
+      <div className={styles.home} role="alert">
+        <p>{error}</p>
+        <button onClick={() => setRetry((current) => current + 1)} type="button">
+          {t("home.retry")}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <HomeDashboard
+      initialData={data}
+      initialNow={data.now}
+      lastTestAt={data.lastTestAt}
+      key={`${data.goalActive}-${data.today}-${data.goal}`}
+    />
+  );
+}
+
+function HomeDashboard({
   initialData,
   initialNow,
   lastTestAt,
 }: HomeScreenProps) {
   const { locale, t } = useI18n();
-  const router = useRouter();
   const requestId = useRef(0);
   const [now, setNow] = useState(initialNow);
   const [query, setQuery] = useState("");
@@ -71,14 +159,13 @@ export function HomeScreen({
 
     const currentRequestId = ++requestId.current;
     const timeoutId = window.setTimeout(() => {
-      void searchWordsAction(normalizedQuery)
+      void requestApiJson(
+        `/api/words?query=${encodeURIComponent(normalizedQuery)}&limit=50`,
+        wordsPageResponseSchema,
+        { cache: "no-store" },
+      )
         .then((result) => {
           if (currentRequestId !== requestId.current) {
-            return;
-          }
-
-          if (result.status === "invalid") {
-            setError(t("home.words.searchError"));
             return;
           }
 
@@ -108,11 +195,12 @@ export function HomeScreen({
     setError("");
 
     try {
-      const deleted = await deleteWordAction(id);
+      const response = await fetch(`/api/words/${encodeURIComponent(id)}`, {
+        method: "DELETE",
+      });
 
-      if (!deleted) {
-        setError(t("home.words.removeFailed"));
-        return;
+      if (!response.ok) {
+        throw new Error("Unable to delete word.");
       }
 
       setCreatedWords((currentWords) =>
@@ -126,7 +214,7 @@ export function HomeScreen({
         setSearchResultCount((count) => Math.max(0, count - 1));
       }
 
-      router.refresh();
+      notifyAccountDataChanged();
     } catch {
       setError(t("home.words.removeFailed"));
     } finally {
@@ -143,7 +231,7 @@ export function HomeScreen({
     );
     setIsSheetOpen(false);
     setQuery("");
-    router.refresh();
+    notifyAccountDataChanged();
   }
 
   async function handleEnableGoal() {
@@ -155,14 +243,18 @@ export function HomeScreen({
     setError("");
 
     try {
-      const result = await enableDailyGoalAction(selectedGoal);
+      const response = await fetch("/api/home/daily-goal", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ goal: selectedGoal }),
+      });
 
-      if (result.status !== "enabled") {
+      if (!response.ok) {
         setError(t("home.goal.enableError"));
         return;
       }
 
-      router.refresh();
+      notifyAccountDataChanged();
     } catch {
       setError(t("home.goal.dailyEnableError"));
     } finally {

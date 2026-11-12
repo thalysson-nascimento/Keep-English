@@ -2,9 +2,13 @@
 
 import { useState, type FormEvent } from "react";
 import {
-  createWordAction,
-  lookupWordAction,
-} from "@/features/words/presentation/actions";
+  notifyAccountDataChanged,
+  requestApiJson,
+} from "@/shared/lib/api-client";
+import {
+  createWordResponseSchema,
+  lookupWordResponseSchema,
+} from "@/features/words/application/words-api.schema";
 import type { Word } from "@/features/words/domain/word";
 import type { WordLookup } from "@/features/words/domain/word-lookup";
 import { useI18n } from "@/shared/i18n/locale-provider";
@@ -44,15 +48,15 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
 
     try {
       setMessage(t("word.add.translating"));
-      const result = await lookupWordAction({
-        word: input,
-        skipCorrection,
-      });
-
-      if (result.status === "invalid") {
-        setMessage(t("word.add.invalid"));
-        return;
-      }
+      const result = await requestApiJson(
+        "/api/words/lookup",
+        lookupWordResponseSchema,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ word: input, skipCorrection }),
+        },
+      );
 
       setLookup(result.lookup);
       setDuplicate(result.duplicate);
@@ -97,34 +101,55 @@ export function WordFormSheet({ onClose, onCreated }: WordFormSheetProps) {
     setMessage("");
 
     try {
-      const result = await createWordAction({
-        word: lookup.word,
-        translation: lookup.translation,
-        example: lookup.example || null,
-      });
+      let response: Response;
 
-      if (result.status === "duplicate") {
+      try {
+        response = await fetch("/api/words", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            word: lookup.word,
+            translation: lookup.translation,
+            example: lookup.example || null,
+          }),
+        });
+      } catch {
+        setMessage(t("word.add.saveFailed"));
+        return;
+      }
+
+      const result = createWordResponseSchema.safeParse(
+        await response.json().catch(() => null),
+      );
+
+      if (!result.success) {
+        setMessage(t("word.add.saveFailed"));
+        return;
+      }
+
+      if (result.data.status === "duplicate") {
         setDuplicate(true);
         setMessage(t("word.add.duplicate"));
         return;
       }
 
-      if (result.status === "goal-required") {
+      if (result.data.status === "goal-required") {
         setMessage(t("word.add.goalRequired"));
         return;
       }
 
-      if (result.status === "goal-reached") {
+      if (result.data.status === "goal-reached") {
         setMessage(t("word.add.goalReached"));
         return;
       }
 
-      if (result.status === "invalid") {
+      if (result.data.status !== "created" || !response.ok) {
         setMessage(t("word.add.invalidInput"));
         return;
       }
 
-      onCreated(result.word);
+      notifyAccountDataChanged();
+      onCreated(result.data.word);
     } catch {
       setMessage(t("word.add.saveFailed"));
     } finally {

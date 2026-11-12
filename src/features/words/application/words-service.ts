@@ -23,8 +23,6 @@ export async function createWord(
   input: WordInput,
   goalCompletion: GoalCompletionContext,
 ): Promise<Word | null> {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   const newWord: NewWord = {
     ...input,
     wordKey: normalizeWord(input.word),
