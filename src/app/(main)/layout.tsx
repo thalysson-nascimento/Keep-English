@@ -10,12 +10,12 @@ async function AuthenticatedMainLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
-  const userId = await requireCurrentUserId();
+  await requireCurrentUserId();
   return (
     <AppShell
       headerStats={
         <Suspense fallback={<div className={styles.headerStatsSkeleton} />}>
-          <HomeHeaderStats userId={userId} />
+          <HomeHeaderStats />
         </Suspense>
       }
     >

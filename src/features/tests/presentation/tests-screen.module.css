@@ -2,6 +2,16 @@
   width: 100%;
 }
 
+.error {
+  padding: 18px;
+  color: #c62828;
+  text-align: center;
+}
+
+.error button {
+  margin-top: 8px;
+}
+
 .hero {
   overflow: hidden;
   padding: 22px 22px 0;

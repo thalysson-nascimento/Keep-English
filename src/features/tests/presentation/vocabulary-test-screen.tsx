@@ -4,14 +4,23 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { TestAccessData } from "@/features/tests/application/get-test-access-data";
 import {
+  testCompletionResultSchema,
+  testSessionResponseSchema,
+} from "@/features/tests/application/tests-api.schema";
+import {
+  ApiRequestError,
+  notifyAccountDataChanged,
+  requestApiJson,
+} from "@/shared/lib/api-client";
+import {
   formatTestCountdown,
   getTestCooldownRemaining,
   getTestLockReason,
   normalizeAnswer,
   type VocabularyQuestion,
 } from "@/features/tests/domain/vocabulary-test";
-import { completeVocabularyTestAction } from "@/features/tests/presentation/actions";
 import { useI18n } from "@/shared/i18n/locale-provider";
+import { useRouter } from "next/navigation";
 import styles from "./vocabulary-test-screen.module.css";
 
 interface VocabularyTestScreenProps {
@@ -48,7 +57,65 @@ function getCompletionError(
   return t("test.recordFailed");
 }
 
-export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
+export function VocabularyTestScreen() {
+  const { t } = useI18n();
+  const router = useRouter();
+  const [data, setData] = useState<
+    (TestAccessData & { questions: VocabularyQuestion[] }) | null
+  >(null);
+  const [hasError, setHasError] = useState(false);
+  const [retry, setRetry] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void requestApiJson(
+      "/api/tests/session",
+      testSessionResponseSchema,
+      { cache: "no-store", signal: controller.signal },
+    )
+      .then(setData)
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        if (error instanceof ApiRequestError && error.status === 401) {
+          router.replace("/login");
+          return;
+        }
+
+        setHasError(true);
+      });
+
+    return () => controller.abort();
+  }, [retry, router]);
+
+  if (!data && hasError) {
+    return (
+      <div className={styles.error} role="alert">
+        <p>{t("test.loadFailed")}</p>
+        <button
+          onClick={() => {
+            setHasError(false);
+            setRetry((current) => current + 1);
+          }}
+          type="button"
+        >
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return <VocabularyTestSkeleton />;
+  }
+
+  return <VocabularyTest data={data} />;
+}
+
+function VocabularyTest({ data }: VocabularyTestScreenProps) {
   const { t } = useI18n();
   const [now, setNow] = useState(data.now);
   const [hasStarted, setHasStarted] = useState(false);
@@ -118,17 +185,30 @@ export function VocabularyTestScreen({ data }: VocabularyTestScreenProps) {
     setError("");
 
     try {
-      const result = await completeVocabularyTestAction(nextAnswers);
+      const response = await fetch("/api/tests/complete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nextAnswers),
+      });
+      const result = testCompletionResultSchema.safeParse(
+        await response.json().catch(() => null),
+      );
 
-      if (result.status !== "completed") {
-        setError(getCompletionError(result.status, t));
+      if (!result.success) {
+        setError(t("test.recordFailed"));
         return;
       }
 
+      if (result.data.status !== "completed") {
+        setError(getCompletionError(result.data.status, t));
+        return;
+      }
+
+      notifyAccountDataChanged();
       setCompletedTest({
-        score: result.score,
-        total: result.total,
-        completedAt: result.completedAt,
+        score: result.data.score,
+        total: result.data.total,
+        completedAt: result.data.completedAt,
       });
     } catch {
       setError(t("test.saveFailed"));

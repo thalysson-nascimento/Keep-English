@@ -32,7 +32,7 @@ export function AuthForm({ mode, initialPassword, token }: AuthFormProps) {
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(mode === "login" ? "user@test.com" : "");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState(
     mode === "login" ? (initialPassword ?? "") : "",
   );

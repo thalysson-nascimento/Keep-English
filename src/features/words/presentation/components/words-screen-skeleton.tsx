@@ -1,13 +1,13 @@
-import { getRequestLocale } from "@/shared/i18n/server";
-import { translate } from "@/shared/i18n/messages";
+"use client";
+
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./words-screen.module.css";
 
-export async function WordsSummarySkeleton() {
-  const locale = await getRequestLocale();
-
+export function WordsSummarySkeleton() {
+  const { t } = useI18n();
   return (
     <section
-      aria-label={translate(locale, "words.summary.aria")}
+      aria-label={t("words.summary.aria")}
       aria-busy="true"
       className={`${styles.hero} ${styles.skeletonHero}`}
       role="status"
@@ -23,12 +23,11 @@ export async function WordsSummarySkeleton() {
   );
 }
 
-export async function WordsPerformanceSkeleton() {
-  const locale = await getRequestLocale();
-
+export function WordsPerformanceSkeleton() {
+  const { t } = useI18n();
   return (
     <section
-      aria-label={translate(locale, "words.performance.title")}
+      aria-label={t("words.performance.title")}
       aria-busy="true"
       className={styles.section}
       role="status"
@@ -51,12 +50,11 @@ export async function WordsPerformanceSkeleton() {
   );
 }
 
-export async function WordsRecentSkeleton() {
-  const locale = await getRequestLocale();
-
+export function WordsRecentSkeleton() {
+  const { t } = useI18n();
   return (
     <section
-      aria-label={translate(locale, "words.recent.title")}
+      aria-label={t("words.recent.title")}
       aria-busy="true"
       className={styles.section}
       role="status"

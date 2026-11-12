@@ -1,19 +1,19 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { TestsOverviewData } from "@/features/tests/application/get-tests-overview";
-import { getIntlLocale } from "@/shared/i18n/config";
-import { getRequestLocale } from "@/shared/i18n/server";
+import { testsOverviewResponseSchema } from "@/features/tests/application/tests-api.schema";
 import {
-  translate,
-  type TranslationKey,
-  type TranslationValues,
-} from "@/shared/i18n/messages";
+  ApiRequestError,
+  requestApiJson,
+} from "@/shared/lib/api-client";
+import { getIntlLocale } from "@/shared/i18n/config";
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./tests-screen.module.css";
 import { TestStartButton } from "./test-start-button";
 
-interface TestsScreenProps {
-  data: TestsOverviewData;
-}
-
-type Translator = (key: TranslationKey, values?: TranslationValues) => string;
+type Translator = ReturnType<typeof useI18n>["t"];
 
 function formatDate(timestamp: number, locale: string): string {
   return new Date(timestamp).toLocaleDateString(locale, {
@@ -77,9 +77,8 @@ function EmptyTests({ t }: { t: Translator }) {
   );
 }
 
-export async function TestsScreen({ data }: TestsScreenProps) {
-  const locale = await getRequestLocale();
-  const t: Translator = (key, values) => translate(locale, key, values);
+function TestsOverview({ data }: { data: TestsOverviewData }) {
+  const { locale, t } = useI18n();
   const intlLocale = getIntlLocale(locale);
   const recentChartRecords = data.records.slice(0, 6).reverse();
   const chartRecords = Array.from({ length: 6 }, (_, index) => {
@@ -207,12 +206,71 @@ export async function TestsScreen({ data }: TestsScreenProps) {
   );
 }
 
-export async function TestsScreenSkeleton() {
-  const locale = await getRequestLocale();
+export function TestsScreen() {
+  const { t } = useI18n();
+  const router = useRouter();
+  const [data, setData] = useState<TestsOverviewData | null>(null);
+  const [error, setError] = useState(false);
+  const [retry, setRetry] = useState(0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    void requestApiJson(
+      "/api/tests",
+      testsOverviewResponseSchema,
+      { cache: "no-store", signal: controller.signal },
+    )
+      .then(setData)
+      .catch((requestError: unknown) => {
+        if (controller.signal.aborted) {
+          return;
+        }
+
+        if (
+          requestError instanceof ApiRequestError &&
+          requestError.status === 401
+        ) {
+          router.replace("/login");
+          return;
+        }
+
+        setError(true);
+      });
+
+    return () => controller.abort();
+  }, [retry, router]);
+
+  if (data) {
+    return <TestsOverview data={data} />;
+  }
+
+  if (error) {
+    return (
+      <div className={styles.error} role="alert">
+        <p>{t("testOverview.loadFailed")}</p>
+        <button
+          onClick={() => {
+            setError(false);
+            setRetry((current) => current + 1);
+          }}
+          type="button"
+        >
+          {t("common.retry")}
+        </button>
+      </div>
+    );
+  }
+
+  return <TestsScreenSkeleton />;
+}
+
+export function TestsScreenSkeleton() {
+  const { t } = useI18n();
 
   return (
     <div
-      aria-label={translate(locale, "testOverview.loadingAria")}
+      aria-label={t("testOverview.loadingAria")}
       aria-busy="true"
       className={styles.screen}
       role="status"

@@ -711,3 +711,43 @@ Cores no cliente: eu = azul, `others[0]` = laranja, `others[1]` = vermelho.
 | Limites de taxa sugeridos | `/auth/*`: 5/15 min · `/lookup`: 30/min por usuário · demais: 120/min |
 | Timeout das integrações | 4 s por chamada externa; `lookup` total ≤ 10 s |
 | Paralelismo no `lookup` | Datamuse e LanguageTool podem rodar em paralelo; MyMemory depende da correção; Tatoeba depende da tradução |
+
+---
+
+# PARTE C — Endpoints implementados no projeto
+
+Esta seção descreve as rotas que existem atualmente no Next.js e substitui a
+proposta `/api/v1` da Parte B quando houver diferenças. As rotas de negócio
+validam a sessão Better Auth no servidor, derivam o usuário da sessão e acessam
+o SQLite por meio dos repositórios Prisma. A interface consome esses endpoints;
+não usa classes ou dados mockados para as funcionalidades abaixo.
+
+| Método e rota | Autenticação | Responsabilidade |
+|---|---|---|
+| `GET /api/home` | 🔒 | Dados do início: totais, atividade da semana, metas, palavras recentes e último teste |
+| `GET /api/home/summary` | 🔒 | Totais, sequência e XP exibidos no cabeçalho |
+| `POST /api/home/daily-goal` | 🔒 | Habilita ou atualiza a meta diária; corpo `{ "goal": 3 \| 5 \| 10 \| 15 \| 20 }` |
+| `GET /api/words?query=&offset=0&limit=15` | 🔒 | Pesquisa e paginação das palavras do usuário |
+| `POST /api/words` | 🔒 | Valida e salva uma palavra, atualizando a conclusão da meta quando necessário |
+| `DELETE /api/words/:id` | 🔒 | Remove somente uma palavra pertencente ao usuário autenticado |
+| `GET /api/words/overview` | 🔒 | Resumo, desempenho de 7/14 dias e palavras recentes |
+| `POST /api/words/lookup` | 🔒 | Consulta os serviços externos no servidor e verifica duplicidade |
+| `GET /api/tests` | 🔒 | Histórico, estatísticas e disponibilidade do teste |
+| `GET /api/tests/session` | 🔒 | Estado de acesso e perguntas para uma sessão de teste |
+| `POST /api/tests/complete` | 🔒 | Valida respostas e regras de acesso no servidor e registra o resultado |
+| `GET /api/profile` | 🔒 | Perfil e estatísticas do usuário autenticado |
+| `GET /api/ranking?offset=0&limit=10` | 🔒 | Página do ranking semanal |
+| `GET /api/ranking/top` | 🔒 | Pódio semanal |
+| `GET /api/ranking/compare` | 🔒 | Comparação semanal do usuário com participantes próximos |
+| `ALL /api/auth/[...all]` | Conforme operação | Autenticação, sessão e demais operações Better Auth |
+
+Entradas externas são validadas com Zod. Os endpoints de palavras retornam
+`400` para entrada inválida, `401` sem sessão, `404` quando a palavra não
+pertence ao usuário e `409` para duplicidade ou regras de meta. O salvamento de
+teste retorna um estado de domínio (`completed`, `invalid`, `words`, `goal` ou
+`cooldown`), com status HTTP apropriado. Falhas de provedores de tradução são
+retornadas como `502`, sem expor detalhes internos.
+
+As APIs de ranking mantêm os caminhos existentes; as telas de início, palavras,
+testes e perfil foram migradas para consumir os endpoints próprios. O endpoint
+de autenticação continua sendo gerenciado pelo Better Auth.

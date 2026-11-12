@@ -1,14 +1,14 @@
-import { getRequestLocale } from "@/shared/i18n/server";
-import { translate } from "@/shared/i18n/messages";
+"use client";
+
+import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./home-screen.module.css";
 
-export async function HomeSkeleton() {
-  const locale = await getRequestLocale();
-
+export function HomeSkeleton() {
+  const { t } = useI18n();
   return (
     <div
       aria-busy="true"
-      aria-label={translate(locale, "common.loadingHome")}
+      aria-label={t("common.loadingHome")}
       className={styles.home}
     >
       <span className={styles.skeletonHeading} />
