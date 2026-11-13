@@ -12,7 +12,8 @@ export function getPrismaClient(): PrismaClient {
     return globalForPrisma.prisma;
   }
 
-  const url = process.env.DATABASE_URL;
+  const url =
+    process.env.DATABASE_URL_POOLED?.trim() || process.env.DATABASE_URL?.trim();
   if (!url) {
     throw new Error("DATABASE_URL must be set before using Prisma.");
   }

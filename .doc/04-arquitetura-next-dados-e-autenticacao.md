@@ -318,7 +318,7 @@ Recomendado para começar: **JWT em cookie** com `tokenVersion` no `User` (incre
 - *Rate limit* em `/auth/*`, `/lookup` e `/tests`.
 - Validação com Zod em **todas** as entradas; limites de tamanho (`term` ≤ 80 caracteres, `example` ≤ 200, nome ≤ 24, busca `q` ≤ 80).
 - Mensagens de erro genéricas na autenticação.
-- Variáveis de ambiente (`.env.example`): `DATABASE_URL`, `DIRECT_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` e outras integrações opcionais.
+- Variáveis de ambiente (`.env.example`): `DATABASE_URL`, `DATABASE_URL_POOLED`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` e outras integrações opcionais.
 
 ---
 
@@ -387,15 +387,16 @@ Recomendado para começar: **JWT em cookie** com `tokenVersion` no `User` (incre
 O projeto usa PostgreSQL em todos os ambientes. Configure estas variáveis na Vercel
 para Production (e Preview, se necessário):
 
-- `DATABASE_URL`: URL de runtime fornecida pelo serviço PostgreSQL. Use a URL
-  com pooling se o provedor oferecer uma específica para aplicações serverless.
-- `DIRECT_URL`: URL direta para o Prisma CLI executar migrations. Se o provedor
-  não separar conexões pooled e diretas, use a mesma URL em ambas.
+- `DATABASE_URL`: URL direta fornecida pelo serviço PostgreSQL; o Prisma CLI usa
+  esta conexão para aplicar migrations.
+- `DATABASE_URL_POOLED`: URL com pooling para as requisições da aplicação. O
+  Prisma Postgres fornece esta variável. Se o provedor não oferecer pooling, a
+  aplicação usa `DATABASE_URL` como alternativa.
 - `BETTER_AUTH_SECRET`: segredo aleatório com pelo menos 32 caracteres. Gere um
   valor único e mantenha-o estável entre deploys; não o salve no repositório.
 - `BETTER_AUTH_URL`: URL canônica do site, incluindo `https://`.
 
 O `vercel.json` executa `npm run vercel-build`, que aplica `prisma migrate deploy`
-com `DIRECT_URL` antes do build. Configure essas variáveis antes do deploy. Essa
-troca de provider não importa automaticamente dados do arquivo SQLite local
+com `DATABASE_URL` antes do build. Configure essas variáveis antes do deploy.
+Essa troca de provider não importa automaticamente dados do arquivo SQLite local
 ignorado pelo Git.
