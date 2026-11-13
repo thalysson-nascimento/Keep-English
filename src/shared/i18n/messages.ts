@@ -101,7 +101,7 @@ const en = {
     "Saved words, daily goals, and test results are linked to your account to show your progress and ranking.",
   "legal.privacy.storage.title": "Storage",
   "legal.privacy.storage.text":
-    "In the current development environment, data is stored in a local SQLite database. This document and data-handling practices must be reviewed before public release.",
+    "Account data is stored in the PostgreSQL database configured for this deployment. Review the provider's privacy and retention policies before public release.",
   "legal.terms.title": "Terms of use",
   "legal.terms.description":
     "Keep English is an app in development to support recording and practicing English vocabulary.",
@@ -432,7 +432,7 @@ const ptBR = {
     "Palavras salvas, metas diárias e resultados de testes são associados à sua conta para apresentar o progresso e o ranking.",
   "legal.privacy.storage.title": "Armazenamento",
   "legal.privacy.storage.text":
-    "No ambiente de desenvolvimento atual, os dados ficam em uma base SQLite local. Antes da disponibilização pública, este documento e as práticas de tratamento de dados precisam ser revisados.",
+    "Os dados da conta são armazenados no banco PostgreSQL configurado para esta implantação. Antes da disponibilização pública, revise as políticas de privacidade e retenção do provedor.",
   "legal.terms.title": "Termos de uso",
   "legal.terms.description":
     "O Keep English é uma aplicação em desenvolvimento para apoiar o registro e a prática de vocabulário em inglês.",

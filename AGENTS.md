@@ -23,7 +23,7 @@ The project uses:
 - Next.js with App Router.
 - React.
 - TypeScript with strict mode.
-- SQLite for the current development stage; PostgreSQL remains the production target.
+- PostgreSQL as the fixed database provider in development and production.
 - Prisma ORM.
 - Better Auth for authentication.
 - Zod for data validation.
@@ -175,7 +175,7 @@ Authentication and authorization are separate responsibilities.
 
 ## 8. Database Rules
 
-SQLite is the database for the current development stage. PostgreSQL remains the production target, and database provider selection is fixed rather than conditional on environment.
+PostgreSQL is the fixed database provider across environments. Provider selection must not vary by environment.
 
 Prisma is the ORM and migration management solution.
 

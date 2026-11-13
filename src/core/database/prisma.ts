@@ -1,6 +1,6 @@
 import "server-only";
 
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 
 const globalForPrisma = globalThis as typeof globalThis & {
@@ -17,7 +17,7 @@ export function getPrismaClient(): PrismaClient {
     throw new Error("DATABASE_URL must be set before using Prisma.");
   }
 
-  const adapter = new PrismaBetterSqlite3({ url });
+  const adapter = new PrismaPg({ connectionString: url, max: 1 });
   globalForPrisma.prisma = new PrismaClient({ adapter });
 
   return globalForPrisma.prisma;

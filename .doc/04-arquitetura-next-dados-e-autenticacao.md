@@ -13,7 +13,7 @@ Navegador (React)                    Servidor Next.js                       Exte
 Páginas / componentes   ──fetch──▶   Route Handlers  /api/v1/*   ──────▶   MyMemory
 TanStack Query (cache)  ◀──JSON──    Serviços de domínio                    Datamuse
 Cookie de sessão        ───────────▶ Auth (sessão)                          LanguageTool
-                                     Prisma ─────▶ Banco (SQLite→Postgres)  Tatoeba
+                                     Prisma ─────▶ PostgreSQL                Tatoeba
 ```
 
 Camadas no servidor (de fora para dentro):
@@ -36,7 +36,7 @@ No protótipo, as camadas 1–3 estão **todas dentro do objeto `Repo`** (no nav
 | Fonte | `next/font/google` → Nunito 600/700/800/900 | Sem *layout shift* e sem requisição externa em tempo de execução |
 | Dados no cliente | **TanStack Query** | Cache, *invalidate* após mutações, paginação infinita (`useInfiniteQuery`) |
 | Validação | **Zod** (entrada e saída) | Um schema por endpoint, compartilhado com o cliente |
-| Banco | **Prisma** + **SQLite** em desenvolvimento → **PostgreSQL** em produção | Você pediu SQLite no início; Prisma permite trocar sem reescrever |
+| Banco | **Prisma** + **PostgreSQL** em todos os ambientes | O provider é fixo; configure uma connection string por ambiente |
 | Autenticação | **Auth.js (NextAuth v5)** — provider *Credentials* (e-mail + senha), opcional Google | Sessão em cookie *httpOnly*; ver seção 6 |
 | Hash de senha | **Argon2id** (ou bcrypt custo ≥ 12) | Padrão atual |
 | Datas | `date-fns` + `date-fns-tz` (ou Temporal quando disponível) | Limites de dia por fuso horário |
@@ -131,7 +131,7 @@ keep-english/
 ## 5. Modelo de dados (Prisma — Sugestão)
 
 ```prisma
-datasource db { provider = "sqlite" /* trocar para "postgresql" em produção */ url = env("DATABASE_URL") }
+datasource db { provider = "postgresql" }
 generator client { provider = "prisma-client-js" }
 
 model User {
@@ -221,7 +221,7 @@ model DailyXp {                      // agregado para o ranking (evita recalcula
 }
 ```
 
-> No SQLite do Prisma não há `enum`/`Json` nativos; usar `String` (como acima). No PostgreSQL, trocar por `enum` e `Json`.
+> A configuração atual usa PostgreSQL em todos os ambientes; o modelo de produção está em `prisma/schema.prisma`.
 
 ### 5.1 Derivações (nada disso precisa de tabela própria)
 
@@ -318,7 +318,7 @@ Recomendado para começar: **JWT em cookie** com `tokenVersion` no `User` (incre
 - *Rate limit* em `/auth/*`, `/lookup` e `/tests`.
 - Validação com Zod em **todas** as entradas; limites de tamanho (`term` ≤ 80 caracteres, `example` ≤ 200, nome ≤ 24, busca `q` ≤ 80).
 - Mensagens de erro genéricas na autenticação.
-- Variáveis de ambiente (`.env.example`): `DATABASE_URL`, `AUTH_SECRET`, `AUTH_URL`, `GOOGLE_ID/SECRET` (opcional), `MYMEMORY_EMAIL` (opcional, aumenta a cota), `LANGUAGETOOL_API_KEY` (opcional, plano pago), `UPSTASH_*` (rate limit).
+- Variáveis de ambiente (`.env.example`): `DATABASE_URL`, `DIRECT_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL` e outras integrações opcionais.
 
 ---
 
@@ -372,7 +372,7 @@ Recomendado para começar: **JWT em cookie** com `tokenVersion` no `User` (incre
 ## 10. Plano de implementação em fases (Sugestão)
 
 1. **Fundação:** projeto Next + TypeScript + Tailwind, fonte, tokens, tema claro/escuro, `AppShell` e navegação.
-2. **Banco e autenticação:** Prisma + SQLite, `User`, Auth.js (credenciais), telas de login/registro, proteção de rotas.
+2. **Banco e autenticação:** Prisma + PostgreSQL, `User`, Better Auth (credenciais), telas de login/registro, proteção de rotas.
 3. **Palavras:** `Word`, `POST/GET/DELETE /words`, folha "Anotar palavra", listas e tela "Todas as palavras" (busca + paginação).
 4. **Lookup:** integrações MyMemory/Datamuse/LanguageTool/Tatoeba no servidor, `POST /lookup`, cache e *rate limit*.
 5. **Meta e evolução:** `GoalLog`, `GET/PUT /goals/today`, gráfico de 7 dias com 🔥, `stats/*`.
@@ -380,4 +380,22 @@ Recomendado para começar: **JWT em cookie** com `tokenVersion` no `User` (incre
 7. **Ranking:** `DailyXp`, endpoints de ranking, pódio, gráfico SVG e lista paginada.
 8. **Perfil:** `GET/PATCH /me`, trocar senha, sair, excluir conta, exportar dados.
 9. **Qualidade:** testes de serviços (meta, teste, ranking), Playwright nos fluxos principais, acessibilidade, revisão de contraste.
-10. **Produção:** migrar para PostgreSQL, variáveis de ambiente, deploy, monitoramento.
+10. **Deploy:** configurar as variáveis de ambiente, aplicar migrations com Prisma e publicar na Vercel.
+
+## 11. PostgreSQL na Vercel (configuração atual)
+
+O projeto usa PostgreSQL em todos os ambientes. Configure estas variáveis na Vercel
+para Production (e Preview, se necessário):
+
+- `DATABASE_URL`: URL de runtime fornecida pelo serviço PostgreSQL. Use a URL
+  com pooling se o provedor oferecer uma específica para aplicações serverless.
+- `DIRECT_URL`: URL direta para o Prisma CLI executar migrations. Se o provedor
+  não separar conexões pooled e diretas, use a mesma URL em ambas.
+- `BETTER_AUTH_SECRET`: segredo aleatório com pelo menos 32 caracteres. Gere um
+  valor único e mantenha-o estável entre deploys; não o salve no repositório.
+- `BETTER_AUTH_URL`: URL canônica do site, incluindo `https://`.
+
+O `vercel.json` executa `npm run vercel-build`, que aplica `prisma migrate deploy`
+com `DIRECT_URL` antes do build. Configure essas variáveis antes do deploy. Essa
+troca de provider não importa automaticamente dados do arquivo SQLite local
+ignorado pelo Git.

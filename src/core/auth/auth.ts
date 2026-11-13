@@ -48,7 +48,7 @@ export function createAuth() {
   const prisma = getPrismaClient();
 
   return betterAuth({
-    database: prismaAdapter(prisma, { provider: "sqlite" }),
+    database: prismaAdapter(prisma, { provider: "postgresql" }),
     secret,
     baseURL,
     user: {

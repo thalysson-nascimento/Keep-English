@@ -719,7 +719,7 @@ Cores no cliente: eu = azul, `others[0]` = laranja, `others[1]` = vermelho.
 Esta seção descreve as rotas que existem atualmente no Next.js e substitui a
 proposta `/api/v1` da Parte B quando houver diferenças. As rotas de negócio
 validam a sessão Better Auth no servidor, derivam o usuário da sessão e acessam
-o SQLite por meio dos repositórios Prisma. A interface consome esses endpoints;
+o PostgreSQL por meio dos repositórios Prisma. A interface consome esses endpoints;
 não usa classes ou dados mockados para as funcionalidades abaixo.
 
 | Método e rota | Autenticação | Responsabilidade |
