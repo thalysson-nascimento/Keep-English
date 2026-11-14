@@ -16,6 +16,7 @@
     "prisma:validate": "prisma validate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:seed": "prisma db seed",
     "vercel-build": "npm run prisma:migrate:deploy && npm run build"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "eslint-config-next": "16.4.5",
     "prettier": "^3.9.10",
     "prisma": "^7.10.1",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

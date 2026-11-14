@@ -302,6 +302,10 @@
   margin-top: 18px;
 }
 
+.forgotAlternate {
+  margin-top: 18px;
+}
+
 .registerPrompt {
   display: grid;
   gap: 18px;

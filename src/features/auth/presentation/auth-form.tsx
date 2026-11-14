@@ -12,6 +12,7 @@ import styles from "./auth-form.module.css";
 
 interface AuthFormProps {
   mode: "login" | "register" | "forgot" | "reset";
+  initialEmail?: string;
   initialPassword?: string;
   token?: string;
 }
@@ -27,12 +28,19 @@ export function AuthFormSkeleton() {
   );
 }
 
-export function AuthForm({ mode, initialPassword, token }: AuthFormProps) {
+export function AuthForm({
+  mode,
+  initialEmail,
+  initialPassword,
+  token,
+}: AuthFormProps) {
   const { t } = useI18n();
   const router = useRouter();
 
   const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(
+    mode === "login" ? (initialEmail ?? "") : "",
+  );
   const [password, setPassword] = useState(
     mode === "login" ? (initialPassword ?? "") : "",
   );
@@ -264,7 +272,7 @@ export function AuthForm({ mode, initialPassword, token }: AuthFormProps) {
                     ? "new-password"
                     : "current-password"
                 }
-                minLength={8}
+                minLength={isRegistering || isResettingPassword ? 8 : undefined}
                 onChange={(event) => setPassword(event.target.value)}
                 required
                 type={passwordVisible ? "text" : "password"}
@@ -350,7 +358,11 @@ export function AuthForm({ mode, initialPassword, token }: AuthFormProps) {
       ) : (
         <Link
           className={`${styles.alternate} ${
-            isRegistering ? styles.registerAlternate : ""
+            isRegistering
+              ? styles.registerAlternate
+              : isForgotPassword
+                ? styles.forgotAlternate
+                : ""
           }`}
           href="/login"
         >

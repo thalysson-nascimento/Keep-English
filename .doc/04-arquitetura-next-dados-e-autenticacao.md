@@ -360,7 +360,7 @@ Recomendado para começar: **JWT em cookie** com `tokenVersion` no `User` (incre
 | `Repo.tests()` / `addTest()` | `GET /api/v1/tests`, fluxo `POST /tests` → `answers` → `finish` |
 | `Repo.profile()` / `setProfile()` | `GET/PATCH /api/v1/me` |
 | `Repo.ranking*()` | `GET /api/v1/ranking`, `/top`, `/compare` |
-| `Repo.seed()` / `reset()` | `prisma/seed.ts` (modo demo) / `DELETE /me` |
+| `Repo.seed()` / `reset()` | `prisma/seed.ts` (conta compartilhada de beta, execução manual) / `DELETE /me` |
 | `mm`, `resolve`, `spell`, `sentence` | `integrations/*` + `POST /api/v1/lookup` (uma chamada só) |
 | `renderOthers()` e cálculos (streak, médias, melhor dia) | `GET /api/v1/stats/summary` e `/stats/daily` |
 | `dayKey()` | `localDate` calculado no servidor com o fuso do usuário |

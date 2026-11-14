@@ -6,6 +6,7 @@ export default async function LoginPage() {
 
   return (
     <AuthForm
+      initialEmail={process.env.LOGIN_DEFAULT_EMAIL}
       initialPassword={process.env.LOGIN_DEFAULT_PASSWORD}
       mode="login"
     />
