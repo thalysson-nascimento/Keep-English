@@ -7,10 +7,12 @@ import json
 from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
+from legal_content import load_legal_content, load_pages
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
-VERSION = '1.1.0'
+LEGAL_CONTENT = load_legal_content()
+VERSION = LEGAL_CONTENT['version']
 EMAIL = 'thalysson.developer@gmail.com'
 NS = {'b': 'http://www.google.com/2005/gml/b', 'h': 'http://www.w3.org/1999/xhtml'}
 
@@ -22,7 +24,7 @@ def escape(value):
 def document(page):
     notice = ''
     if page['kind'] in ('legal', 'deletion'):
-        notice = '<aside class="notice"><p><strong>Versão para revisão.</strong> A rede de anúncios, as práticas de retenção e a configuração de produção precisam ser confirmadas antes da publicação deste documento.</p></aside>'
+        notice = '<aside class="notice"><p><strong>Versão para revisão.</strong> ' + escape(LEGAL_CONTENT['reviewNotice']) + '</p></aside>'
     heading = page.get('heading', page['title'])
     sections = ''.join(f'<section id="{page["key"]}-{index}"><h2>{escape(title)}</h2><p>{escape(text)}</p></section>' for index, (title, text) in enumerate(page['sections'], 1))
     toc = '<nav class="toc" aria-label="Nesta página"><strong>Nesta página</strong><ol>' + ''.join(f'<li><a href="#{page["key"]}-{index}">{escape(title)}</a></li>' for index, (title, _) in enumerate(page['sections'], 1)) + '</ol></nav>'
@@ -32,12 +34,14 @@ def document(page):
     if page['kind'] == 'contact':
         action = f'<a class="button" href="mailto:{EMAIL}?subject=Suporte%20%E2%80%94%20Keep%20English">Enviar e-mail ao suporte <span aria-hidden="true">↗</span></a>'
     related = '<p>Veja também: <a href="/p/privacidade.html">Privacidade</a> · <a href="/p/termos-de-uso.html">Termos de uso</a> · <a href="/p/excluir-conta.html">Excluir conta</a>.</p>'
-    google = '<p><a href="https://policies.google.com/privacy">Política de Privacidade do Google</a>.</p>' if page['key'] == 'privacidade' else ''
-    return f'<main id="conteudo" class="document" data-content-language="pt-BR"><a class="blogger-back" href="/">← Voltar ao início</a><p class="eyebrow">Keep English / {"Aprender" if page["kind"] == "article" else "Informações"}</p><h1>{escape(heading)}</h1><p class="meta">Versão {VERSION} · 15 de novembro de 2026</p>{notice}<p>{escape(page["intro"])}</p>{action}{toc}{sections}{google}{related}</main>'
+    google = '<p><a href="' + escape(LEGAL_CONTENT['googlePrivacy']['href']) + '">' + escape(LEGAL_CONTENT['googlePrivacy']['label']) + '</a>.</p>' if page['key'] == 'privacidade' else ''
+    return f'<main id="conteudo" class="document" data-content-language="pt-BR"><a class="blogger-back" href="/">← Voltar ao início</a><p class="eyebrow">Keep English / {"Aprender" if page["kind"] == "article" else "Informações"}</p><h1>{escape(heading)}</h1><p class="meta">Versão {VERSION} · {LEGAL_CONTENT["date"]}</p>{notice}<p>{escape(page["intro"])}</p>{action}{toc}{sections}{google}{related}</main>'
 
 
 def build():
-    pages = json.loads((ROOT / 'source/pages.json').read_text(encoding='utf-8'))
+    pages = load_pages()
+    # Generated copy makes the installation package self-contained; edit the app source.
+    (ROOT / 'source/legal-documents.json').write_text(json.dumps(LEGAL_CONTENT, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     css = (ROOT / 'source/styles.css').read_text(encoding='utf-8')
     logo = 'data:image/png;base64,' + base64.b64encode((ROOT / 'assets/keep-english.png').read_bytes()).decode()
     image = f'<img src="{logo}" alt="" width="52" height="52"/>'
@@ -107,7 +111,7 @@ def build():
     (ROOT / 'reports/inventory.json').write_text(json.dumps(inventory, ensure_ascii=False, indent=2), encoding='utf-8')
     (ROOT / 'reports/project.json').write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding='utf-8')
     manifest = '\n'.join(f'| {p["title"]} | `/p/{p["slug"]}.html` | `pages/{p["slug"]}.html` |' for p in pages)
-    (ROOT / 'PAGINAS.md').write_text('# Páginas a criar no Blogger\n\nImportar o tema não cria páginas. Publique cada página com o título exato abaixo. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.\n\n| Título exato | Endereço esperado | Conteúdo de referência |\n| --- | --- | --- |\n' + manifest + '\n\nOs documentos são integrados ao tema e selecionados pelo título exato. O editor de páginas pode conter uma breve descrição: o corpo público vem do tema. Os arquivos HTML são referências completas para revisão, não devem ser colados junto com outra cópia do documento. Para editar: altere `source/pages.json`, execute `python blogger/build.py` e reinstale o XML. Páginas adicionais com títulos diferentes exibem o corpo nativo.\n', encoding='utf-8')
+    (ROOT / 'PAGINAS.md').write_text('# Páginas a criar no Blogger\n\nImportar o tema não cria páginas. Publique cada página com o título exato abaixo. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.\n\n| Título exato | Endereço esperado | Conteúdo de referência |\n| --- | --- | --- |\n' + manifest + '\n\nOs documentos são integrados ao tema e selecionados pelo título exato. O editor de páginas pode conter uma breve descrição: o corpo público vem do tema. Os arquivos HTML são referências completas para revisão, não devem ser colados junto com outra cópia do documento. Para editar textos legais: altere `src/features/auth/content/legal-documents.json` na raiz do projeto (fonte compartilhada com o app). Para as demais páginas, altere `source/pages.json`. Depois execute `python blogger/build.py` e reinstale o XML. Páginas adicionais com títulos diferentes exibem o corpo nativo.\n', encoding='utf-8')
     checksum = hashlib.sha256(theme_path.read_bytes()).hexdigest()
     (ROOT / 'reports/theme-sha256.txt').write_text(f'{checksum}  {theme_path.name}\n', encoding='utf-8')
     print(json.dumps({'theme': theme_path.name, 'version': VERSION, 'pages': len(pages), 'sha256': checksum}))

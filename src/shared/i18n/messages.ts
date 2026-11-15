@@ -88,38 +88,6 @@ const en = {
   "auth.signingOut": "Signing out...",
   "auth.signOut": "Sign out",
   "auth.legal.back": "Back to registration",
-  "auth.legal.notice":
-    "This is an initial project document and must be reviewed before publication.",
-  "legal.privacy.title": "Privacy policy",
-  "legal.privacy.description":
-    "This initial version describes the data used by the application during development.",
-  "legal.privacy.account.title": "Account data",
-  "legal.privacy.account.text":
-    "The application stores your name, email, and avatar to identify your account. Authentication and passwords are managed by Better Auth.",
-  "legal.privacy.learning.title": "Learning data",
-  "legal.privacy.learning.text":
-    "Saved words, daily goals, and test results are linked to your account to show your progress and ranking.",
-  "legal.privacy.storage.title": "Storage",
-  "legal.privacy.ads.title": "Advertising",
-  "legal.privacy.ads.text":
-    "The advertising version is planned to show an ad when the app opens and optional rewarded videos to unlock another test before the 30-minute interval ends. The advertising provider and its data practices must be confirmed before this version is released.",
-  "legal.privacy.deletion.title": "Account deletion",
-  "legal.privacy.deletion.text":
-    "Go to Profile → Delete account and confirm deletion. Once successful, your account, sessions, saved words, goals and test history are removed from the active database, and you return to sign-in. You can also contact thalysson.developer@gmail.com; support requests are handled within 30 days. Backup and provider retention practices remain under review. Public developer name: Datingmatch Studio.",
-  "legal.privacy.storage.text":
-    "Account data is stored in the PostgreSQL database configured for this deployment. Review the provider's privacy and retention policies before public release.",
-  "legal.terms.title": "Terms of use",
-  "legal.terms.description":
-    "Keep English is an app in development to support recording and practicing English vocabulary.",
-  "legal.terms.account.title": "Account use",
-  "legal.terms.account.text":
-    "Keep your sign-in details secure and use the application lawfully and respectfully. Features may change while the product is in development.",
-  "legal.terms.availability.title": "Availability",
-  "legal.terms.availability.text":
-    "This version is experimental and may experience interruptions, changes, or data loss. Do not use the application to store critical information.",
-  "legal.terms.review.title": "Contact and review",
-  "legal.terms.review.text":
-    "This text is an informational draft and does not replace terms reviewed for the public operation of the service.",
   "home.greeting.morning": "Good morning",
   "home.greeting.afternoon": "Good afternoon",
   "home.greeting.evening": "Good evening",
@@ -434,38 +402,6 @@ const ptBR = {
   "auth.signingOut": "Saindo...",
   "auth.signOut": "Sair da conta",
   "auth.legal.back": "Voltar ao cadastro",
-  "auth.legal.notice":
-    "Documento inicial do projeto. Precisa de revisão antes da publicação definitiva.",
-  "legal.privacy.title": "Política de privacidade",
-  "legal.privacy.description":
-    "Esta versão inicial descreve os dados usados pela aplicação durante o desenvolvimento.",
-  "legal.privacy.account.title": "Dados da conta",
-  "legal.privacy.account.text":
-    "A aplicação armazena nome, e-mail e avatar para identificar sua conta. A autenticação e as senhas são gerenciadas pelo Better Auth.",
-  "legal.privacy.learning.title": "Dados de aprendizagem",
-  "legal.privacy.learning.text":
-    "Palavras salvas, metas diárias e resultados de testes são associados à sua conta para apresentar o progresso e o ranking.",
-  "legal.privacy.storage.title": "Armazenamento",
-  "legal.privacy.ads.title": "Publicidade",
-  "legal.privacy.ads.text":
-    "A versão com publicidade prevê anúncio na abertura do app e vídeos recompensados opcionais para liberar outro teste antes do intervalo de 30 minutos. A rede de anúncios e suas práticas de dados precisam ser confirmadas antes de disponibilizar essa versão.",
-  "legal.privacy.deletion.title": "Exclusão da conta",
-  "legal.privacy.deletion.text":
-    "Acesse Perfil → Excluir conta e confirme a exclusão. Após o sucesso, conta, sessões, palavras, metas e histórico de testes são removidos do banco ativo, e você retorna ao login. Você também pode escrever para thalysson.developer@gmail.com; pedidos ao suporte são atendidos em até 30 dias. A retenção em backups e fornecedores permanece em revisão. Nome público do desenvolvedor: Datingmatch Studio.",
-  "legal.privacy.storage.text":
-    "Os dados da conta são armazenados no banco PostgreSQL configurado para esta implantação. Antes da disponibilização pública, revise as políticas de privacidade e retenção do provedor.",
-  "legal.terms.title": "Termos de uso",
-  "legal.terms.description":
-    "O Keep English é uma aplicação em desenvolvimento para apoiar o registro e a prática de vocabulário em inglês.",
-  "legal.terms.account.title": "Uso da conta",
-  "legal.terms.account.text":
-    "Mantenha seus dados de acesso em segurança e utilize a aplicação de forma lícita e respeitosa. As funcionalidades podem mudar enquanto o produto estiver em desenvolvimento.",
-  "legal.terms.availability.title": "Disponibilidade",
-  "legal.terms.availability.text":
-    "Esta versão é experimental e pode sofrer interrupções, alterações ou perda de dados. Não utilize a aplicação para armazenar informações críticas.",
-  "legal.terms.review.title": "Contato e revisão",
-  "legal.terms.review.text":
-    "Este texto é um rascunho informativo e não substitui termos revisados para a operação pública do serviço.",
   "home.greeting.morning": "Bom dia",
   "home.greeting.afternoon": "Boa tarde",
   "home.greeting.evening": "Boa noite",

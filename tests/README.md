@@ -1,5 +1,17 @@
 # Verificação da exclusão de conta
 
+## Documentos legais
+
+Com o aplicativo em execução local, confira privacidade e termos contra a prévia do Blogger:
+
+```text
+node --test tests/legal-documents-parity.test.mjs
+```
+
+O teste verifica título, introdução, todas as seções, versão, data, aviso e link de privacidade do Google, com o idioma de interface em português e inglês. Os documentos permanecem em português para corresponder integralmente ao Blogger. A fonte editável é `src/features/auth/content/legal-documents.json`; a cópia do pacote Blogger é gerada automaticamente.
+
+## Conta e dados
+
 O teste de integração utiliza PostgreSQL e cria duas contas descartáveis com identificadores aleatórios. Não utiliza nem exclui a conta compartilhada de testes. Executar com as dependências existentes e uma conexão PostgreSQL válida em `.env` ou `.env.development.local`:
 
 ```text

@@ -19,7 +19,11 @@ Esta entrega não foi importada nem publicada em uma conta Blogger. A aceitaçã
 
 ## Manutenção
 
-Fontes: `source/styles.css`, `source/pages.json`, `assets/keep-english.png` e `build.py`. Execute da raiz do projeto:
+Privacidade e termos usam a mesma fonte do app: `src/features/auth/content/legal-documents.json`, na raiz do repositório. Edite esse arquivo para atualizar título, introdução, seções, versão, data e aviso de revisão nos dois destinos. O app exibe o documento integral em português, idioma disponível no Blogger, mesmo quando a interface estiver em inglês.
+
+O construtor gera `source/legal-documents.json` como cópia para o pacote portátil. Não edite essa cópia no repositório: a próxima geração a substitui. Fora do repositório, ela permite consultar os documentos no pacote de instalação.
+
+Demais fontes: `source/styles.css`, `source/pages.json`, `assets/keep-english.png` e `build.py`. Execute da raiz do projeto:
 
 ```text
 python blogger/build.py

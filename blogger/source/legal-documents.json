@@ -1,0 +1,121 @@
+{
+  "version": "1.1.0",
+  "date": "15 de novembro de 2026",
+  "reviewNotice": "A rede de anúncios, as práticas de retenção e a configuração de produção precisam ser confirmadas antes da publicação deste documento.",
+  "googlePrivacy": {
+    "label": "Política de Privacidade do Google",
+    "href": "https://policies.google.com/privacy"
+  },
+  "documents": {
+    "privacidade": {
+      "key": "privacidade",
+      "slug": "privacidade",
+      "title": "Política de Privacidade",
+      "kind": "legal",
+      "intro": "Esta política descreve o tratamento de dados no Keep English e os canais para exercer seus direitos. Datingmatch Studio é o nome público do desenvolvedor. Contato: thalysson.developer@gmail.com.",
+      "sections": [
+        [
+          "Dados da conta",
+          "O cadastro utiliza nome, e-mail e credenciais de autenticação. O perfil inclui um avatar e as datas de criação e atualização. A autenticação utiliza uma representação protegida da senha; nunca envie sua senha ao suporte."
+        ],
+        [
+          "Dados de estudo",
+          "Armazenamos palavras, traduções, exemplos, datas de inclusão, metas e resultados de testes associados à conta. Essas informações permitem organizar seu vocabulário, apresentar sua evolução e calcular a sequência e a classificação semanal."
+        ],
+        [
+          "Sessões e acesso",
+          "O serviço utiliza informações de sessão para reconhecer o usuário autenticado e proteger o acesso à conta. O modelo de sessões permite registrar endereço IP e informações do navegador; a configuração efetiva de produção e a retenção desses registros precisam ser confirmadas antes da publicação desta política."
+        ],
+        [
+          "Finalidades e bases legais",
+          "Dados necessários ao cadastro e ao funcionamento das ferramentas de estudo são tratados para prestar o serviço solicitado. Outras operações, como atendimento, proteção do serviço e eventual cumprimento de obrigações, precisam ter sua finalidade e base legal avaliadas conforme o caso. Atividades que dependam de consentimento exigem uma escolha específica; aceitar termos de uso não substitui esse consentimento."
+        ],
+        [
+          "Informações no ranking",
+          "O ranking utiliza nome, avatar e pontuação calculada a partir da atividade de estudo. Esses elementos podem ser apresentados a outros usuários no contexto da classificação. Evite usar informações sensíveis como nome de exibição."
+        ],
+        [
+          "Tradução, correção e exemplos",
+          "Conforme a consulta realizada, o servidor envia palavras ou textos de busca para Datamuse, LanguageTool, MyMemory e Tatoeba para obter sugestões, traduções e exemplos. O fluxo analisado não inclui e-mail ou senha nessas consultas. Evite inserir informações pessoais ou confidenciais nos campos de vocabulário. Os fornecedores também podem tratar informações técnicas relacionadas às requisições de acordo com suas práticas."
+        ],
+        [
+          "Armazenamento e fornecedores",
+          "Os dados da conta e do estudo são armazenados no servidor. A identificação da hospedagem de produção, dos operadores, dos países de tratamento e das salvaguardas aplicáveis a transferências internacionais deve ser completada a partir da implantação efetiva. Esta versão não declara que todos os dados permanecem no Brasil."
+        ],
+        [
+          "Este site no Blogger",
+          "Este site é hospedado na plataforma Blogger, do Google. O acesso está sujeito também às práticas da plataforma, que pode tratar informações técnicas e utilizar cookies. O tema fornecido não acrescenta ferramentas próprias de publicidade ou análise de audiência. Configurações e integrações adicionadas ao blog ou ao app devem ser avaliadas separadamente. Consulte a Política de Privacidade do Google para conhecer o tratamento pela plataforma."
+        ],
+        [
+          "Publicidade e vídeos recompensados",
+          "A versão com publicidade prevê anúncios na abertura do aplicativo e vídeos recompensados opcionais para liberar um novo teste antes do intervalo de 30 minutos. A identificação da rede de anúncios, dos SDKs e dos dados efetivamente tratados ainda precisa ser confirmada antes de disponibilizar essa versão. Não presumimos ausência de identificadores publicitários ou rastreamento. Preferências e consentimentos aplicáveis deverão acompanhar a configuração real e o público atendido."
+        ],
+        [
+          "Retenção e exclusão",
+          "No aplicativo, acesse Perfil → Excluir conta, leia o aviso e confirme em Excluir. Após o sucesso da operação, a conta e os dados associados são removidos do banco ativo e você retorna ao login. Também é possível solicitar a exclusão por thalysson.developer@gmail.com, com atendimento em até 30 dias. Cópias de segurança, dados eventualmente tratados por fornecedores e retenções justificadas dependem das respectivas práticas e precisam ser detalhados antes da publicação final."
+        ],
+        [
+          "Seus direitos",
+          "Conforme a legislação aplicável, você pode solicitar confirmação de tratamento, acesso, correção, informações sobre compartilhamento e, quando cabível, anonimização, bloqueio, eliminação, portabilidade e revogação do consentimento. Escreva para o suporte, descrevendo o pedido. A verificação de titularidade deve se limitar ao necessário para impedir acesso indevido aos dados."
+        ],
+        [
+          "Crianças e adolescentes",
+          "O público etário e os controles aplicáveis à versão distribuída ainda precisam ser definidos. Esta proposta não afirma que o aplicativo está configurado para uso infantil. A publicação depende da avaliação do público-alvo e das medidas de proteção exigidas para crianças e adolescentes, quando aplicáveis."
+        ],
+        [
+          "Segurança e atualizações",
+          "O acesso a dados deve ser limitado a pessoas e serviços autorizados. Nenhum sistema pode oferecer garantia absoluta de segurança. Mudanças relevantes nas práticas de tratamento exigem atualização desta política e comunicação apropriada. Para dúvidas ou pedidos sobre dados, utilize thalysson.developer@gmail.com."
+        ]
+      ]
+    },
+    "termos": {
+      "key": "termos",
+      "slug": "termos-de-uso",
+      "title": "Termos de Uso",
+      "kind": "legal",
+      "intro": "Estes termos descrevem as condições de uso do Keep English, cujo desenvolvedor utiliza o nome público Datingmatch Studio. Contato: thalysson.developer@gmail.com.",
+      "sections": [
+        [
+          "Finalidade do serviço",
+          "O Keep English oferece ferramentas para registrar vocabulário em inglês, consultar traduções e exemplos, praticar com testes e acompanhar metas, evolução e ranking. O resultado do estudo depende de fatores individuais; o serviço não promete fluência ou uma nota específica."
+        ],
+        [
+          "Cadastro e acesso",
+          "Forneça informações corretas e mantenha suas credenciais protegidas. Não compartilhe sua senha com o suporte. Se suspeitar de acesso indevido, entre em contato pelo e-mail indicado. As regras etárias e eventuais exigências de participação de responsáveis precisam ser definidas antes da publicação final."
+        ],
+        [
+          "Uso responsável",
+          "Não use o serviço para acessar contas alheias, explorar vulnerabilidades, sobrecarregar sistemas, divulgar conteúdo ilícito ou inserir dados pessoais de terceiros sem fundamento. Não manipule resultados, pontuação ou classificação. Falhas podem ser comunicadas ao suporte."
+        ],
+        [
+          "Traduções e exemplos",
+          "Traduções, sugestões ortográficas e exemplos podem ser fornecidos por serviços externos e conter erros ou conteúdo fora de contexto. Revise os resultados. As ferramentas de estudo não substituem tradução profissional em decisões que exijam precisão técnica, jurídica ou médica."
+        ],
+        [
+          "Seu conteúdo e a marca",
+          "Você mantém os direitos que possuir sobre o conteúdo que inserir e autoriza o tratamento necessário para armazenar, organizar e apresentar esse conteúdo nas funções solicitadas. O uso do serviço não transfere a titularidade da marca, do software ou dos elementos visuais. Conteúdo de terceiros permanece sujeito aos direitos e licenças aplicáveis."
+        ],
+        [
+          "Metas, pontuação e ranking",
+          "Metas, sequência e pontuação servem para acompanhar e incentivar o estudo. O ranking pode mostrar nome, avatar e pontuação aos demais participantes. Essas funcionalidades não constituem promessa de prêmio ou valor financeiro."
+        ],
+        [
+          "Disponibilidade e mudanças",
+          "O serviço pode passar por manutenção, correções e atualizações. Recursos que dependem de internet ou fornecedores externos podem ficar temporariamente indisponíveis. Mudanças relevantes devem ser informadas de forma adequada, respeitando os direitos aplicáveis."
+        ],
+        [
+          "Publicidade e recompensas",
+          "A versão com anúncios prevê publicidade na abertura do app e a opção de assistir a um vídeo recompensado para realizar outro teste antes de completar o intervalo de 30 minutos. O vídeo é uma escolha do usuário. A liberação depende da confirmação de conclusão do anúncio e das demais condições do teste. Os formatos e as regras efetivas devem ser conferidos na versão distribuída antes da publicação destes termos."
+        ],
+        [
+          "Encerramento e exclusão",
+          "Você pode excluir a conta em Perfil → Excluir conta, confirmando a ação no aviso. Depois da exclusão bem-sucedida, os dados associados são removidos do banco ativo e o aplicativo retorna ao login. Também é possível solicitar exclusão ao suporte, com atendimento em até 30 dias. Desinstalar o aplicativo ou sair da sessão não apaga a conta. A ação implica perda do histórico; consulte a Política de Privacidade para informações de retenção. Restrições de acesso por uso indevido devem ser proporcionais e permitir contato com o suporte."
+        ],
+        [
+          "Direitos e contato",
+          "Estes termos não afastam direitos assegurados pela legislação aplicável, inclusive direitos do consumidor e de proteção de dados. Dúvidas, sugestões e solicitações podem ser encaminhadas para thalysson.developer@gmail.com. A versão final deve identificar o responsável jurídico e as condições efetivas da operação."
+        ]
+      ]
+    }
+  }
+}

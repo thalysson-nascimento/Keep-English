@@ -31,7 +31,38 @@
 
 .screen p {
   color: var(--muted);
+  font-size: 16px;
+  overflow-wrap: anywhere;
+}
+
+.screen a {
+  color: var(--text);
+  text-underline-offset: 3px;
+}
+
+.screen a:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+
+.screen .meta {
   font-size: 14px;
+}
+
+.index {
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  font-size: 14px;
+}
+
+.index ol {
+  padding-left: 20px;
+  margin-bottom: 0;
+}
+
+.index li {
+  margin-top: 6px;
 }
 
 .notice {

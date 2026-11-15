@@ -2,23 +2,19 @@ import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { getRequestLocale } from "@/shared/i18n/server";
 import { translate } from "@/shared/i18n/messages";
+import legalContent from "@/features/auth/content/legal-documents.json";
 import styles from "./legal-document.module.css";
 
 interface LegalDocumentProps {
-  title: string;
-  description: string;
-  sections: Array<{ title: string; text: string }>;
+  documentKey: keyof typeof legalContent.documents;
 }
 
-export async function LegalDocument({
-  title,
-  description,
-  sections,
-}: LegalDocumentProps) {
+export async function LegalDocument({ documentKey }: LegalDocumentProps) {
   const locale = await getRequestLocale();
+  const document = legalContent.documents[documentKey];
 
   return (
-    <main className={styles.screen}>
+    <article className={styles.screen} lang="pt-BR">
       <Link
         aria-label={translate(locale, "auth.legal.back")}
         className={styles.back}
@@ -26,15 +22,38 @@ export async function LegalDocument({
       >
         <ArrowLeft aria-hidden="true" />
       </Link>
-      <h1>{title}</h1>
-      <p className={styles.notice}>{translate(locale, "auth.legal.notice")}</p>
-      <p>{description}</p>
-      {sections.map((section) => (
-        <section key={section.title}>
-          <h2>{section.title}</h2>
-          <p>{section.text}</p>
+      <h1>{document.title}</h1>
+      <p className={styles.meta}>
+        Versão {legalContent.version} · {legalContent.date}
+      </p>
+      <p className={styles.notice}>
+        <strong>Versão para revisão.</strong> {legalContent.reviewNotice}
+      </p>
+      <p>{document.intro}</p>
+      <nav aria-label="Nesta página" className={styles.index}>
+        <strong>Nesta página</strong>
+        <ol>
+          {document.sections.map(([title], index) => (
+            <li key={title}>
+              <a href={`#${documentKey}-${index + 1}`}>{title}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+      {document.sections.map(([title, text], index) => (
+        <section id={`${documentKey}-${index + 1}`} key={title}>
+          <h2>{title}</h2>
+          <p>{text}</p>
         </section>
       ))}
-    </main>
+      {documentKey === "privacidade" && (
+        <p>
+          <a href={legalContent.googlePrivacy.href}>
+            {legalContent.googlePrivacy.label}
+          </a>
+          .
+        </p>
+      )}
+    </article>
   );
 }
