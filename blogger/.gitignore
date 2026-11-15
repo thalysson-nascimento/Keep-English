@@ -1,0 +1,4 @@
+*.zip
+__pycache__/
+reports/inventory.json
+keep-english-blogger-v1.0.0.xml

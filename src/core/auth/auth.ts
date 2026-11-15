@@ -52,6 +52,9 @@ export function createAuth() {
     secret,
     baseURL,
     user: {
+      deleteUser: {
+        enabled: true,
+      },
       additionalFields: {
         avatar: {
           type: "string",

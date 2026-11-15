@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import { SignOutButton } from "@/features/auth/presentation/sign-out-button";
+import { DeleteAccountButton } from "@/features/profile/presentation/delete-account-button";
 import { getIntlLocale } from "@/shared/i18n/config";
 import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./profile-screen.module.css";
@@ -184,6 +185,7 @@ export function ProfileScreen() {
       </section>
 
       <SignOutButton />
+      <DeleteAccountButton />
     </div>
   );
 }

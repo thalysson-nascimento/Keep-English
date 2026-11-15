@@ -100,6 +100,12 @@ const en = {
   "legal.privacy.learning.text":
     "Saved words, daily goals, and test results are linked to your account to show your progress and ranking.",
   "legal.privacy.storage.title": "Storage",
+  "legal.privacy.ads.title": "Advertising",
+  "legal.privacy.ads.text":
+    "The advertising version is planned to show an ad when the app opens and optional rewarded videos to unlock another test before the 30-minute interval ends. The advertising provider and its data practices must be confirmed before this version is released.",
+  "legal.privacy.deletion.title": "Account deletion",
+  "legal.privacy.deletion.text":
+    "Go to Profile → Delete account and confirm deletion. Once successful, your account, sessions, saved words, goals and test history are removed from the active database, and you return to sign-in. You can also contact thalysson.developer@gmail.com; support requests are handled within 30 days. Backup and provider retention practices remain under review. Public developer name: Datingmatch Studio.",
   "legal.privacy.storage.text":
     "Account data is stored in the PostgreSQL database configured for this deployment. Review the provider's privacy and retention policies before public release.",
   "legal.terms.title": "Terms of use",
@@ -262,6 +268,15 @@ const en = {
   "profile.loadFailed": "Couldn't load profile data.",
   "profile.invalidData": "The profile data received is invalid.",
   "profile.retry": "Try again",
+  "profile.delete.open": "Delete account",
+  "profile.delete.title": "Delete your account?",
+  "profile.delete.description":
+    "You will permanently lose all your account data: saved words, goals, test history and ranking progress. This action cannot be undone.",
+  "profile.delete.confirm": "Delete",
+  "profile.delete.wait": "Please wait...",
+  "profile.delete.error": "Couldn't delete your account. Please try again.",
+  "profile.delete.signInAgain":
+    "For your security, sign in again before confirming deletion. Your account has not been deleted.",
   "testOverview.summary": "TESTS COMPLETED",
   "testOverview.aria": "Completed tests summary",
   "testOverview.total": "in total",
@@ -431,6 +446,12 @@ const ptBR = {
   "legal.privacy.learning.text":
     "Palavras salvas, metas diárias e resultados de testes são associados à sua conta para apresentar o progresso e o ranking.",
   "legal.privacy.storage.title": "Armazenamento",
+  "legal.privacy.ads.title": "Publicidade",
+  "legal.privacy.ads.text":
+    "A versão com publicidade prevê anúncio na abertura do app e vídeos recompensados opcionais para liberar outro teste antes do intervalo de 30 minutos. A rede de anúncios e suas práticas de dados precisam ser confirmadas antes de disponibilizar essa versão.",
+  "legal.privacy.deletion.title": "Exclusão da conta",
+  "legal.privacy.deletion.text":
+    "Acesse Perfil → Excluir conta e confirme a exclusão. Após o sucesso, conta, sessões, palavras, metas e histórico de testes são removidos do banco ativo, e você retorna ao login. Você também pode escrever para thalysson.developer@gmail.com; pedidos ao suporte são atendidos em até 30 dias. A retenção em backups e fornecedores permanece em revisão. Nome público do desenvolvedor: Datingmatch Studio.",
   "legal.privacy.storage.text":
     "Os dados da conta são armazenados no banco PostgreSQL configurado para esta implantação. Antes da disponibilização pública, revise as políticas de privacidade e retenção do provedor.",
   "legal.terms.title": "Termos de uso",
@@ -600,6 +621,16 @@ const ptBR = {
   "profile.loadFailed": "Não foi possível carregar os dados do perfil.",
   "profile.invalidData": "Os dados recebidos para o perfil são inválidos.",
   "profile.retry": "Tentar novamente",
+  "profile.delete.open": "Excluir conta",
+  "profile.delete.title": "Excluir sua conta?",
+  "profile.delete.description":
+    "Você perderá permanentemente todos os dados da sua conta: palavras salvas, metas, histórico de testes e progresso no ranking. Essa ação não pode ser desfeita.",
+  "profile.delete.confirm": "Excluir",
+  "profile.delete.wait": "Aguarde...",
+  "profile.delete.error":
+    "Não foi possível excluir sua conta. Tente novamente.",
+  "profile.delete.signInAgain":
+    "Para sua segurança, entre novamente antes de confirmar a exclusão. Sua conta não foi excluída.",
   "testOverview.summary": "TESTES REALIZADOS",
   "testOverview.aria": "Resumo dos testes realizados",
   "testOverview.total": "no total",

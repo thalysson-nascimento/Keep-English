@@ -21,6 +21,14 @@ export default async function PrivacyPage() {
           title: translate(locale, "legal.privacy.storage.title"),
           text: translate(locale, "legal.privacy.storage.text"),
         },
+        {
+          title: translate(locale, "legal.privacy.ads.title"),
+          text: translate(locale, "legal.privacy.ads.text"),
+        },
+        {
+          title: translate(locale, "legal.privacy.deletion.title"),
+          text: translate(locale, "legal.privacy.deletion.text"),
+        },
       ]}
       title={translate(locale, "legal.privacy.title")}
     />

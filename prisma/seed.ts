@@ -15,15 +15,19 @@ const prisma = new PrismaClient({
   adapter: new PrismaPg({ connectionString: databaseUrl, max: 1 }),
 });
 
-async function seedTestUser(password: string): Promise<void> {
+async function seedTestUser(
+  email: string,
+  name: string,
+  password: string,
+): Promise<string> {
   // The seed password may be shorter than the public sign-up minimum.
   const passwordHash = await hashPassword(password);
 
-  await prisma.$transaction(async (transaction) => {
+  const userId = await prisma.$transaction(async (transaction) => {
     const user = await transaction.user.upsert({
-      where: { email: "user@test.com" },
-      update: { name: "User Test" },
-      create: { name: "User Test", email: "user@test.com" },
+      where: { email },
+      update: { name },
+      create: { name, email },
       select: { id: true },
     });
 
@@ -37,7 +41,7 @@ async function seedTestUser(password: string): Promise<void> {
         where: { id: credentialAccount.id },
         data: { password: passwordHash },
       });
-      return;
+      return user.id;
     }
 
     await transaction.account.create({
@@ -48,21 +52,61 @@ async function seedTestUser(password: string): Promise<void> {
         password: passwordHash,
       },
     });
+    return user.id;
   });
 
-  console.info("Seeded test account user@test.com.");
+  console.info(`Seeded test account ${email}.`);
+  return userId;
+}
+
+async function seedDeletionData(userId: string): Promise<void> {
+  await prisma.$transaction([
+    prisma.word.upsert({
+      where: { userId_wordKey: { userId, wordKey: "habit" } },
+      update: {},
+      create: {
+        userId,
+        word: "habit",
+        translation: "hábito",
+        wordKey: "habit",
+        translationKey: "habito",
+        example: "Reading is a daily habit.",
+      },
+    }),
+    prisma.dailyGoal.upsert({
+      where: { userId_dateKey: { userId, dateKey: "2026-11-15" } },
+      update: {},
+      create: { userId, dateKey: "2026-11-15", goal: 1 },
+    }),
+    prisma.dailyGoalCompletion.upsert({
+      where: {
+        userId_dateKey_goal: { userId, dateKey: "2026-11-15", goal: 1 },
+      },
+      update: {},
+      create: { userId, dateKey: "2026-11-15", goal: 1, xp: 10 },
+    }),
+    prisma.vocabularyTest.upsert({
+      where: { id: `${userId}-deletion-demo` },
+      update: {},
+      create: { id: `${userId}-deletion-demo`, userId, score: 1, total: 1 },
+    }),
+  ]);
 }
 
 async function main(): Promise<void> {
   try {
-    const password = process.env.LOGIN_DEFAULT_PASSWORD;
-    if (!password) {
-      throw new Error(
-        "LOGIN_DEFAULT_PASSWORD must be set before seeding the test user.",
+    // Intentionally public credentials for the closed-test accounts only.
+    const password = "123456";
+    if (process.argv.includes("--deletion-test")) {
+      const userId = await seedTestUser(
+        "delete@test.com",
+        "Conta para excluir",
+        password,
       );
+      await seedDeletionData(userId);
+      return;
     }
-
-    await seedTestUser(password);
+    await seedTestUser("user@test.com", "User Test", password);
   } finally {
     await prisma.$disconnect();
   }

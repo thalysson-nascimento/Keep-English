@@ -1,0 +1,66 @@
+{
+  "xml": "passed",
+  "errors": [],
+  "warnings": [],
+  "routes": [
+    {
+      "key": "sobre",
+      "title": "Sobre o Keep English",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "privacidade",
+      "title": "Política de Privacidade",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "termos",
+      "title": "Termos de Uso",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "exclusao",
+      "title": "Excluir conta",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "contato",
+      "title": "Contato e suporte",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "caderno",
+      "title": "Como criar seu caderno de vocabulário",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "contexto",
+      "title": "Como estudar palavras em contexto",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "rotina",
+      "title": "Como montar uma rotina de revisão",
+      "languages": [
+        "pt-BR"
+      ]
+    }
+  ],
+  "blogger_import": "not_checked",
+  "browser_visibility": "not_checked",
+  "public_page": "not_checked"
+}

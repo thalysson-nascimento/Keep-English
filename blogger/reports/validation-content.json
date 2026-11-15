@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "preview_pages": 9,
+  "checks": [
+    "One main heading per preview",
+    "Unique ids per preview",
+    "Local page and fragment links resolve",
+    "Shared document paragraphs present in XML and preview",
+    "Legal review notices preserved",
+    "Deletion mail action present"
+  ],
+  "errors": [],
+  "browser_visibility": "not_checked",
+  "blogger_import": "not_checked",
+  "published_pages": "not_checked"
+}

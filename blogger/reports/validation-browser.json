@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "scope": "Local preview extracted from generated Blogger XML",
+  "homepage_widths_checked": [320, 390, 768, 1366],
+  "horizontal_overflow": false,
+  "images_loaded": true,
+  "document_routes_checked": 8,
+  "document_main_content_visible": true,
+  "deletion_page_navigation": "passed",
+  "back_to_home_navigation": "passed",
+  "email_action": "href inspected; no email sent",
+  "blogger_import": "not_checked",
+  "published_pages": "not_checked",
+  "screenshots": ["inicio.jpg", "desktop.jpg", "mobile.jpg", "exclusao.jpg"]
+}

@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "database": "PostgreSQL",
+  "test": "tests/auth-delete-account.integration.test.ts",
+  "checks": [
+    "Unauthenticated deletion rejected",
+    "Untrusted origin rejected",
+    "Stale session rejected",
+    "Authenticated account identity derived from session",
+    "User, credentials, all sessions and learning data removed",
+    "Another account and its word preserved",
+    "Cookie revoked and deleted session unusable"
+  ],
+  "ui_preview": ["Cancel", "Wait with disabled buttons", "Successful redirect", "Recoverable error", "Sign in again for stale session"],
+  "manual_seed_account": "delete@test.com",
+  "manual_seed_account_deleted": false,
+  "advertising_sdk_implemented": false,
+  "blogger_published": false
+}

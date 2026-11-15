@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "project_key": "3926127d176bab3de42a3539",
+  "source_digest_reviewed": "b601e9209f71c126b0d83f7228cc14fb78ba3805a5d02616542c75327ec9dd2f",
+  "identity": {
+    "name": "Keep English",
+    "developer_display_name": "Datingmatch Studio",
+    "contact_email": "thalysson.developer@gmail.com",
+    "blog_url": null,
+    "status": "user_confirmed"
+  },
+  "architecture": {
+    "stack": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Prisma",
+      "PostgreSQL",
+      "Better Auth"
+    ],
+    "facts": [
+      {
+        "status": "observed",
+        "source": "src/core/auth/auth.ts",
+        "fact": "Email/password authentication with Better Auth user.deleteUser.enabled; Prisma user relations use ON DELETE CASCADE."
+      },
+      {
+        "status": "observed",
+        "source": "src/features/words/infrastructure/public-word-lookup.ts",
+        "fact": "Server queries Datamuse, LanguageTool, MyMemory and Tatoeba."
+      },
+      {
+        "status": "user_confirmed",
+        "source": "User instructions, 2026-11-15",
+        "fact": "Opening advertisement and optional rewarded video to bypass the 30-minute test cooldown are planned; support deletion requests handled within 30 days."
+      }
+    ]
+  },
+  "brand": {
+    "logo": "blogger/assets/keep-english.png",
+    "approval": "user_supplied"
+  },
+  "preferences": {
+    "languages": [
+      "pt-BR"
+    ],
+    "back_link": "top-left"
+  },
+  "output_directory": "blogger",
+  "pages": [
+    {
+      "key": "sobre",
+      "title": "Sobre o Keep English",
+      "slug": "sobre",
+      "heading": "Um lugar para guardar o inglês que você aprende.",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "privacidade",
+      "title": "Política de Privacidade",
+      "slug": "privacidade",
+      "heading": "Política de Privacidade",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "termos",
+      "title": "Termos de Uso",
+      "slug": "termos-de-uso",
+      "heading": "Termos de Uso",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "exclusao",
+      "title": "Excluir conta",
+      "slug": "excluir-conta",
+      "heading": "Excluir sua conta do Keep English",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "contato",
+      "title": "Contato e suporte",
+      "slug": "contato",
+      "heading": "Contato e suporte",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "caderno",
+      "title": "Como criar seu caderno de vocabulário",
+      "slug": "caderno-de-vocabulario",
+      "heading": "Como criar seu caderno de vocabulário",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "contexto",
+      "title": "Como estudar palavras em contexto",
+      "slug": "palavras-em-contexto",
+      "heading": "Como estudar palavras em contexto",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    },
+    {
+      "key": "rotina",
+      "title": "Como montar uma rotina de revisão",
+      "slug": "rotina-de-revisao",
+      "heading": "Como montar uma rotina de revisão",
+      "content_mode": "integrated",
+      "languages": [
+        "pt-BR"
+      ]
+    }
+  ],
+  "validation_selectors": {
+    "back_link_class": "blogger-back"
+  },
+  "validation": {
+    "xml": "not_checked",
+    "local_browser": "not_checked",
+    "blogger_import": "not_checked",
+    "public_pages": {}
+  },
+  "open_issues": [
+    "Advertising network, SDK data practices, backups and retention require confirmation before legal publication.",
+    "Blogger page creation, import and published URL checks remain pending.",
+    "Embedded PNG acceptance must be verified during Blogger import."
+  ]
+}
