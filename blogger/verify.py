@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 import xml.etree.ElementTree as ET
 from urllib.parse import unquote, urlsplit
-from legal_content import load_legal_content, load_pages
+from legal_content import load_legal_content, load_pages, route_condition, theme_version
 
 ROOT = Path(__file__).resolve().parent
 NS = {'b': 'http://www.google.com/2005/gml/b', 'h': 'http://www.w3.org/1999/xhtml'}
@@ -44,7 +44,7 @@ def check():
     pages = load_pages()
     if load_legal_content() != json.loads((ROOT / 'source/legal-documents.json').read_text(encoding='utf-8')):
         errors.append('Bundled legal documents differ from the application source; rebuild the Blogger theme.')
-    theme = ET.parse(ROOT / f'keep-english-blogger-v{load_legal_content()["version"]}.xml').getroot()
+    theme = ET.parse(ROOT / f'keep-english-blogger-v{theme_version()}.xml').getroot()
     parsed = {}
     for path in (ROOT / 'preview').rglob('*.html'):
         parser = Page()
@@ -69,7 +69,7 @@ def check():
             if url.fragment and unquote(url.fragment) not in parsed[target].ids:
                 errors.append(f'{path.name}: missing anchor {href}')
     for page in pages:
-        route = next(node for node in theme.findall('.//b:if', NS) if node.attrib.get('cond') == 'data:blog.pageName == "' + page['title'] + '"')
+        route = next(node for node in theme.findall('.//b:if', NS) if node.attrib.get('cond') == route_condition(page))
         main = route.find('h:main', NS)
         text = ''.join(main.itertext())
         path = ROOT / 'preview/p' / (page['slug'] + '.html')

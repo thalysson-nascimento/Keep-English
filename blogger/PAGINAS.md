@@ -1,13 +1,13 @@
-# Páginas a criar no Blogger
+# Páginas e postagens do Blogger
 
-Importar o tema não cria páginas. Publique cada página com o título exato abaixo. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.
+Os três documentos legais já estão publicados como postagens e foram mapeados pelos títulos e endereços reais. Não recrie nem renomeie esses três documentos. Para as demais páginas, importar o tema não as cria: publique-as com os títulos indicados. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.
 
 | Título exato | Endereço esperado | Conteúdo de referência |
 | --- | --- | --- |
 | Sobre o Keep English | `/p/sobre.html` | `pages/sobre.html` |
-| Política de Privacidade | `/p/privacidade.html` | `pages/privacidade.html` |
-| Termos de Uso | `/p/termos-de-uso.html` | `pages/termos-de-uso.html` |
-| Excluir conta | `/p/excluir-conta.html` | `pages/excluir-conta.html` |
+| Politica de privacidade | `/2026/11/politica-de-privacidade.html` | `pages/privacidade.html` |
+| Termos de uso | `/2026/11/termos-de-uso.html` | `pages/termos-de-uso.html` |
+| Exclusão da conta | `/2026/11/exclusao-da-conta.html` | `pages/excluir-conta.html` |
 | Contato e suporte | `/p/contato.html` | `pages/contato.html` |
 | Como criar seu caderno de vocabulário | `/p/caderno-de-vocabulario.html` | `pages/caderno-de-vocabulario.html` |
 | Como estudar palavras em contexto | `/p/palavras-em-contexto.html` | `pages/palavras-em-contexto.html` |

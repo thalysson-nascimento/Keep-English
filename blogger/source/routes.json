@@ -1,0 +1,17 @@
+{
+  "blog_url": "https://keepenglishworld.blogspot.com/",
+  "pages": {
+    "privacidade": {
+      "path": "/2026/11/politica-de-privacidade.html",
+      "published_title": "Politica de privacidade"
+    },
+    "termos": {
+      "path": "/2026/11/termos-de-uso.html",
+      "published_title": "Termos de uso"
+    },
+    "exclusao": {
+      "path": "/2026/11/exclusao-da-conta.html",
+      "published_title": "Exclusão da conta"
+    }
+  }
+}

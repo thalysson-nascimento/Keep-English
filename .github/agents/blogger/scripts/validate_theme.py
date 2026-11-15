@@ -56,10 +56,13 @@ def validate(theme_path, profile):
     for page in profile.get('pages', []):
         if page.get('content_mode') != 'integrated': continue
         title = page['title']
-        matches = [node for node in root.findall('.//b:if', NS) if node.attrib.get('cond') == 'data:blog.pageName == "' + title + '"']
+        route_titles = page.get('routing_titles', [title])
+        condition = ' or '.join('data:blog.pageName == "' + value + '"' for value in route_titles)
+        matches = [node for node in root.findall('.//b:if', NS) if node.attrib.get('cond') == condition]
         if len(matches) != 1: errors.append('Missing or ambiguous exact-title route: ' + title); continue
         node = matches[0]
-        if parents[node].attrib.get('cond') != 'data:blog.pageType == "static_page"': errors.append('Institutional route needs a separate static_page guard: ' + title)
+        guards = ('data:blog.pageType == "static_page"', 'data:blog.pageType == "static_page" or data:blog.pageType == "item"')
+        if parents[node].attrib.get('cond') not in guards: errors.append('Institutional route needs a separate page-type guard: ' + title)
         if id(node) in widget_nodes: errors.append('Integrated institutional route depends on a widget: ' + title)
         languages = {n.attrib['data-content-language'] for n in node.iter() if 'data-content-language' in n.attrib}
         if not set(page.get('languages', [])).issubset(languages): errors.append('Incomplete language blocks: ' + title)
@@ -72,7 +75,7 @@ def public_check(url, page, back_class='blogger-back'):
     parsed = urllib.parse.urlparse(url)
     if parsed.scheme not in ('http', 'https') or not parsed.hostname or parsed.username or parsed.password: raise ValueError('Use a public HTTP(S) URL without credentials.')
     if parsed.hostname.lower() in ('localhost', '127.0.0.1', '::1'): raise ValueError('Use the published public page, not localhost.')
-    expected_path = '/p/' + page['slug'] + '.html'
+    expected_path = page.get('path', '/p/' + page['slug'] + '.html')
     if parsed.path != expected_path: raise ValueError('URL path differs from the configured page: ' + expected_path)
     request = urllib.request.Request(url, headers={'User-Agent': 'BloggerThemeReadOnlyCheck/1.0'})
     with urllib.request.urlopen(request, timeout=25) as response:

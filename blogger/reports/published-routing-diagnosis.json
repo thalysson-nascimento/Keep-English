@@ -1,0 +1,28 @@
+{
+  "observed_theme": "1.2.0",
+  "blog_url": "https://keepenglishworld.blogspot.com/",
+  "findings": {
+    "pages_feed_entries": 0,
+    "old_privacy_path_status": 404,
+    "legal_posts_status": 200,
+    "legal_posts_main_content_present": false
+  },
+  "published_documents": [
+    {
+      "title": "Politica de privacidade",
+      "path": "/2026/11/politica-de-privacidade.html"
+    },
+    {
+      "title": "Termos de uso",
+      "path": "/2026/11/termos-de-uso.html"
+    },
+    {
+      "title": "Exclusão da conta",
+      "path": "/2026/11/exclusao-da-conta.html"
+    }
+  ],
+  "fixed_file_theme": "1.2.1",
+  "local_xml_and_route_regression": "passed",
+  "fixed_theme_installed": "not_checked",
+  "fixed_public_pages": "not_checked"
+}

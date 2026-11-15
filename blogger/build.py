@@ -7,12 +7,12 @@ import json
 from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
-from legal_content import load_legal_content, load_pages
+from legal_content import load_legal_content, load_pages, route_condition, theme_version
 
 ROOT = Path(__file__).resolve().parent
 REPO = ROOT.parent
 LEGAL_CONTENT = load_legal_content()
-VERSION = LEGAL_CONTENT['version']
+VERSION = theme_version()
 EMAIL = 'thalysson.developer@gmail.com'
 NS = {'b': 'http://www.google.com/2005/gml/b', 'h': 'http://www.w3.org/1999/xhtml'}
 
@@ -33,7 +33,7 @@ def document(page):
         action = f'<a class="button" href="mailto:{EMAIL}?subject=Suporte%20%E2%80%94%20Keep%20English">Enviar e-mail ao suporte <span aria-hidden="true">↗</span></a>'
     related = '<p>Veja também: <a href="/p/privacidade.html">Privacidade</a> · <a href="/p/termos-de-uso.html">Termos de uso</a> · <a href="/p/excluir-conta.html">Excluir conta</a>.</p>'
     google = '<p><a href="' + escape(LEGAL_CONTENT['googlePrivacy']['href']) + '">' + escape(LEGAL_CONTENT['googlePrivacy']['label']) + '</a>.</p>' if page['key'] == 'privacidade' else ''
-    return f'<main id="conteudo" class="document" data-content-language="pt-BR"><a class="blogger-back" href="/">← Voltar ao início</a><p class="eyebrow">Keep English / {"Aprender" if page["kind"] == "article" else "Informações"}</p><h1>{escape(heading)}</h1><p class="meta">Versão {VERSION} · {LEGAL_CONTENT["date"]}</p>{notice}<p>{escape(page["intro"])}</p>{action}{toc}{sections}{google}{related}</main>'
+    return f'<main id="conteudo" class="document" data-content-language="pt-BR"><a class="blogger-back" href="/">← Voltar ao início</a><p class="eyebrow">Keep English / {"Aprender" if page["kind"] == "article" else "Informações"}</p><h1>{escape(heading)}</h1><p class="meta">Versão {LEGAL_CONTENT["version"]} · {LEGAL_CONTENT["date"]}</p>{notice}<p>{escape(page["intro"])}</p>{action}{toc}{sections}{google}{related}</main>'
 
 
 def build():
@@ -53,18 +53,21 @@ def build():
 <section class="soft-section"><div class="wrap section"><div class="section-heading"><div><span class="eyebrow">Sua rotina, com mais incentivo</span><h2>Um caderno que acompanha você.</h2><p>Ferramentas para organizar as descobertas e manter a prática por perto.</p></div></div><div class="feature-grid"><article class="feature"><h3>Seu próprio vocabulário</h3><p>Reúna palavras, traduções e exemplos que fazem sentido para o seu estudo.</p></article><article class="feature"><h3>Testes para revisar</h3><p>Pratique o conteúdo que você anotou e acompanhe os resultados dos testes.</p></article><article class="feature"><h3>Metas e sequência</h3><p>Defina uma meta de palavras e acompanhe os dias de estudo para incentivar o hábito.</p></article><article class="feature"><h3>Evolução e ranking</h3><p>Observe sua atividade nos gráficos e participe da classificação semanal.</p></article></div></div></section>
 <section class="wrap section" id="artigos"><div class="section-heading"><div><span class="eyebrow">Ideias para colocar em prática</span><h2>Seu próximo passo no estudo.</h2><p>Leituras curtas para aproveitar melhor o seu vocabulário.</p></div></div><div class="grid">{articles}</div></section>
 <section class="wrap section" id="ajuda"><div class="help"><div><span class="eyebrow">Conte com a gente</span><h2>Ajuda e informações,<br/>sem complicação.</h2><p>Encontre o suporte e saiba mais sobre seus dados, sua conta e as condições de uso.</p></div><nav class="help-links" aria-label="Central de ajuda"><a href="/p/contato.html">Falar com o suporte <span aria-hidden="true">↗</span></a><a href="/p/privacidade.html">Política de privacidade <span aria-hidden="true">↗</span></a><a href="/p/termos-de-uso.html">Termos de uso <span aria-hidden="true">↗</span></a><a href="/p/excluir-conta.html">Excluir conta e dados <span aria-hidden="true">↗</span></a></nav></div></section></main>'''
-    known = ' or '.join('data:blog.pageName == "' + p['title'] + '"' for p in pages)
-    routes = ''.join('<b:if cond=\'data:blog.pageName == "' + escape(p['title']) + '"\'>' + document(p) + '</b:if>' for p in pages)
+    known = ' or '.join(route_condition(p) for p in pages)
+    routes = ''.join("<b:if cond='" + escape(route_condition(p)) + "'>" + document(p) + '</b:if>' for p in pages)
     blog = '''<b:section id="main" class="main" maxwidgets="1" showaddelement="no"><b:widget id="Blog1" type="Blog" version="1" locked="true" title="Artigos" mobile="yes"><b:includable id="main" var="top"><b:if cond='data:blog.pageType != "static_page"'><b:if cond='data:blog.url != data:blog.homepageUrl'><main id="conteudo" class="document"><a class="blogger-back" href="/">← Voltar ao início</a><h1><data:blog.pageName/></h1><b:loop values="data:posts" var="post"><article class="post-content"><h2><a expr:href="data:post.url"><data:post.title/></a></h2><data:post.body/></article></b:loop><nav class="pager" aria-label="Mais artigos"><b:if cond="data:newerPageUrl"><a expr:href="data:newerPageUrl">← Mais recentes</a></b:if><b:if cond="data:olderPageUrl"><a expr:href="data:olderPageUrl">Anteriores →</a></b:if></nav></main><b:else/><section class="wrap post-list" aria-label="Novidades do blog"><b:loop values="data:posts" var="post"><article class="post-card"><h2><a expr:href="data:post.url"><data:post.title/></a></h2><p><data:post.snippet/></p><a class="text-link" expr:href="data:post.url">Ler publicação ↗</a></article></b:loop><nav class="pager" aria-label="Mais publicações"><b:if cond="data:olderPageUrl"><a expr:href="data:olderPageUrl">Mais publicações →</a></b:if></nav></section></b:if><b:else/>'''
     blog += '<b:if cond=\'!(' + escape(known) + ')\'><main id="conteudo" class="document"><a class="blogger-back" href="/">← Voltar ao início</a><b:loop values="data:posts" var="post"><h1><data:post.title/></h1><div class="post-content"><data:post.body/></div></b:loop></main></b:if></b:if></b:includable></b:widget></b:section>'
     theme = f'''<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:b="http://www.google.com/2005/gml/b" xmlns:data="http://www.google.com/2005/gml/data" xmlns:expr="http://www.google.com/2005/gml/expr" b:version="2" lang="pt-BR" dir="ltr">
 <head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><meta name="theme-color" content="#58cc02"/><meta name="keep-english-theme" content="{VERSION}"/><title><data:blog.pageTitle/></title><b:include data="blog" name="all-head-content"/><b:skin><![CDATA[{css}]]></b:skin></head>
-<body>{header}<b:if cond="data:blog.url == data:blog.homepageUrl">{home}</b:if><b:if cond='data:blog.pageType == "static_page"'>{routes}</b:if>{blog}{footer}</body></html>'''
+<body>{header}<b:if cond="data:blog.url == data:blog.homepageUrl">{home}</b:if><b:if cond='data:blog.pageType == "static_page" or data:blog.pageType == "item"'>{routes}</b:if>{blog}{footer}</body></html>'''
     # Conditional branches are mutually exclusive, but keep XML ids globally unique too.
     theme = theme.replace(' id="conteudo"', '')
+    theme = theme.replace("cond='data:blog.pageType != \"static_page\"'", "cond='data:blog.pageType != &quot;static_page&quot; and !(" + escape(known) + ")'")
     theme = theme.replace('</header>', '</header><div id="conteudo" tabindex="-1"></div>', 1)
+    for page in pages:
+        theme = theme.replace('href="/p/' + page['slug'] + '.html"', 'href="' + page['path'] + '"')
     theme_path = ROOT / f'keep-english-blogger-v{VERSION}.xml'
     theme_path.write_text(theme, encoding='utf-8')
     (ROOT / 'template.xml').write_text(theme, encoding='utf-8')
@@ -87,13 +90,16 @@ def build():
     def write_preview(path, title, content):
         result = preview(title, content)
         in_page = path.parent.name == 'p'
+        for page in pages:
+            local = ('' if in_page else 'p/') + page['slug'] + '.html'
+            result = result.replace('href="' + page['path'] + '"', 'href="' + local + '"')
         result = result.replace('href="/p/', 'href="' + ('' if in_page else 'p/'))
         result = result.replace('href="/#', 'href="' + ('../index.html#' if in_page else '#'))
         result = result.replace('href="/"', 'href="' + ('../index.html' if in_page else 'index.html') + '"')
         path.write_text(result, encoding='utf-8')
     write_preview(ROOT / 'preview/index.html', 'Início', extracted_home)
     for page in pages:
-        condition = 'data:blog.pageName == "' + page['title'] + '"'
+        condition = route_condition(page)
         node = next(n for n in root.findall('.//b:if', NS) if n.attrib['cond'] == condition)
         content = plain(node.find('h:main', NS))
         write_preview(ROOT / 'preview/p' / (page['slug'] + '.html'), page['title'], content)
@@ -113,8 +119,12 @@ def build():
     profile['open_issues'] = ['Real AdMob ad unit, server-side verification callback and native app update require external configuration.', 'Blogger page creation, import and published URL checks remain pending.', 'Embedded PNG acceptance must be verified during Blogger import.']
     (ROOT / 'reports/inventory.json').write_text(json.dumps(inventory, ensure_ascii=False, indent=2), encoding='utf-8')
     (ROOT / 'reports/project.json').write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding='utf-8')
-    manifest = '\n'.join(f'| {p["title"]} | `/p/{p["slug"]}.html` | `pages/{p["slug"]}.html` |' for p in pages)
-    (ROOT / 'PAGINAS.md').write_text('# Páginas a criar no Blogger\n\nImportar o tema não cria páginas. Publique cada página com o título exato abaixo. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.\n\n| Título exato | Endereço esperado | Conteúdo de referência |\n| --- | --- | --- |\n' + manifest + '\n\nOs documentos são integrados ao tema e selecionados pelo título exato. O editor de páginas pode conter uma breve descrição: o corpo público vem do tema. Os arquivos HTML são referências completas para revisão, não devem ser colados junto com outra cópia do documento. Para editar textos legais: altere `src/features/auth/content/legal-documents.json` na raiz do projeto (fonte compartilhada com o app). Para as demais páginas, altere `source/pages.json`. Depois execute `python blogger/build.py` e reinstale o XML. Páginas adicionais com títulos diferentes exibem o corpo nativo.\n', encoding='utf-8')
+    manifest = '\n'.join(f'| {p["routing_titles"][-1]} | `{p["path"]}` | `pages/{p["slug"]}.html` |' for p in pages)
+    (ROOT / 'PAGINAS.md').write_text('# Páginas e postagens do Blogger\n\nOs três documentos legais já estão publicados como postagens e foram mapeados pelos títulos e endereços reais. Não recrie nem renomeie esses três documentos. Para as demais páginas, importar o tema não as cria: publique-as com os títulos indicados. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.\n\n| Título exato | Endereço esperado | Conteúdo de referência |\n| --- | --- | --- |\n' + manifest + '\n\nOs documentos são integrados ao tema e selecionados pelo título exato. O editor de páginas pode conter uma breve descrição: o corpo público vem do tema. Os arquivos HTML são referências completas para revisão, não devem ser colados junto com outra cópia do documento. Para editar textos legais: altere `src/features/auth/content/legal-documents.json` na raiz do projeto (fonte compartilhada com o app). Para as demais páginas, altere `source/pages.json`. Depois execute `python blogger/build.py` e reinstale o XML. Páginas adicionais com títulos diferentes exibem o corpo nativo.\n', encoding='utf-8')
+    for entry, page in zip(profile['pages'], pages):
+        entry.update({'path': page['path'], 'routing_titles': page['routing_titles']})
+    profile['identity']['blog_url'] = 'https://keepenglishworld.blogspot.com/'
+    (ROOT / 'reports/project.json').write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding='utf-8')
     checksum = hashlib.sha256(theme_path.read_bytes()).hexdigest()
     (ROOT / 'reports/theme-sha256.txt').write_text(f'{checksum}  {theme_path.name}\n', encoding='utf-8')
     print(json.dumps({'theme': theme_path.name, 'version': VERSION, 'pages': len(pages), 'sha256': checksum}))

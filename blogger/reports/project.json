@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "project_key": "3926127d176bab3de42a3539",
-  "source_digest_reviewed": "db2a56369a72a7fe9c32a5b6e80a2cd23f94e2a2f2f55d48879ca279a0ef763a",
+  "source_digest_reviewed": "6a9bac0f5a161b208b195f080da3b13a2ab743d7722a22afabc298a3c8f384be",
   "identity": {
     "name": "Keep English",
     "developer_display_name": "Datingmatch Studio",
     "contact_email": "thalysson.developer@gmail.com",
-    "blog_url": null,
+    "blog_url": "https://keepenglishworld.blogspot.com/",
     "status": "user_confirmed"
   },
   "architecture": {
@@ -56,6 +56,10 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/p/sobre.html",
+      "routing_titles": [
+        "Sobre o Keep English"
       ]
     },
     {
@@ -66,6 +70,11 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/2026/11/politica-de-privacidade.html",
+      "routing_titles": [
+        "Política de Privacidade",
+        "Politica de privacidade"
       ]
     },
     {
@@ -76,6 +85,11 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/2026/11/termos-de-uso.html",
+      "routing_titles": [
+        "Termos de Uso",
+        "Termos de uso"
       ]
     },
     {
@@ -86,6 +100,11 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/2026/11/exclusao-da-conta.html",
+      "routing_titles": [
+        "Excluir conta",
+        "Exclusão da conta"
       ]
     },
     {
@@ -96,6 +115,10 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/p/contato.html",
+      "routing_titles": [
+        "Contato e suporte"
       ]
     },
     {
@@ -106,6 +129,10 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/p/caderno-de-vocabulario.html",
+      "routing_titles": [
+        "Como criar seu caderno de vocabulário"
       ]
     },
     {
@@ -116,6 +143,10 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/p/palavras-em-contexto.html",
+      "routing_titles": [
+        "Como estudar palavras em contexto"
       ]
     },
     {
@@ -126,6 +157,10 @@
       "content_mode": "integrated",
       "languages": [
         "pt-BR"
+      ],
+      "path": "/p/rotina-de-revisao.html",
+      "routing_titles": [
+        "Como montar uma rotina de revisão"
       ]
     }
   ],
