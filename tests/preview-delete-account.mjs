@@ -3,13 +3,22 @@ import { build } from "esbuild";
 import { createServer } from "node:http";
 import { resolve } from "node:path";
 
+const rewardPreview = process.argv.includes("--reward");
+const port = rewardPreview ? 8767 : 8766;
+const componentName = rewardPreview
+  ? "RewardedTestButton"
+  : "DeleteAccountButton";
+const componentPath = rewardPreview
+  ? "tests/presentation/rewarded-test-button"
+  : "profile/presentation/delete-account-button";
+
 const result = await build({
   stdin: {
     contents: `import { createRoot } from 'react-dom/client';
-      import { DeleteAccountButton } from './src/features/profile/presentation/delete-account-button';
+      import { ${componentName} } from './src/features/${componentPath}';
       import { LocaleProvider } from './src/shared/i18n/locale-provider';
       import './src/shared/styles/tokens.css';
-      createRoot(document.getElementById('root')).render(<LocaleProvider locale="pt-BR"><DeleteAccountButton /></LocaleProvider>);`,
+      createRoot(document.getElementById('root')).render(<LocaleProvider locale="pt-BR"><${componentName} /></LocaleProvider>);`,
     loader: "tsx",
     resolveDir: resolve("."),
   },
@@ -21,6 +30,17 @@ const result = await build({
     {
       name: "simulated-auth",
       setup(builder) {
+        builder.onResolve({ filter: /^next\/navigation$/ }, () => ({
+          path: "navigation",
+          namespace: "preview-navigation",
+        }));
+        builder.onLoad(
+          { filter: /.*/, namespace: "preview-navigation" },
+          () => ({
+            contents:
+              "export const useRouter = () => ({ push: (url) => location.assign(url) });",
+          }),
+        );
         builder.onResolve({ filter: /^@\/core\/auth\/auth-client$/ }, () => ({
           path: "auth",
           namespace: "preview",
@@ -35,7 +55,7 @@ const result = await build({
 const script = result.outputFiles.find((file) => file.path.endsWith(".js"));
 const css = result.outputFiles.find((file) => file.path.endsWith(".css"));
 createServer(async (request, response) => {
-  const url = new URL(request.url, "http://localhost:8766");
+  const url = new URL(request.url, `http://localhost:${port}`);
   if (url.pathname === "/preview.js") {
     response.setHeader("Content-Type", "application/javascript");
     return response.end(script.contents);
@@ -68,8 +88,8 @@ createServer(async (request, response) => {
       "<!doctype html><html lang='pt-BR'><title>Login de teste</title><h1>Login — retorno após exclusão simulada</h1></html>",
     );
   response.end(
-    `<!doctype html><html lang="pt-BR"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teste isolado de exclusão</title><link rel="stylesheet" href="/preview.css"></head><body style="padding:32px;font-family:system-ui"><h1>Teste isolado do modal</h1><p>Nenhuma conta real é excluída nesta página.</p><nav><a href="/">Sucesso</a> · <a href="/?result=error">Simular erro</a> · <a href="/?result=expired">Sessão antiga</a></nav><div id="root"></div><script src="/preview.js"></script></body></html>`,
+    `<!doctype html><html lang="pt-BR"><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>Teste isolado de interface</title><link rel="stylesheet" href="/preview.css"></head><body style="padding:32px;font-family:system-ui"><h1>Teste isolado do modal</h1><p>Nenhuma conta real é excluída nesta página.</p><nav><a href="/">Sucesso</a> · <a href="/?result=error">Simular erro</a> · <a href="/?result=expired">Sessão antiga</a></nav><div id="root"></div><script src="/preview.js"></script></body></html>`,
   );
-}).listen(8766, "127.0.0.1", () =>
-  console.log("UI preview: http://127.0.0.1:8766"),
+}).listen(port, "127.0.0.1", () =>
+  console.log(`UI preview: http://127.0.0.1:${port}`),
 );

@@ -44,7 +44,7 @@ def check():
     pages = load_pages()
     if load_legal_content() != json.loads((ROOT / 'source/legal-documents.json').read_text(encoding='utf-8')):
         errors.append('Bundled legal documents differ from the application source; rebuild the Blogger theme.')
-    theme = ET.parse(ROOT / 'keep-english-blogger-v1.1.0.xml').getroot()
+    theme = ET.parse(ROOT / f'keep-english-blogger-v{load_legal_content()["version"]}.xml').getroot()
     parsed = {}
     for path in (ROOT / 'preview').rglob('*.html'):
         parser = Page()
@@ -78,17 +78,17 @@ def check():
             errors.append(f'{page["key"]}: missing introduction')
         if page['kind'] == 'legal':
             legal = load_legal_content()
-            if legal['reviewNotice'] not in text or f'Versão {legal["version"]} · {legal["date"]}' not in text:
+            if f'Versão {legal["version"]} · {legal["date"]}' not in text:
                 errors.append(f'{page["key"]}: legal metadata differs from the application source')
         for title, paragraph in page['sections']:
             if paragraph not in text or paragraph not in preview:
                 errors.append(f'{page["key"]}: missing shared paragraph: {title}')
-        if page['kind'] in ('legal', 'deletion') and 'Versão para revisão.' not in text:
-            errors.append(f'{page["key"]}: missing review disclosure')
+        if page['kind'] in ('legal', 'deletion') and 'Versão para revisão.' in text:
+            errors.append(f'{page["key"]}: obsolete review disclosure')
     deletion = parsed[(ROOT / 'preview/p/excluir-conta.html').resolve()]
     if not any(link.startswith('mailto:thalysson.developer@gmail.com?subject=') for link in deletion.links):
         errors.append('Missing account deletion email action')
-    report = {'status': 'passed' if not errors else 'failed', 'preview_pages': len(parsed), 'checks': ['One main heading per preview', 'Unique ids per preview', 'Local page and fragment links resolve', 'Shared document paragraphs present in XML and preview', 'Canonical app legal source matches the bundled copy', 'Legal introductions, version, date and review notice match the app source', 'Legal review notices preserved', 'Deletion mail action present'], 'errors': errors, 'browser_visibility': 'not_checked', 'blogger_import': 'not_checked', 'published_pages': 'not_checked'}
+    report = {'status': 'passed' if not errors else 'failed', 'preview_pages': len(parsed), 'checks': ['One main heading per preview', 'Unique ids per preview', 'Local page and fragment links resolve', 'Shared document paragraphs present in XML and preview', 'Canonical app legal source matches the bundled copy', 'Legal introductions, version and date match the app source', 'No obsolete publication warnings', 'Deletion mail action present'], 'errors': errors, 'browser_visibility': 'not_checked', 'blogger_import': 'not_checked', 'published_pages': 'not_checked'}
     (ROOT / 'reports/validation-content.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(report, ensure_ascii=False))
     raise SystemExit(bool(errors))

@@ -1,0 +1,13 @@
+{
+  "signature_and_access_rules": "passed",
+  "postgresql_reward_scope_and_single_consumption": "passed",
+  "reward_expiration_and_account_deletion": "passed",
+  "unauthenticated_request_rejected": "passed",
+  "unsigned_callback_rejected": "passed",
+  "android_debug_java_compilation": "passed",
+  "modal_watch_cancel_and_unsupported_browser": "passed",
+  "real_admob_ad_delivery": "not_checked",
+  "production_ad_unit_and_ssv_console_configuration": "required",
+  "android_updated_apk_installation": "required",
+  "blogger_import_and_publication": "not_checked"
+}

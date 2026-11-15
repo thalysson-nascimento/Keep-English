@@ -10,6 +10,7 @@ export interface TestAccessData {
   todayWords: number;
   lastTestAt: number | null;
   now: number;
+  cooldownBypass: boolean;
 }
 
 export async function getTestAccessData(
@@ -28,6 +29,9 @@ export async function getTestAccessData(
     ]);
 
   return {
+    cooldownBypass: lastTestAt
+      ? await testsRepository.findRewardForTest(lastTestAt, now)
+      : false,
     words: words.map(({ id, word, translation }) => ({
       id,
       word,

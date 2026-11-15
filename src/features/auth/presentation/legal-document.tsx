@@ -26,9 +26,6 @@ export async function LegalDocument({ documentKey }: LegalDocumentProps) {
       <p className={styles.meta}>
         Versão {legalContent.version} · {legalContent.date}
       </p>
-      <p className={styles.notice}>
-        <strong>Versão para revisão.</strong> {legalContent.reviewNotice}
-      </p>
       <p>{document.intro}</p>
       <nav aria-label="Nesta página" className={styles.index}>
         <strong>Nesta página</strong>

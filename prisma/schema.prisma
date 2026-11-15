@@ -21,6 +21,7 @@ model User {
   dailyGoals           DailyGoal[]
   dailyGoalCompletions DailyGoalCompletion[]
   vocabularyTests      VocabularyTest[]
+  rewardedTestAccess   RewardedTestAccess[]
 }
 
 model Session {
@@ -120,4 +121,19 @@ model VocabularyTest {
 
   @@index([userId, completedAt])
   @@index([completedAt])
+}
+
+model RewardedTestAccess {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  forTestAt       DateTime
+  createdAt       DateTime @default(now())
+  expiresAt       DateTime
+  verifiedAt      DateTime?
+  transactionId   String?  @unique
+  consumedAt      DateTime?
+
+  @@unique([userId, forTestAt])
+  @@index([userId, expiresAt])
 }

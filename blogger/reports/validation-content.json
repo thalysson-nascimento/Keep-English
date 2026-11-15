@@ -7,8 +7,8 @@
     "Local page and fragment links resolve",
     "Shared document paragraphs present in XML and preview",
     "Canonical app legal source matches the bundled copy",
-    "Legal introductions, version, date and review notice match the app source",
-    "Legal review notices preserved",
+    "Legal introductions, version and date match the app source",
+    "No obsolete publication warnings",
     "Deletion mail action present"
   ],
   "errors": [],

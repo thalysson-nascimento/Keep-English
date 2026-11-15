@@ -13,6 +13,7 @@ export interface TestAccessState {
   todayWords: number;
   wordCount: number;
   lastTestAt: number | null;
+  cooldownBypass?: boolean;
 }
 
 export type TestLockReason = "words" | "goal" | "cooldown" | null;
@@ -75,6 +76,7 @@ export function getTestLockReason(
 
   if (
     access.lastTestAt !== null &&
+    !access.cooldownBypass &&
     access.lastTestAt + testCooldownMilliseconds > now
   ) {
     return "cooldown";

@@ -28,10 +28,40 @@ export function createPrismaTestsRepository(userId: string): TestsRepository {
       return test?.completedAt ?? null;
     },
 
-    async recordCompletion(result): Promise<void> {
-      await prisma.vocabularyTest.create({
-        data: { ...result, userId },
+    async findRewardForTest(completedAt, now) {
+      const reward = await prisma.rewardedTestAccess.findFirst({
+        where: {
+          userId,
+          forTestAt: completedAt,
+          verifiedAt: { not: null },
+          consumedAt: null,
+          expiresAt: { gt: now },
+        },
         select: { id: true },
+      });
+      return reward !== null;
+    },
+
+    async recordCompletion(result, rewardForTestAt): Promise<boolean> {
+      return prisma.$transaction(async (transaction) => {
+        if (rewardForTestAt) {
+          const consumed = await transaction.rewardedTestAccess.updateMany({
+            where: {
+              userId,
+              forTestAt: rewardForTestAt,
+              verifiedAt: { not: null },
+              consumedAt: null,
+              expiresAt: { gt: result.completedAt },
+            },
+            data: { consumedAt: result.completedAt },
+          });
+          if (consumed.count !== 1) return false;
+        }
+        await transaction.vocabularyTest.create({
+          data: { ...result, userId },
+          select: { id: true },
+        });
+        return true;
       });
     },
   };

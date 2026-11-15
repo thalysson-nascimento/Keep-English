@@ -269,6 +269,20 @@ const en = {
   "testOverview.loadingAria": "Loading tests",
   "testOverview.loadFailed": "Couldn't load your tests.",
   "test.title": "Vocabulary test",
+  "test.reward.open": "Watch an ad to take another test",
+  "test.reward.title": "Take a test sooner?",
+  "test.reward.description":
+    "Watch a rewarded interstitial video to unlock one test before the 30-minute wait ends. The reward is granted after completion is confirmed. You can cancel and wait normally.",
+  "test.reward.watch": "Watch",
+  "test.reward.wait": "Please wait...",
+  "test.reward.unavailable":
+    "Open the updated Android app to watch the ad. Your current access remains unchanged.",
+  "test.reward.incomplete":
+    "The ad ended without a reward. You can try again or wait for the next test.",
+  "test.reward.pending":
+    "Reward confirmation is taking longer. Please try again shortly; the normal wait still applies until confirmation.",
+  "test.reward.failed":
+    "Couldn't load the ad or confirm the reward. Please try again.",
   "test.unavailable": "Test unavailable",
   "test.lockWords": "Save words before starting a test.",
   "test.lockGoal": "Set and complete your daily goal to unlock the test.",
@@ -591,6 +605,20 @@ const ptBR = {
   "testOverview.loadingAria": "Carregando testes",
   "testOverview.loadFailed": "Não foi possível carregar seus testes.",
   "test.title": "Teste de vocabulário",
+  "test.reward.open": "Assistir anúncio para antecipar teste",
+  "test.reward.title": "Antecipar o próximo teste?",
+  "test.reward.description":
+    "Assista a um vídeo intersticial recompensado para liberar um teste antes do intervalo de 30 minutos. A recompensa é concedida após a confirmação de conclusão. Você pode cancelar e aguardar normalmente.",
+  "test.reward.watch": "Assistir",
+  "test.reward.wait": "Aguarde...",
+  "test.reward.unavailable":
+    "Abra a versão atualizada do aplicativo Android para assistir ao anúncio. Seu acesso atual permanece igual.",
+  "test.reward.incomplete":
+    "O anúncio terminou sem recompensa. Você pode tentar novamente ou aguardar o próximo teste.",
+  "test.reward.pending":
+    "A confirmação da recompensa está demorando. Tente novamente em instantes; o intervalo normal continua até a confirmação.",
+  "test.reward.failed":
+    "Não foi possível carregar o anúncio ou confirmar a recompensa. Tente novamente.",
   "test.unavailable": "Teste indisponível",
   "test.lockWords": "Anote palavras antes de iniciar um teste.",
   "test.lockGoal": "Defina e conclua sua meta diária para liberar o teste.",

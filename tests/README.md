@@ -1,5 +1,15 @@
 # Verificação da exclusão de conta
 
+## Anúncios recompensados
+
+```text
+node --import ./tests/server-only-hook.mjs --conditions=react-server --import tsx --test tests/rewarded-tests.test.ts
+node --import ./scripts/with-project-variables.mjs --import ./tests/server-only-hook.mjs --conditions=react-server --import tsx --test tests/rewarded-tests.integration.test.ts
+node tests/preview-delete-account.mjs --reward
+```
+
+Os testes cobrem assinatura da confirmação, adulteração, bloqueios de estudo, expiração, vínculo com a conta, consumo único em concorrência e exclusão em cascata. A prévia mostra o modal real; no navegador sem a ponte Android, Assistir informa que é necessário abrir o app atualizado. A configuração real do bloco e da confirmação no AdMob deve ser testada separadamente no Android.
+
 ## Documentos legais
 
 Com o aplicativo em execução local, confira privacidade e termos contra a prévia do Blogger:

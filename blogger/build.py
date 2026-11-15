@@ -23,8 +23,6 @@ def escape(value):
 
 def document(page):
     notice = ''
-    if page['kind'] in ('legal', 'deletion'):
-        notice = '<aside class="notice"><p><strong>Versão para revisão.</strong> ' + escape(LEGAL_CONTENT['reviewNotice']) + '</p></aside>'
     heading = page.get('heading', page['title'])
     sections = ''.join(f'<section id="{page["key"]}-{index}"><h2>{escape(title)}</h2><p>{escape(text)}</p></section>' for index, (title, text) in enumerate(page['sections'], 1))
     toc = '<nav class="toc" aria-label="Nesta página"><strong>Nesta página</strong><ol>' + ''.join(f'<li><a href="#{page["key"]}-{index}">{escape(title)}</a></li>' for index, (title, _) in enumerate(page['sections'], 1)) + '</ol></nav>'
@@ -69,6 +67,7 @@ def build():
     theme = theme.replace('</header>', '</header><div id="conteudo" tabindex="-1"></div>', 1)
     theme_path = ROOT / f'keep-english-blogger-v{VERSION}.xml'
     theme_path.write_text(theme, encoding='utf-8')
+    (ROOT / 'template.xml').write_text(theme, encoding='utf-8')
     # Extract HTML from the actual XML so the preview and integrated routes cannot drift.
     root = ET.fromstring(theme)
     def plain(node):
@@ -100,14 +99,18 @@ def build():
         write_preview(ROOT / 'preview/p' / (page['slug'] + '.html'), page['title'], content)
         (ROOT / 'pages' / (page['slug'] + '.html')).write_text(content, encoding='utf-8')
     # Discovery uses the true repository root, even though reusable instructions live under .github.
-    spec = importlib.util.spec_from_file_location('blogger_inventory', REPO / '.github/agents/blogger/scripts/sync_project.py')
+    script_path = REPO / '.github/agents/blogger/scripts/sync_project.py'
+    if not script_path.is_file():
+        script_path = ROOT / 'tools/sync_project.py'
+    spec = importlib.util.spec_from_file_location('blogger_inventory', script_path)
     sync = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(sync)
-    inventory = sync.inventory(REPO)
+    sync.SKIP.update({'.next', 'blogger', '_poc', 'dist', 'coverage', '.claude', '.windsurf'})
+    inventory = sync.inventory(REPO if (REPO / 'package.json').is_file() else ROOT)
     profile = {'schema_version': 1, 'project_key': inventory['project_key'], 'source_digest_reviewed': inventory['source_digest'], 'identity': {'name': 'Keep English', 'developer_display_name': 'Datingmatch Studio', 'contact_email': EMAIL, 'blog_url': None, 'status': 'user_confirmed'}, 'architecture': {'stack': ['Next.js', 'React', 'TypeScript', 'Prisma', 'PostgreSQL', 'Better Auth'], 'facts': [{'status': 'observed', 'source': 'src/core/auth/auth.ts', 'fact': 'Email/password authentication; deletion not configured in reviewed source.'}, {'status': 'observed', 'source': 'src/features/words/infrastructure/public-word-lookup.ts', 'fact': 'Server queries Datamuse, LanguageTool, MyMemory and Tatoeba.'}]}, 'brand': {'logo': 'blogger/assets/keep-english.png', 'approval': 'user_supplied'}, 'preferences': {'languages': ['pt-BR'], 'back_link': 'top-left'}, 'output_directory': 'blogger', 'pages': [{**{k: p[k] for k in ('key', 'title', 'slug')}, 'heading': p.get('heading', p['title']), 'content_mode': 'integrated', 'languages': ['pt-BR']} for p in pages], 'validation_selectors': {'back_link_class': 'blogger-back'}, 'validation': {'xml': 'not_checked', 'local_browser': 'not_checked', 'blogger_import': 'not_checked', 'public_pages': {}}, 'open_issues': ['Legal drafts require operational confirmation before publication.', 'In-app account deletion path and deletion handling are not implemented by this theme.', 'Blogger page creation and real URL confirmation required.', 'Embedded PNG acceptance must be verified during Blogger import; a hosted logo URL may be substituted if necessary.']}
     profile['architecture']['facts'][0]['fact'] = 'Email/password authentication with Better Auth user.deleteUser.enabled; Prisma user relations use ON DELETE CASCADE.'
     profile['architecture']['facts'].append({'status': 'user_confirmed', 'source': 'User instructions, 2026-11-15', 'fact': 'Opening advertisement and optional rewarded video to bypass the 30-minute test cooldown are planned; support deletion requests handled within 30 days.'})
-    profile['open_issues'] = ['Advertising network, SDK data practices, backups and retention require confirmation before legal publication.', 'Blogger page creation, import and published URL checks remain pending.', 'Embedded PNG acceptance must be verified during Blogger import.']
+    profile['open_issues'] = ['Real AdMob ad unit, server-side verification callback and native app update require external configuration.', 'Blogger page creation, import and published URL checks remain pending.', 'Embedded PNG acceptance must be verified during Blogger import.']
     (ROOT / 'reports/inventory.json').write_text(json.dumps(inventory, ensure_ascii=False, indent=2), encoding='utf-8')
     (ROOT / 'reports/project.json').write_text(json.dumps(profile, ensure_ascii=False, indent=2), encoding='utf-8')
     manifest = '\n'.join(f'| {p["title"]} | `/p/{p["slug"]}.html` | `pages/{p["slug"]}.html` |' for p in pages)

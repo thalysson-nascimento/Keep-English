@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_key": "3926127d176bab3de42a3539",
-  "source_digest_reviewed": "575d7bda38ea1ae1abb5e461a2a90d15eb44d72c069b2a7bb178fea95ded55ba",
+  "source_digest_reviewed": "db2a56369a72a7fe9c32a5b6e80a2cd23f94e2a2f2f55d48879ca279a0ef763a",
   "identity": {
     "name": "Keep English",
     "developer_display_name": "Datingmatch Studio",
@@ -139,7 +139,7 @@
     "public_pages": {}
   },
   "open_issues": [
-    "Advertising network, SDK data practices, backups and retention require confirmation before legal publication.",
+    "Real AdMob ad unit, server-side verification callback and native app update require external configuration.",
     "Blogger page creation, import and published URL checks remain pending.",
     "Embedded PNG acceptance must be verified during Blogger import."
   ]

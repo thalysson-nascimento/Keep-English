@@ -23,6 +23,7 @@ export const testsOverviewResponseSchema = z.object({
 });
 
 export const testSessionResponseSchema = z.object({
+  cooldownBypass: z.boolean(),
   words: z.array(
     z.object({
       id: z.string().cuid(),

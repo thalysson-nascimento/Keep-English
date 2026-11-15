@@ -22,6 +22,7 @@ import {
 import { useI18n } from "@/shared/i18n/locale-provider";
 import { useRouter } from "next/navigation";
 import styles from "./vocabulary-test-screen.module.css";
+import { RewardedTestButton } from "./rewarded-test-button";
 
 interface VocabularyTestScreenProps {
   data: TestAccessData & { questions: VocabularyQuestion[] };
@@ -69,11 +70,10 @@ export function VocabularyTestScreen() {
   useEffect(() => {
     const controller = new AbortController();
 
-    void requestApiJson(
-      "/api/tests/session",
-      testSessionResponseSchema,
-      { cache: "no-store", signal: controller.signal },
-    )
+    void requestApiJson("/api/tests/session", testSessionResponseSchema, {
+      cache: "no-store",
+      signal: controller.signal,
+    })
       .then(setData)
       .catch((error: unknown) => {
         if (controller.signal.aborted) {
@@ -138,6 +138,7 @@ function VocabularyTest({ data }: VocabularyTestScreenProps) {
   }, []);
 
   const accessState = {
+    cooldownBypass: data.cooldownBypass,
     goal: data.goal,
     todayWords: data.todayWords,
     wordCount: data.words.length,
@@ -298,6 +299,9 @@ function VocabularyTest({ data }: VocabularyTestScreenProps) {
             {lockReason === "cooldown" ? "⏳" : "🎯"}
           </span>
           <h1>{t("test.unavailable")}</h1>
+          {lockReason === "cooldown" && (
+            <RewardedTestButton onGranted={() => window.location.reload()} />
+          )}
           <p aria-live="polite">{message}</p>
           <Link className={styles.primaryButton} href="/">
             {t("common.backToHome")}

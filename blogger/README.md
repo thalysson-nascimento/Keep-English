@@ -1,36 +1,45 @@
-# Keep English — Blogger 1.1.0
+# Keep English — Blogger 1.2.0
 
-Tema institucional responsivo, com oito páginas completas, três delas artigos de estudo. Desenvolvedor público: Datingmatch Studio. Suporte: thalysson.developer@gmail.com.
+## Arquivos para instalar
 
-## Revisar a prévia
+- `template.xml`: tema atual, pronto para enviar ao Blogger.
+- `keep-english-blogger-v1.2.0.xml`: cópia versionada do mesmo tema.
+- `pages/`: conteúdo completo das oito páginas.
+- `PAGINAS.md`: títulos e endereços das páginas que precisam ser criadas.
+- `preview/index.html`: prévia navegável no computador e celular.
+- `assets/`: logo original.
+- `source/`: estilos e conteúdos do site.
+- `reports/`: resultados das verificações locais.
+- `keep-english-blogger-v1.2.0.zip`: pacote completo de instalação.
 
-Abra `preview/index.html` no navegador. A navegação funciona também abrindo o arquivo diretamente. A prévia usa os blocos extraídos do XML gerado. O arquivo XML é o tema para o Blogger; os arquivos HTML são a prévia e as referências de conteúdo.
+## Instalar no Blogger
 
-## Instalar
+1. Faça backup do tema atual em Blogger → Tema.
+2. Use Tema → Restaurar e envie `template.xml`. Também é possível colar o XML em Editar HTML.
+3. Crie e publique as páginas de `PAGINAS.md`, com os títulos exatos indicados. Importar o tema não cria essas páginas automaticamente.
+4. Confira os endereços gerados e ajuste os links se forem diferentes dos documentados.
+5. Se o painel oferecer um tema móvel separado, use o tema de computador também no celular para manter o layout responsivo.
+6. Abra cada página publicada e confira título, corpo e seta de retorno, incluindo privacidade, termos e exclusão.
 
-1. Faça backup do tema atual em Blogger → Tema antes de alterar um blog existente.
-2. Em um blog de teste, use Tema → Restaurar para enviar `keep-english-blogger-v1.1.0.xml` ou substitua o HTML do tema pelo conteúdo desse arquivo.
-3. Crie as páginas listadas em `PAGINAS.md`, preservando títulos exatos. O XML não cria páginas automaticamente. Confira os endereços efetivamente gerados antes de divulgar os links.
-4. Se o Blogger oferecer um tema móvel separado, selecione o tema de computador para o celular, para manter este layout responsivo.
-5. Verifique início, oito páginas, artigo nativo, arquivo de posts e versão móvel. Confirme logo, setas de retorno, e-mail, títulos e corpo dos documentos, sem duplicações.
-6. Publique documentos legais somente depois de concluir as pendências de `REVISAO-LEGAL.md` e conferir os textos. A configuração do app e a Play Console precisam corresponder às práticas descritas.
+Os textos fixos são integrados no XML e selecionados pelo título exato da página. O corpo no editor pode conter uma descrição curta; não cole uma segunda cópia do documento. Para alterar os textos, atualize as fontes e reinstale o XML gerado. Novas publicações normais continuam sendo exibidas pelo widget Blog.
 
-Esta entrega não foi importada nem publicada em uma conta Blogger. A aceitação pela plataforma precisa ser verificada. A logo original está incorporada como PNG no XML, sem depender do computador do autor. Se a plataforma remover a imagem incorporada, hospede `assets/keep-english.png` no Blogger e use a URL HTTPS gerada em `build.py`, em lugar da montagem de `logo` com base64. Não use uma URL local.
+A logo está incorporada no XML, sem depender de um endereço no computador. Se o Blogger remover a imagem incorporada, hospede `assets/keep-english.png` no Blogger e substitua a montagem da variável `logo` em `build.py` pela URL HTTPS recebida.
 
-## Manutenção
+## Conteúdo compartilhado com o app
 
-Privacidade e termos usam a mesma fonte do app: `src/features/auth/content/legal-documents.json`, na raiz do repositório. Edite esse arquivo para atualizar título, introdução, seções, versão, data e aviso de revisão nos dois destinos. O app exibe o documento integral em português, idioma disponível no Blogger, mesmo quando a interface estiver em inglês.
+Privacidade e termos usam a fonte `src/features/auth/content/legal-documents.json`, na raiz do repositório. O construtor gera uma cópia em `source/legal-documents.json` para acompanhar o pacote. Os documentos são integrais em português nos dois destinos. Esta versão remove os avisos de rascunho e registra a classificação de conteúdo Livre no Brasil e a publicidade pelo Google AdMob.
 
-O construtor gera `source/legal-documents.json` como cópia para o pacote portátil. Não edite essa cópia no repositório: a próxima geração a substitui. Fora do repositório, ela permite consultar os documentos no pacote de instalação.
+## Gerar novamente
 
-Demais fontes: `source/styles.css`, `source/pages.json`, `assets/keep-english.png` e `build.py`. Execute da raiz do projeto:
+Da raiz do projeto:
 
 ```text
 python blogger/build.py
-python .github/agents/blogger/scripts/validate_theme.py --theme blogger/keep-english-blogger-v1.1.0.xml --profile blogger/reports/project.json --report blogger/reports/validation-xml.json
+python .github/agents/blogger/scripts/validate_theme.py --theme blogger/template.xml --profile blogger/reports/project.json --report blogger/reports/validation-xml.json
 python blogger/verify.py
+python blogger/package.py
 ```
 
-Os conteúdos fixos são integrados ao tema, fora do widget de posts. Editar apenas o corpo da página no painel não altera esses documentos. Para revisar o conteúdo, edite as fontes e gere/reinstale o tema. Não renomeie os títulos das páginas sem atualizar o perfil e o roteamento. Publicações novas usam o widget Blog e podem ser gerenciadas normalmente pelo painel; esta primeira versão não inclui comentários no tema.
+O XML, os links e os documentos são verificados localmente. A importação e as URLs públicas do Blogger só podem ser confirmadas após a instalação na sua conta.
 
-Sem scripts próprios de anúncios, analytics, formulários ou cookies adicionados. O Blogger pode ter tratamento próprio de dados e configurações adicionais. Nenhuma dependência do aplicativo foi alterada.
+O ZIP também inclui os verificadores em `tools/`. Com o pacote extraído, é possível executar `python build.py`, `python verify.py` e `python tools/validate_theme.py --theme template.xml --profile reports/project.json` diretamente na pasta extraída.

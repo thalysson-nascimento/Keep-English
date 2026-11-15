@@ -35,7 +35,6 @@ for (const [key, document] of Object.entries(content.documents)) {
     const expected = [
       document.title,
       document.intro,
-      content.reviewNotice,
       `Versão ${content.version} · ${content.date}`,
       ...document.sections.flat(),
     ];
@@ -47,6 +46,8 @@ for (const [key, document] of Object.entries(content.documents)) {
       const markup = await response.text();
       assert.match(markup, /<article[^>]*lang="pt-BR"/);
       const app = visibleText(markup);
+      assert.ok(!app.includes("Versão para revisão."));
+      assert.ok(!blogger.includes("Versão para revisão."));
       for (const paragraph of expected) {
         const normalized = paragraph.replace(/\s+/g, " ");
         assert.ok(

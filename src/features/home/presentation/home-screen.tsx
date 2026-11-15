@@ -28,6 +28,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./home-screen.module.css";
+import { RewardedTestButton } from "@/features/tests/presentation/rewarded-test-button";
 
 interface HomeScreenProps {
   initialData: HomeApiData;
@@ -104,7 +105,10 @@ export function HomeScreen() {
     return (
       <div className={styles.home} role="alert">
         <p>{error}</p>
-        <button onClick={() => setRetry((current) => current + 1)} type="button">
+        <button
+          onClick={() => setRetry((current) => current + 1)}
+          type="button"
+        >
           {t("home.retry")}
         </button>
       </div>
@@ -412,6 +416,7 @@ function HomeDashboard({
         )}
       </div>
       {testHint && <p className={styles.testHint}>{testHint}</p>}
+      {testLockReason === "cooldown" && <RewardedTestButton />}
 
       <section aria-labelledby="goal-title" className={styles.section}>
         <h2 id="goal-title">{t("home.goal.title")}</h2>

@@ -1,7 +1,6 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0",
   "date": "15 de novembro de 2026",
-  "reviewNotice": "A rede de anúncios, as práticas de retenção e a configuração de produção precisam ser confirmadas antes da publicação deste documento.",
   "googlePrivacy": {
     "label": "Política de Privacidade do Google",
     "href": "https://policies.google.com/privacy"
@@ -24,11 +23,11 @@
         ],
         [
           "Sessões e acesso",
-          "O serviço utiliza informações de sessão para reconhecer o usuário autenticado e proteger o acesso à conta. O modelo de sessões permite registrar endereço IP e informações do navegador; a configuração efetiva de produção e a retenção desses registros precisam ser confirmadas antes da publicação desta política."
+          "O serviço utiliza informações de sessão para reconhecer o usuário autenticado e proteger o acesso à conta. Informações técnicas de sessão podem incluir endereço IP e dados do navegador. Essas informações são utilizadas para autenticação, segurança e prevenção de acesso indevido."
         ],
         [
           "Finalidades e bases legais",
-          "Dados necessários ao cadastro e ao funcionamento das ferramentas de estudo são tratados para prestar o serviço solicitado. Outras operações, como atendimento, proteção do serviço e eventual cumprimento de obrigações, precisam ter sua finalidade e base legal avaliadas conforme o caso. Atividades que dependam de consentimento exigem uma escolha específica; aceitar termos de uso não substitui esse consentimento."
+          "Os dados necessários ao cadastro e às ferramentas de estudo são tratados para prestar o serviço solicitado. O atendimento utiliza os dados necessários para responder às solicitações. Outras operações atendem a obrigações legais ou à proteção do serviço, conforme a base legal aplicável. Quando uma atividade depender de consentimento, aceitar os termos de uso não substitui essa escolha específica."
         ],
         [
           "Informações no ranking",
@@ -40,7 +39,7 @@
         ],
         [
           "Armazenamento e fornecedores",
-          "Os dados da conta e do estudo são armazenados no servidor. A identificação da hospedagem de produção, dos operadores, dos países de tratamento e das salvaguardas aplicáveis a transferências internacionais deve ser completada a partir da implantação efetiva. Esta versão não declara que todos os dados permanecem no Brasil."
+          "Os dados da conta e do estudo são armazenados em servidores e tratados por fornecedores necessários à operação, como hospedagem, autenticação, tradução e publicidade. O tratamento pode ocorrer fora do Brasil, observadas as garantias exigidas pela legislação aplicável. Para informações sobre fornecedores e o tratamento dos seus dados, utilize o canal de suporte."
         ],
         [
           "Este site no Blogger",
@@ -48,11 +47,11 @@
         ],
         [
           "Publicidade e vídeos recompensados",
-          "A versão com publicidade prevê anúncios na abertura do aplicativo e vídeos recompensados opcionais para liberar um novo teste antes do intervalo de 30 minutos. A identificação da rede de anúncios, dos SDKs e dos dados efetivamente tratados ainda precisa ser confirmada antes de disponibilizar essa versão. Não presumimos ausência de identificadores publicitários ou rastreamento. Preferências e consentimentos aplicáveis deverão acompanhar a configuração real e o público atendido."
+          "O aplicativo utiliza o Google AdMob, do Google, para exibir anúncios. Você pode escolher assistir a um vídeo intersticial recompensado para antecipar um teste antes do intervalo de 30 minutos. Ao selecionar essa opção, um aviso apresenta a recompensa e as ações Assistir e Cancelar. A liberação depende da confirmação da recompensa; fechar, cancelar ou não concluir o anúncio não garante outro teste. O SDK de anúncios pode tratar endereço IP, identificadores de dispositivo e publicidade, informações técnicas, diagnósticos e interações com anúncios para entregar publicidade, medir desempenho e prevenir fraude. Um identificador da solicitação de recompensa pode ser enviado ao Google para validar a liberação. Consulte também a Política de Privacidade do Google e os controles disponíveis no seu dispositivo."
         ],
         [
           "Retenção e exclusão",
-          "No aplicativo, acesse Perfil → Excluir conta, leia o aviso e confirme em Excluir. Após o sucesso da operação, a conta e os dados associados são removidos do banco ativo e você retorna ao login. Também é possível solicitar a exclusão por thalysson.developer@gmail.com, com atendimento em até 30 dias. Cópias de segurança, dados eventualmente tratados por fornecedores e retenções justificadas dependem das respectivas práticas e precisam ser detalhados antes da publicação final."
+          "No aplicativo, acesse Perfil → Excluir conta, leia o aviso e confirme em Excluir. Após o sucesso da operação, a conta e os dados associados são removidos do banco ativo e você retorna ao login. Você também pode solicitar a exclusão por thalysson.developer@gmail.com, com atendimento em até 30 dias. Eventuais retenções por obrigação legal, segurança ou prevenção de fraude ficam limitadas à finalidade e ao período necessários. A exclusão no banco ativo não representa apagamento instantâneo de registros técnicos ou cópias de segurança mantidos por fornecedores; informações sobre essas retenções podem ser solicitadas pelo suporte."
         ],
         [
           "Seus direitos",
@@ -60,7 +59,7 @@
         ],
         [
           "Crianças e adolescentes",
-          "O público etário e os controles aplicáveis à versão distribuída ainda precisam ser definidos. Esta proposta não afirma que o aplicativo está configurado para uso infantil. A publicação depende da avaliação do público-alvo e das medidas de proteção exigidas para crianças e adolescentes, quando aplicáveis."
+          "O Keep English possui classificação de conteúdo Livre no Brasil, conforme a configuração informada na Google Play. Classificações podem variar conforme o país. A classificação de conteúdo não substitui os cuidados de privacidade nem define, por si só, o público-alvo do aplicativo. O tratamento de dados de crianças e adolescentes deve observar seu melhor interesse e os requisitos legais aplicáveis. Responsáveis podem entrar em contato para solicitar informações ou exercer direitos relacionados aos dados de menores."
         ],
         [
           "Segurança e atualizações",
@@ -81,7 +80,7 @@
         ],
         [
           "Cadastro e acesso",
-          "Forneça informações corretas e mantenha suas credenciais protegidas. Não compartilhe sua senha com o suporte. Se suspeitar de acesso indevido, entre em contato pelo e-mail indicado. As regras etárias e eventuais exigências de participação de responsáveis precisam ser definidas antes da publicação final."
+          "Forneça informações corretas e mantenha suas credenciais protegidas. Não compartilhe sua senha com o suporte. Se suspeitar de acesso indevido, entre em contato pelo e-mail indicado. A classificação de conteúdo é Livre no Brasil. O uso por menores de idade deve observar sua capacidade legal e a participação do responsável quando exigida."
         ],
         [
           "Uso responsável",
@@ -105,7 +104,7 @@
         ],
         [
           "Publicidade e recompensas",
-          "A versão com anúncios prevê publicidade na abertura do app e a opção de assistir a um vídeo recompensado para realizar outro teste antes de completar o intervalo de 30 minutos. O vídeo é uma escolha do usuário. A liberação depende da confirmação de conclusão do anúncio e das demais condições do teste. Os formatos e as regras efetivas devem ser conferidos na versão distribuída antes da publicação destes termos."
+          "O aplicativo utiliza Google AdMob para publicidade. Durante o intervalo de 30 minutos entre testes, você pode optar por assistir a um vídeo intersticial recompensado para antecipar um novo teste. O modal apresenta a recompensa e as ações Assistir e Cancelar. A recompensa corresponde à liberação de um teste e depende da confirmação de conclusão do anúncio, sem dispensar as demais condições do teste. Fechar ou cancelar o anúncio antes de obter a recompensa não libera outro teste. Falhas de carregamento ou de confirmação podem impedir a liberação; aguarde o intervalo normal ou tente novamente. A recompensa não tem valor monetário."
         ],
         [
           "Encerramento e exclusão",
@@ -113,7 +112,7 @@
         ],
         [
           "Direitos e contato",
-          "Estes termos não afastam direitos assegurados pela legislação aplicável, inclusive direitos do consumidor e de proteção de dados. Dúvidas, sugestões e solicitações podem ser encaminhadas para thalysson.developer@gmail.com. A versão final deve identificar o responsável jurídico e as condições efetivas da operação."
+          "Estes termos não afastam direitos assegurados pela legislação aplicável, inclusive direitos do consumidor e de proteção de dados. Dúvidas, sugestões e solicitações podem ser encaminhadas para thalysson.developer@gmail.com. O nome público do desenvolvedor responsável pelo Keep English é Datingmatch Studio."
         ]
       ]
     }

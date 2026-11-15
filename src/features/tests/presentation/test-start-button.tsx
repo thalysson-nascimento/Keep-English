@@ -10,6 +10,7 @@ import {
 } from "@/features/tests/domain/vocabulary-test";
 import { useI18n } from "@/shared/i18n/locale-provider";
 import styles from "./tests-screen.module.css";
+import { RewardedTestButton } from "./rewarded-test-button";
 
 interface TestStartButtonProps {
   access: TestAccessState & { now: number };
@@ -56,6 +57,7 @@ export function TestStartButton({ access }: TestStartButtonProps) {
       <p aria-live="polite" className={styles.testHint}>
         {hint}
       </p>
+      {lockReason === "cooldown" && <RewardedTestButton />}
     </div>
   );
 }

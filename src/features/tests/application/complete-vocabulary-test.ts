@@ -36,6 +36,7 @@ export async function completeVocabularyTest(
       todayWords: data.todayWords,
       wordCount: data.words.length,
       lastTestAt: data.lastTestAt,
+      cooldownBypass: data.cooldownBypass,
     },
     data.now,
   );
@@ -71,11 +72,17 @@ export async function completeVocabularyTest(
       : correct;
   }, 0);
 
-  await testsRepository.recordCompletion({
-    score,
-    total: expectedQuestionCount,
-    completedAt: now,
-  });
+  const recorded = await testsRepository.recordCompletion(
+    {
+      score,
+      total: expectedQuestionCount,
+      completedAt: now,
+    },
+    data.cooldownBypass && data.lastTestAt !== null
+      ? new Date(data.lastTestAt)
+      : undefined,
+  );
+  if (!recorded) return { status: "cooldown" };
 
   return {
     status: "completed",

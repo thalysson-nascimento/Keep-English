@@ -11,5 +11,9 @@ export interface StoredVocabularyTestResult extends VocabularyTestResult {
 export interface TestsRepository {
   findAll(): Promise<StoredVocabularyTestResult[]>;
   findLatestCompletion(): Promise<Date | null>;
-  recordCompletion(result: VocabularyTestResult): Promise<void>;
+  findRewardForTest(completedAt: Date, now: Date): Promise<boolean>;
+  recordCompletion(
+    result: VocabularyTestResult,
+    rewardForTestAt?: Date,
+  ): Promise<boolean>;
 }
