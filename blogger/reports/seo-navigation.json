@@ -1,0 +1,27 @@
+[
+  {
+    "previous_path": "/p/sobre.html",
+    "published_http_status": 404,
+    "new_link_target": "/#como-funciona"
+  },
+  {
+    "previous_path": "/p/contato.html",
+    "published_http_status": 404,
+    "new_link_target": "/#ajuda"
+  },
+  {
+    "previous_path": "/p/caderno-de-vocabulario.html",
+    "published_http_status": 404,
+    "new_link_target": "/#guia-caderno"
+  },
+  {
+    "previous_path": "/p/palavras-em-contexto.html",
+    "published_http_status": 404,
+    "new_link_target": "/#guia-contexto"
+  },
+  {
+    "previous_path": "/p/rotina-de-revisao.html",
+    "published_http_status": 404,
+    "new_link_target": "/#guia-rotina"
+  }
+]

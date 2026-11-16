@@ -1,1 +1,1 @@
-32969e39283ffd0b48a8b0c57dcdc292f9e52a2a9426f3c2767bf8edae1907ea  keep-english-blogger-v1.2.1.xml
+98339435af3b18775814c596de28f1ef3593f1d23197bc5fbbb67cca525c7e0a  keep-english-blogger-v1.3.0.xml

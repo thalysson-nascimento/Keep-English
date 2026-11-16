@@ -1,16 +1,16 @@
-# Keep English — Blogger 1.2.1
+# Keep English — Blogger 1.3.0
 
 ## Arquivos para instalar
 
 - `template.xml`: tema atual, pronto para enviar ao Blogger.
-- `keep-english-blogger-v1.2.1.xml`: cópia versionada do mesmo tema.
+- `keep-english-blogger-v1.3.0.xml`: cópia versionada do mesmo tema.
 - `pages/`: conteúdo completo das oito páginas.
 - `PAGINAS.md`: títulos e endereços das páginas que precisam ser criadas.
 - `preview/index.html`: prévia navegável no computador e celular.
 - `assets/`: logo original.
 - `source/`: estilos e conteúdos do site.
 - `reports/`: resultados das verificações locais.
-- `keep-english-blogger-v1.2.1.zip`: pacote completo de instalação.
+- `keep-english-blogger-v1.3.0.zip`: pacote completo de instalação.
 
 ## Instalar no Blogger
 
@@ -47,3 +47,7 @@ O ZIP também inclui os verificadores em `tools/`. Com o pacote extraído, é po
 ## Correção de páginas vazias — 1.2.1
 
 O blog publicado usa postagens em `/2026/11/` para os três documentos legais, enquanto o tema anterior apontava para `/p/`. A correção mapeia os endereços e títulos existentes em `source/routes.json` e renderiza os documentos fora do widget Blog tanto em páginas quanto em postagens. Não é necessário colar novamente os conteúdos nem recriar os três posts. Reimporte `template.xml`; a confirmação no site publicado depende dessa instalação. O layout e os textos legais foram preservados.
+
+## SEO — versão 1.3.0
+
+Metadados específicos, URLs canônicas, Open Graph, cartões de compartilhamento e dados estruturados foram adicionados. Os guias completos estão acessíveis no início enquanto suas páginas próprias ainda não forem publicadas. Sobre e Ajuda levam a seções existentes; os links legais permanecem nos posts já publicados. Consulte `SEO.md` para configurar visibilidade nos buscadores, descrições, favicon, imagem pública e Search Console. O tema não altera automaticamente o painel nem garante ranking.

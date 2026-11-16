@@ -1,0 +1,26 @@
+{
+  "site_name": "Keep English",
+  "home_title": "Keep English — vocabulário de inglês e prática diária",
+  "home_description": "Anote palavras em inglês, consulte traduções e exemplos, pratique com testes e acompanhe suas metas diárias com o Keep English.",
+  "publisher": "Datingmatch Studio",
+  "contact_email": "thalysson.developer@gmail.com",
+  "social_image_url": null,
+  "search_console_verification": null,
+  "descriptions": {
+    "sobre": "Conheça o Keep English: seu caderno de vocabulário em inglês, com traduções, exemplos, testes e metas para praticar todos os dias.",
+    "privacidade": "Saiba como o Keep English trata seus dados, usa serviços de tradução e anúncios do AdMob e permite solicitar a exclusão da conta.",
+    "termos": "Consulte as condições de uso do Keep English: conta, estudo de vocabulário, anúncios recompensados, responsabilidades e exclusão.",
+    "exclusao": "Veja como excluir sua conta do Keep English pelo aplicativo ou solicitar a exclusão por e-mail. Conheça os dados removidos e os prazos.",
+    "contato": "Fale com o suporte do Keep English para tirar dúvidas sobre o aplicativo, sua conta, privacidade e exclusão de dados.",
+    "caderno": "Aprenda a organizar um caderno de vocabulário em inglês: escolha palavras úteis, guarde exemplos e pratique o conteúdo anotado.",
+    "contexto": "Entenda como estudar palavras em inglês no contexto de frases, observar combinações e criar exemplos para revisar o significado.",
+    "rotina": "Monte uma rotina de revisão de vocabulário em inglês com metas possíveis, prática de lembrança e acompanhamento dos resultados."
+  },
+  "unpublished_link_targets": {
+    "/p/sobre.html": "/#como-funciona",
+    "/p/contato.html": "/#ajuda",
+    "/p/caderno-de-vocabulario.html": "/#guia-caderno",
+    "/p/palavras-em-contexto.html": "/#guia-contexto",
+    "/p/rotina-de-revisao.html": "/#guia-rotina"
+  }
+}

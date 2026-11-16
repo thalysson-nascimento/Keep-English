@@ -1,6 +1,6 @@
 # Páginas e postagens do Blogger
 
-Os três documentos legais já estão publicados como postagens e foram mapeados pelos títulos e endereços reais. Não recrie nem renomeie esses três documentos. Para as demais páginas, importar o tema não as cria: publique-as com os títulos indicados. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.
+Os três documentos legais já estão publicados como postagens e foram mapeados pelos títulos e endereços reais. Não recrie nem renomeie esses três documentos. As demais páginas ainda não estão publicadas: seus links levam a seções existentes no início. Os guias completos ficam no início até serem publicados com URLs próprias. Criar páginas separadas é opcional; para isso, siga SEO.md e atualize os destinos após a publicação. Confira o endereço gerado pelo Blogger; se diferir, ajuste os links em `build.py` e `source/pages.json` e gere novamente.
 
 | Título exato | Endereço esperado | Conteúdo de referência |
 | --- | --- | --- |

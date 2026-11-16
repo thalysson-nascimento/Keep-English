@@ -1,0 +1,490 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "h1": 1,
+    "meta": [
+      {
+        "charset": "UTF-8"
+      },
+      {
+        "content": "width=device-width, initial-scale=1",
+        "name": "viewport"
+      },
+      {
+        "content": "#58cc02",
+        "name": "theme-color"
+      },
+      {
+        "content": "1.2.1",
+        "name": "keep-english-theme"
+      },
+      {
+        "content": "text/html; charset=UTF-8",
+        "http-equiv": "Content-Type"
+      },
+      {
+        "content": "blogger",
+        "name": "generator"
+      },
+      {
+        "content": "https://keepenglishworld.blogspot.com/",
+        "property": "og:url"
+      },
+      {
+        "content": "Keep English",
+        "property": "og:title"
+      },
+      {
+        "content": "",
+        "property": "og:description"
+      },
+      {
+        "name": "google-adsense-platform-account",
+        "content": "ca-host-pub-1556223355139109"
+      },
+      {
+        "name": "google-adsense-platform-domain",
+        "content": "blogspot.com"
+      }
+    ],
+    "links": [
+      {
+        "href": "https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css",
+        "rel": "stylesheet",
+        "type": "text/css"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/favicon.ico",
+        "rel": "icon",
+        "type": "image/x-icon"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/",
+        "rel": "canonical"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/rss+xml",
+        "title": "Keep English - RSS",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default?alt=rss"
+      },
+      {
+        "rel": "service.post",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://www.blogger.com/feeds/2472929840757213608/posts/default"
+      },
+      {
+        "rel": "me",
+        "href": "https://www.blogger.com/profile/09096876509786708570"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "media": "none",
+        "onload": "if(media!='all')media='all'",
+        "rel": "stylesheet"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "rel": "stylesheet"
+      }
+    ],
+    "scripts": [
+      {
+        "type": "text/javascript",
+        "src": "https://www.blogger.com/static/v1/widgets/2650890479-widgets.js"
+      },
+      {
+        "type": "text/javascript"
+      }
+    ],
+    "images": [
+      {
+        "alt": "",
+        "height": "52",
+        "width": "52"
+      },
+      {
+        "alt": "Logo Keep English: balão com check, marcador e chama",
+        "class": "hero-logo",
+        "height": "250",
+        "width": "250"
+      }
+    ]
+  },
+  {
+    "path": "/2026/11/politica-de-privacidade.html",
+    "status": 200,
+    "h1": 1,
+    "meta": [
+      {
+        "charset": "UTF-8"
+      },
+      {
+        "content": "width=device-width, initial-scale=1",
+        "name": "viewport"
+      },
+      {
+        "content": "#58cc02",
+        "name": "theme-color"
+      },
+      {
+        "content": "1.2.1",
+        "name": "keep-english-theme"
+      },
+      {
+        "content": "text/html; charset=UTF-8",
+        "http-equiv": "Content-Type"
+      },
+      {
+        "content": "blogger",
+        "name": "generator"
+      },
+      {
+        "content": "https://keepenglishworld.blogspot.com/2026/11/politica-de-privacidade.html",
+        "property": "og:url"
+      },
+      {
+        "content": "Politica de privacidade",
+        "property": "og:title"
+      },
+      {
+        "content": "← Voltar ao início Keep English / Informações Política de Privacidade Versão 1.2.0 · 15 de novembro de 2026 Esta política descreve o tratame...",
+        "property": "og:description"
+      },
+      {
+        "name": "google-adsense-platform-account",
+        "content": "ca-host-pub-1556223355139109"
+      },
+      {
+        "name": "google-adsense-platform-domain",
+        "content": "blogspot.com"
+      }
+    ],
+    "links": [
+      {
+        "href": "https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css",
+        "rel": "stylesheet",
+        "type": "text/css"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/favicon.ico",
+        "rel": "icon",
+        "type": "image/x-icon"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/2026/11/politica-de-privacidade.html",
+        "rel": "canonical"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/rss+xml",
+        "title": "Keep English - RSS",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default?alt=rss"
+      },
+      {
+        "rel": "service.post",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://www.blogger.com/feeds/2472929840757213608/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/5157482127835378653/comments/default"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "media": "none",
+        "onload": "if(media!='all')media='all'",
+        "rel": "stylesheet"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "rel": "stylesheet"
+      }
+    ],
+    "scripts": [
+      {
+        "type": "text/javascript",
+        "src": "https://www.blogger.com/static/v1/widgets/2650890479-widgets.js"
+      },
+      {
+        "type": "text/javascript"
+      }
+    ],
+    "images": [
+      {
+        "alt": "",
+        "height": "52",
+        "width": "52"
+      }
+    ]
+  },
+  {
+    "path": "/2026/11/termos-de-uso.html",
+    "status": 200,
+    "h1": 1,
+    "meta": [
+      {
+        "charset": "UTF-8"
+      },
+      {
+        "content": "width=device-width, initial-scale=1",
+        "name": "viewport"
+      },
+      {
+        "content": "#58cc02",
+        "name": "theme-color"
+      },
+      {
+        "content": "1.2.1",
+        "name": "keep-english-theme"
+      },
+      {
+        "content": "text/html; charset=UTF-8",
+        "http-equiv": "Content-Type"
+      },
+      {
+        "content": "blogger",
+        "name": "generator"
+      },
+      {
+        "content": "https://keepenglishworld.blogspot.com/2026/11/termos-de-uso.html",
+        "property": "og:url"
+      },
+      {
+        "content": "Termos de uso",
+        "property": "og:title"
+      },
+      {
+        "content": "← Voltar ao início Keep English / Informações Termos de Uso Versão 1.2.0 · 15 de novembro de 2026 Estes termos descrevem as condições de uso...",
+        "property": "og:description"
+      },
+      {
+        "name": "google-adsense-platform-account",
+        "content": "ca-host-pub-1556223355139109"
+      },
+      {
+        "name": "google-adsense-platform-domain",
+        "content": "blogspot.com"
+      }
+    ],
+    "links": [
+      {
+        "href": "https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css",
+        "rel": "stylesheet",
+        "type": "text/css"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/favicon.ico",
+        "rel": "icon",
+        "type": "image/x-icon"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/2026/11/termos-de-uso.html",
+        "rel": "canonical"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/rss+xml",
+        "title": "Keep English - RSS",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default?alt=rss"
+      },
+      {
+        "rel": "service.post",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://www.blogger.com/feeds/2472929840757213608/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/7030517514160537577/comments/default"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "media": "none",
+        "onload": "if(media!='all')media='all'",
+        "rel": "stylesheet"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "rel": "stylesheet"
+      }
+    ],
+    "scripts": [
+      {
+        "type": "text/javascript",
+        "src": "https://www.blogger.com/static/v1/widgets/2650890479-widgets.js"
+      },
+      {
+        "type": "text/javascript"
+      }
+    ],
+    "images": [
+      {
+        "alt": "",
+        "height": "52",
+        "width": "52"
+      }
+    ]
+  },
+  {
+    "path": "/2026/11/exclusao-da-conta.html",
+    "status": 200,
+    "h1": 1,
+    "meta": [
+      {
+        "charset": "UTF-8"
+      },
+      {
+        "content": "width=device-width, initial-scale=1",
+        "name": "viewport"
+      },
+      {
+        "content": "#58cc02",
+        "name": "theme-color"
+      },
+      {
+        "content": "1.2.1",
+        "name": "keep-english-theme"
+      },
+      {
+        "content": "text/html; charset=UTF-8",
+        "http-equiv": "Content-Type"
+      },
+      {
+        "content": "blogger",
+        "name": "generator"
+      },
+      {
+        "content": "https://keepenglishworld.blogspot.com/2026/11/exclusao-da-conta.html",
+        "property": "og:url"
+      },
+      {
+        "content": "Exclusão da conta",
+        "property": "og:title"
+      },
+      {
+        "content": "← Voltar ao início Keep English / Informações Excluir sua conta do Keep English Versão 1.2.0 · 15 de novembro de 2026 Você pode excluir sua ...",
+        "property": "og:description"
+      },
+      {
+        "name": "google-adsense-platform-account",
+        "content": "ca-host-pub-1556223355139109"
+      },
+      {
+        "name": "google-adsense-platform-domain",
+        "content": "blogspot.com"
+      }
+    ],
+    "links": [
+      {
+        "href": "https://www.blogger.com/static/v1/widgets/2872013778-css_bundle_v2.css",
+        "rel": "stylesheet",
+        "type": "text/css"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/favicon.ico",
+        "rel": "icon",
+        "type": "image/x-icon"
+      },
+      {
+        "href": "https://keepenglishworld.blogspot.com/2026/11/exclusao-da-conta.html",
+        "rel": "canonical"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/rss+xml",
+        "title": "Keep English - RSS",
+        "href": "https://keepenglishworld.blogspot.com/feeds/posts/default?alt=rss"
+      },
+      {
+        "rel": "service.post",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://www.blogger.com/feeds/2472929840757213608/posts/default"
+      },
+      {
+        "rel": "alternate",
+        "type": "application/atom+xml",
+        "title": "Keep English - Atom",
+        "href": "https://keepenglishworld.blogspot.com/feeds/9117613002397505097/comments/default"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "media": "none",
+        "onload": "if(media!='all')media='all'",
+        "rel": "stylesheet"
+      },
+      {
+        "href": "https://www.blogger.com/dyncss/2472929840757213608/authorization.css?zx=889a1df6-2aa3-4058-acc6-eeab27b75272",
+        "rel": "stylesheet"
+      }
+    ],
+    "scripts": [
+      {
+        "type": "text/javascript",
+        "src": "https://www.blogger.com/static/v1/widgets/2650890479-widgets.js"
+      },
+      {
+        "type": "text/javascript"
+      }
+    ],
+    "images": [
+      {
+        "alt": "",
+        "height": "52",
+        "width": "52"
+      }
+    ]
+  },
+  {
+    "path": "/robots.txt",
+    "status": 200,
+    "body": "User-agent: Mediapartners-Google\nDisallow: \n\nUser-agent: *\nDisallow: /search\nDisallow: /share-widget\nAllow: /\n\nSitemap: https://keepenglishworld.blogspot.com/sitemap.xml\n\n"
+  },
+  {
+    "path": "/sitemap.xml",
+    "status": 200,
+    "body": "<?xml version='1.0' encoding='UTF-8'?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"><url><loc>https://keepenglishworld.blogspot.com/2026/11/termos-de-uso.html</loc><lastmod>2026-11-15T23:35:38Z</lastmod></url><url><loc>https://keepenglishworld.blogspot.com/2026/11/exclusao-da-conta.html</loc><lastmod>2026-11-15T23:36:28Z</lastmod></url><url><loc>https://keepenglishworld.blogspot.com/2026/11/politica-de-privacidade.html</loc><lastmod>2026-11-15T23:35:01Z</lastmod></url></urlset>"
+  },
+  {
+    "path": "/sitemap-pages.xml",
+    "status": 200,
+    "body": "<?xml version='1.0' encoding='UTF-8'?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\"></urlset>"
+  },
+  {
+    "path": "/feeds/pages/default?alt=json",
+    "status": 200,
+    "body": "{\"version\":\"1.0\",\"encoding\":\"UTF-8\",\"feed\":{\"xmlns\":\"http://www.w3.org/2005/Atom\",\"xmlns$openSearch\":\"http://a9.com/-/spec/opensearchrss/1.0/\",\"xmlns$gd\":\"http://schemas.google.com/g/2005\",\"id\":{\"$t\":\"tag:blogger.com,1999:blog-2472929840757213608\"},\"updated\":{\"$t\":\"2026-11-15T15:43:48.196-08:00\"},\"title\":{\"type\":\"text\",\"$t\":\"Keep English\"},\"subtitle\":{\"type\":\"html\",\"$t\":\"\"},\"link\":[{\"rel\":\"http://schemas.google.com/g/2005#feed\",\"type\":\"application/atom+xml\",\"href\":\"https:\\/\\/keepenglishworld.blogspot.com\\/feeds\\/pages\\/default\"},{\"rel\":\"self\",\"type\":\"application/atom+xml\",\"href\":\"https:\\/\\/www.blogger.com\\/feeds\\/2472929840757213608\\/pages\\/default?alt=json\"},{\"rel\":\"alternate\",\"type\":\"text/html\",\"href\":\"https:\\/\\/keepenglishworld.blogspot.com\\/\"}],\"author\":[{\"name\":{\"$t\":\"Datingmatch\"},\"uri\":{\"$t\":\"http:\\/\\/www.blogger.com\\/profile\\/09096876509786708570\"},\"email\":{\"$t\":\"noreply@blogger.com\"},\"gd$image\":{\"rel\":\"http://schemas.google.com/g/2005#thumbnail\",\"width\":\"16\",\"height\":\"16\",\"src\":\"https:\\/\\/img1.blogblog.com\\/img\\/b16-rounded.gif\"}}],\"generator\":{\"version\":\"7.00\",\"uri\":\"http://www.blogger.com\",\"$t\":\"Blogger\"},\"openSearch$totalResults\":{\"$t\":\"0\"},\"openSearch$startIndex\":{\"$t\":\"1\"},\"openSearch$itemsPerPage\":{\"$t\":\"25\"}}}"
+  }
+]
